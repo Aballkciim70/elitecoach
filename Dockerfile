@@ -8,6 +8,4 @@ RUN npm install --production
 
 COPY server-final.js .
 
-EXPOSE 5000
-
 CMD ["node", "server-final.js"]
