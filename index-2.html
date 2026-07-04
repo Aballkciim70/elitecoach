@@ -1,0 +1,747 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>kpsul_corps — coaching musculation sur-mesure</title>
+<meta name="description" content="Un programme construit à partir de tout ce qui te compose : mesures, objectif, alimentation, mode de vie, morphologie. Rien de générique." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-900:#0B1413;
+    --ink-800:#10201D;
+    --ink-700:#172924;
+    --line:#22403A;
+    --paper:#ECEFE9;
+    --muted:#8A9A93;
+    --shell:#E7D9C4;
+    --core:#34E0C8;
+    --core-dim:rgba(52,224,200,.14);
+    --err:#E8735B;
+    --disp:"Space Grotesk",system-ui,sans-serif;
+    --body:"Hanken Grotesk",system-ui,sans-serif;
+    --mono:"Space Mono",ui-monospace,monospace;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink-900);
+    color:var(--paper);
+    font-family:var(--body);
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--core);color:var(--ink-900)}
+  :focus-visible{outline:2px solid var(--core);outline-offset:3px;border-radius:4px}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  .section{padding:96px 0}
+  .eyebrow{
+    font-family:var(--mono);font-size:12px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--core);display:inline-flex;
+    align-items:center;gap:9px;
+  }
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--core);opacity:.7}
+
+  /* ---------- capsule mark ---------- */
+  .cap{display:inline-flex;width:34px;height:16px;border-radius:99px;overflow:hidden;flex:0 0 auto;transform:rotate(-20deg)}
+  .cap span{display:block;width:50%;height:100%}
+  .cap .a{background:var(--shell)}
+  .cap .b{background:var(--core)}
+  .cap.lg{width:60px;height:28px}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(10px);
+    background:rgba(11,20,19,.72);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:12px;font-family:var(--disp);font-weight:700;letter-spacing:-.01em}
+  .brand b{font-weight:700}
+  .brand i{font-style:normal;color:var(--muted)}
+  .nav-cta{
+    font-family:var(--mono);font-size:13px;letter-spacing:.04em;
+    border:1px solid var(--line);padding:9px 15px;border-radius:99px;
+    transition:.2s border-color,.2s color;
+  }
+  .nav-cta:hover{border-color:var(--core);color:var(--core)}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;padding:88px 0 76px}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+  h1{
+    font-family:var(--disp);font-weight:700;
+    font-size:clamp(40px,6.6vw,68px);line-height:1.02;letter-spacing:-.03em;
+    margin:22px 0 20px;
+  }
+  h1 em{font-style:normal;color:var(--core)}
+  .lede{font-size:clamp(17px,2vw,19px);color:#C6D0CB;max-width:34ch}
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+  .btn{
+    font-family:var(--disp);font-weight:500;font-size:16px;
+    padding:15px 26px;border-radius:99px;cursor:pointer;border:1px solid transparent;
+    transition:transform .15s ease,background .2s,color .2s,border-color .2s;
+    display:inline-flex;align-items:center;gap:10px;
+  }
+  .btn-primary{background:var(--core);color:#04110E}
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{border-color:var(--line);color:var(--paper)}
+  .btn-ghost:hover{border-color:var(--core);color:var(--core)}
+  .btn.hidden{display:none}
+
+  .visual{
+    position:relative;border:1px solid var(--line);border-radius:20px;
+    background:linear-gradient(160deg,var(--ink-800),var(--ink-900));
+    padding:26px;min-height:340px;display:flex;flex-direction:column;justify-content:space-between;
+    overflow:hidden;
+  }
+  .visual::after{
+    content:"";position:absolute;inset:-40% -30% auto auto;width:60%;height:70%;
+    background:radial-gradient(closest-side,var(--core-dim),transparent);pointer-events:none;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:8px;position:relative;z-index:2}
+  .chip{
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
+    color:#B9C6C0;border:1px solid var(--line);padding:6px 11px;border-radius:99px;
+    background:rgba(255,255,255,.02);
+  }
+  .converge{display:flex;align-items:center;gap:14px;position:relative;z-index:2;margin-top:8px}
+  .converge .arrow{flex:1;height:1px;background:linear-gradient(90deg,var(--line),var(--core));position:relative}
+  .converge .arrow::after{content:"";position:absolute;right:0;top:-3px;width:7px;height:7px;border-top:1px solid var(--core);border-right:1px solid var(--core);transform:rotate(45deg)}
+  .out{
+    font-family:var(--disp);font-weight:700;font-size:15px;color:var(--ink-900);
+    background:var(--core);padding:10px 16px;border-radius:99px;white-space:nowrap;
+  }
+
+  /* ---------- approche ---------- */
+  .kicker-row{display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:44px}
+  h2{font-family:var(--disp);font-weight:700;font-size:clamp(28px,4vw,40px);letter-spacing:-.02em;line-height:1.08;max-width:20ch}
+  .sub{color:var(--muted);max-width:42ch}
+
+  .flow{display:grid;grid-template-columns:1fr auto 1fr;gap:30px;align-items:center}
+  .inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .inp{border:1px solid var(--line);border-radius:12px;padding:14px 15px;background:var(--ink-800)}
+  .inp .n{font-family:var(--mono);font-size:11px;color:var(--core);letter-spacing:.12em}
+  .inp .t{font-size:14.5px;color:#D5DDD8;margin-top:3px}
+  .pipe{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+  .pipe .capbox{width:118px;height:118px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;background:radial-gradient(closest-side,var(--core-dim),transparent)}
+  .pipe .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .result{border:1px solid var(--core);border-radius:16px;padding:26px;background:linear-gradient(160deg,rgba(52,224,200,.06),transparent)}
+  .result h3{font-family:var(--disp);font-weight:700;font-size:21px;margin-bottom:10px}
+  .result p{color:#C6D0CB;font-size:15.5px}
+  .result ul{list-style:none;margin-top:16px;display:grid;gap:9px}
+  .result li{display:flex;gap:10px;font-size:14.5px;color:#D5DDD8}
+  .result li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--core);margin-top:8px;flex:0 0 auto}
+
+  /* ---------- parcours (colonnes) ---------- */
+  .steps4{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--ink-800)}
+  .stepcol{padding:26px 16px;border-left:1px solid var(--line)}
+  .stepcol:first-child{border-left:none}
+  .stepcol .num{font-family:var(--mono);font-size:13px;color:var(--core);letter-spacing:.12em}
+  .stepcol h4{font-family:var(--disp);font-weight:700;font-size:clamp(16px,4.4vw,22px);letter-spacing:-.01em;margin:16px 0 8px}
+  .stepcol p{font-size:clamp(11px,2.9vw,14px);color:#B9C6C0;line-height:1.4}
+
+  /* ---------- form / wizard ---------- */
+  .form-shell{border:1px solid var(--line);border-radius:22px;background:var(--ink-800);padding:clamp(22px,4vw,40px);max-width:820px;margin:0 auto;scroll-margin-top:82px}
+
+  .stepper{display:flex;margin-bottom:22px}
+  .node{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center}
+  .node:not(:first-child)::before{content:"";position:absolute;top:15px;right:50%;width:100%;height:2px;background:var(--line);transition:background .35s}
+  .node.done::before,.node.active::before{background:var(--core)}
+  .node .dot{position:relative;z-index:1;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--ink-800);border:2px solid var(--line);font-family:var(--mono);font-size:13px;color:var(--muted);transition:.3s}
+  .node .nlabel{font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);transition:.3s;line-height:1.2}
+  .node.active .dot{border-color:var(--core);color:var(--core);box-shadow:0 0 0 4px var(--core-dim)}
+  .node.active .nlabel{color:var(--paper)}
+  .node.done .dot{border-color:var(--core);background:var(--core);color:#04110E}
+  .node.done .nlabel{color:#B9C6C0}
+  .step-count{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted);text-align:center;margin:-2px 0 26px}
+
+  .step{display:none}
+  .step.active{display:block;animation:stepIn .35s ease}
+  @keyframes stepIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .step:focus{outline:none}
+  .step-head{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--core);padding-bottom:16px;display:flex;align-items:center;gap:10px}
+  .step-head span{flex:1;height:1px;background:var(--line)}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .field{display:flex;flex-direction:column;gap:7px;margin-bottom:2px}
+  .field.full{grid-column:1/-1}
+  label.lb{font-size:14px;color:#C6D0CB;font-weight:500}
+  label.lb .opt{color:var(--muted);font-weight:400;font-size:12.5px}
+  input,select,textarea{
+    font-family:var(--body);font-size:16px;color:var(--paper);
+    background:var(--ink-900);border:1px solid var(--line);border-radius:11px;
+    padding:13px 14px;width:100%;transition:border-color .18s,background .18s;
+  }
+  textarea{resize:vertical;min-height:96px}
+  input::placeholder,textarea::placeholder{color:#5E6E68}
+  input:focus,select:focus,textarea:focus{border-color:var(--core);background:#0d1a18;outline:none}
+  select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238A9A93' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+  .invalid{border-color:var(--err)!important}
+
+  .note{display:flex;gap:12px;border:1px dashed var(--line);border-radius:12px;padding:14px 16px;background:rgba(231,217,196,.04);margin-top:16px}
+  .note .cap{margin-top:3px}
+  .note p{font-size:13.5px;color:#B9C6C0}
+  .note b{color:var(--shell);font-weight:600}
+
+  .consent{display:flex;gap:12px;align-items:flex-start;margin-top:18px}
+  .consent input{width:20px;height:20px;flex:0 0 auto;accent-color:var(--core);margin-top:2px}
+  .consent label{font-size:13.5px;color:#B9C6C0}
+  .consent a{color:var(--core);text-decoration:underline;text-underline-offset:2px}
+
+  .form-msg{font-size:14px;min-height:20px;margin-top:16px}
+  .form-msg.error{color:var(--err)}
+  .nav-btns{display:flex;gap:12px;margin-top:14px}
+  .nav-btns .btn{flex:1;justify-content:center}
+
+  .success{display:none;text-align:center;padding:44px 20px}
+  .success.show{display:block}
+  .success .cap{margin:0 auto 20px;transform:rotate(-20deg) scale(1.4)}
+  .success h3{font-family:var(--disp);font-weight:700;font-size:26px;margin-bottom:10px}
+  .success p{color:#C6D0CB;max-width:40ch;margin:0 auto 22px}
+
+  /* ---------- séances / calendrier ---------- */
+  .cal-legend{display:flex;flex-wrap:wrap;gap:18px;margin:0 0 20px}
+  .leg{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#B9C6C0}
+  .leg .d{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+  .leg .d.solo{background:var(--core)}
+  .leg .d.groupe{background:var(--shell)}
+  .cal{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--ink-800)}
+  .calrow{display:flex;gap:16px;align-items:center;padding:16px 18px;border-top:1px solid var(--line)}
+  .calrow:first-child{border-top:none}
+  .calday{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);width:104px;flex:0 0 auto}
+  .slots{display:flex;flex-wrap:wrap;gap:9px}
+  .slot{font-family:var(--body);font-size:14px;color:var(--paper);background:var(--ink-900);border:1px solid var(--line);border-radius:99px;padding:8px 9px 8px 15px;cursor:pointer;display:inline-flex;align-items:center;gap:9px;transition:border-color .18s,transform .12s}
+  .slot:hover{border-color:var(--core);transform:translateY(-1px)}
+  .slot .stype{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:99px}
+  .slot .stype.solo{color:#04110E;background:var(--core)}
+  .slot .stype.groupe{color:#1A140A;background:var(--shell)}
+  .repos{font-size:13.5px;color:#5E6E68;font-style:italic}
+  @media(max-width:560px){
+    .calrow{flex-direction:column;align-items:flex-start;gap:10px}
+    .calday{width:auto}
+  }
+
+  /* ---------- suite / roadmap ---------- */
+  .road{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .card{border:1px solid var(--line);border-radius:16px;padding:24px;background:var(--ink-800)}
+  .card .tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .card h4{font-family:var(--disp);font-weight:700;font-size:18px;margin:12px 0 8px}
+  .card p{font-size:14.5px;color:#B9C6C0}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line);padding:40px 0;color:var(--muted);font-size:13.5px}
+  .foot-in{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+  .foot-in .brand{color:var(--paper)}
+
+  /* ---------- reveal ---------- */
+  .rise{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+  .rise.in{opacity:1;transform:none}
+
+  /* ---------- responsive ---------- */
+  @media(max-width:880px){
+    .section{padding:66px 0}
+    .hero{padding:52px 0 44px}
+    .hero-grid{grid-template-columns:1fr;gap:34px}
+    .visual{min-height:280px}
+    .flow{grid-template-columns:1fr;gap:22px}
+    .pipe{flex-direction:row;justify-content:center;gap:18px}
+    .road{grid-template-columns:1fr}
+  }
+  @media(max-width:560px){
+    body{font-size:16px}
+    .grid2{grid-template-columns:1fr}
+    .inputs{grid-template-columns:1fr}
+    .nav-cta{display:none}
+    .cta-row .btn{flex:1;justify-content:center}
+    .node .nlabel{font-size:9px}
+    .stepcol{padding:18px 9px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .rise{opacity:1;transform:none}
+    html{scroll-behavior:auto}
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="kpsul_corps, accueil">
+      <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
+      <span><b>kpsul</b><i>_corps</i></span>
+    </a>
+    <a class="nav-cta" href="#bilan">Commencer mon bilan</a>
+  </div>
+</nav>
+
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Coaching musculation · sur-mesure</span>
+      <h1>Un programme construit à partir de <em>tout ce qui te compose.</em></h1>
+      <p class="lede">Tes mesures, ton objectif, ton alimentation, ton mode de vie, ta morphologie. On rassemble chaque paramètre dans une seule capsule : ton plan. Rien de générique, rien de copié-collé.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#bilan">Faire mon bilan</a>
+        <a class="btn btn-ghost" href="#approche">Voir l'approche</a>
+      </div>
+    </div>
+
+    <div class="visual" aria-hidden="true">
+      <div class="chips" id="chips">
+        <span class="chip">Poids</span>
+        <span class="chip">Taille</span>
+        <span class="chip">Objectif</span>
+        <span class="chip">Alimentation</span>
+        <span class="chip">Morphologie</span>
+        <span class="chip">Métabolisme</span>
+        <span class="chip">Fréquence</span>
+        <span class="chip">Sommeil</span>
+        <span class="chip">Mode de vie</span>
+        <span class="chip">Limitations</span>
+      </div>
+      <div class="converge">
+        <span class="cap lg"><span class="a"></span><span class="b"></span></span>
+        <span class="arrow"></span>
+        <span class="out">Ton programme</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <section class="section" id="approche">
+    <div class="wrap">
+      <div class="kicker-row rise">
+        <div>
+          <span class="eyebrow">Ton parcours</span>
+          <h2 style="margin-top:16px">Quatre étapes, un plan qui te ressemble.</h2>
+        </div>
+        <p class="sub">D'un coup d'œil, voilà comment on avance ensemble — du premier bilan à ton suivi.</p>
+      </div>
+
+      <div class="steps4 rise">
+        <div class="stepcol">
+          <div class="num">01</div>
+          <h4>Bilan</h4>
+          <p>Tu remplis ton profil.</p>
+        </div>
+        <div class="stepcol">
+          <div class="num">02</div>
+          <h4>Analyse</h4>
+          <p>J'étudie tes paramètres.</p>
+        </div>
+        <div class="stepcol">
+          <div class="num">03</div>
+          <h4>Plan</h4>
+          <p>Ton programme sur-mesure.</p>
+        </div>
+        <div class="stepcol">
+          <div class="num">04</div>
+          <h4>Suivi</h4>
+          <p>On ajuste chaque semaine.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="bilan" style="padding-top:20px">
+    <div class="wrap">
+      <div class="kicker-row rise" style="margin-bottom:30px">
+        <div>
+          <span class="eyebrow">Le bilan</span>
+          <h2 style="margin-top:16px">Parle-moi de toi.</h2>
+        </div>
+        <p class="sub">Cinq étapes, une à la fois. Plus c'est précis, plus ton programme le sera. Je reviens vers toi avec les premières pistes.</p>
+      </div>
+
+      <div class="form-shell rise">
+        <form id="bilanForm" novalidate>
+
+          <div class="stepper" id="stepper" aria-hidden="true">
+            <div class="node"><span class="dot">1</span><span class="nlabel">Toi</span></div>
+            <div class="node"><span class="dot">2</span><span class="nlabel">Corps</span></div>
+            <div class="node"><span class="dot">3</span><span class="nlabel">Objectif</span></div>
+            <div class="node"><span class="dot">4</span><span class="nlabel">Séances</span></div>
+            <div class="node"><span class="dot">5</span><span class="nlabel">Vie</span></div>
+          </div>
+          <p class="step-count" id="stepCount"></p>
+
+          <!-- Étape 1 -->
+          <div class="step" data-step="1" tabindex="-1">
+            <div class="step-head">Toi <span></span></div>
+            <div class="grid2">
+              <div class="field"><label class="lb" for="prenom">Prénom</label><input id="prenom" name="Prénom" required placeholder="Alex"></div>
+              <div class="field"><label class="lb" for="email">Email</label><input id="email" name="Email" type="email" required placeholder="alex@email.com"></div>
+              <div class="field"><label class="lb" for="age">Âge</label><input id="age" name="Âge" type="number" min="14" max="99" required placeholder="28"></div>
+              <div class="field">
+                <label class="lb" for="sexe">Sexe</label>
+                <select id="sexe" name="Sexe" required>
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Homme</option><option>Femme</option><option>Préfère ne pas préciser</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Étape 2 -->
+          <div class="step" data-step="2" tabindex="-1">
+            <div class="step-head">Ton corps <span></span></div>
+            <div class="grid2">
+              <div class="field"><label class="lb" for="taille">Taille (cm)</label><input id="taille" name="Taille (cm)" type="number" min="120" max="230" required placeholder="178"></div>
+              <div class="field"><label class="lb" for="poids">Poids (kg)</label><input id="poids" name="Poids (kg)" type="number" min="35" max="250" required placeholder="74"></div>
+              <div class="field full">
+                <label class="lb" for="morpho">Morphologie ressentie <span class="opt">— si tu sais</span></label>
+                <select id="morpho" name="Morphologie">
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Plutôt fin, prend le muscle difficilement (ectomorphe)</option>
+                  <option>Équilibré, réagit vite (mésomorphe)</option>
+                  <option>Prend le gras facilement (endomorphe)</option>
+                  <option>Je ne sais pas</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Étape 3 -->
+          <div class="step" data-step="3" tabindex="-1">
+            <div class="step-head">Ton objectif <span></span></div>
+            <div class="grid2">
+              <div class="field">
+                <label class="lb" for="objectif">Objectif principal</label>
+                <select id="objectif" name="Objectif" required>
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Prise de muscle</option><option>Perte de gras</option>
+                  <option>Recomposition (les deux)</option><option>Force / performance</option>
+                  <option>Remise en forme</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="lb" for="niveau">Niveau</label>
+                <select id="niveau" name="Niveau" required>
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Débutant</option><option>Intermédiaire</option><option>Avancé</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label class="lb" for="pourquoi">Pourquoi maintenant ? <span class="opt">— optionnel</span></label>
+                <textarea id="pourquoi" name="Motivation" placeholder="Ce qui te motive, une échéance, un déclic..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Étape 4 -->
+          <div class="step" data-step="4" tabindex="-1">
+            <div class="step-head">Ton entraînement <span></span></div>
+            <div class="grid2">
+              <div class="field">
+                <label class="lb" for="freq">Séances possibles / semaine</label>
+                <select id="freq" name="Fréquence" required>
+                  <option value="" disabled selected>Choisir</option>
+                  <option>2</option><option>3</option><option>4</option><option>5</option><option>6 et +</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="lb" for="lieu">Où t'entraînes-tu ?</label>
+                <select id="lieu" name="Lieu" required>
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Salle de sport</option><option>À la maison</option><option>Les deux</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label class="lb" for="materiel">Matériel dispo <span class="opt">— optionnel</span></label>
+                <input id="materiel" name="Matériel" placeholder="Haltères, barre, machines, élastiques, rien...">
+              </div>
+            </div>
+          </div>
+
+          <!-- Étape 5 -->
+          <div class="step" data-step="5" tabindex="-1">
+            <div class="step-head">Alimentation &amp; mode de vie <span></span></div>
+            <div class="grid2">
+              <div class="field">
+                <label class="lb" for="repas">Repas par jour</label>
+                <select id="repas" name="Repas/jour">
+                  <option value="" disabled selected>Choisir</option>
+                  <option>1 à 2</option><option>3</option><option>4 et +</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="lb" for="sommeil">Sommeil moyen / nuit</label>
+                <select id="sommeil" name="Sommeil">
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Moins de 6h</option><option>6 à 7h</option><option>7 à 8h</option><option>Plus de 8h</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label class="lb" for="regime">Régime ou préférences alimentaires <span class="opt">— optionnel</span></label>
+                <input id="regime" name="Régime" placeholder="Végétarien, sans lactose, allergies, aliments que tu détestes...">
+              </div>
+              <div class="field full">
+                <label class="lb" for="limites">Blessures ou limitations physiques <span class="opt">— optionnel</span></label>
+                <textarea id="limites" name="Limitations" placeholder="Une gêne au genou, au dos, une épaule fragile... ce qui pourrait limiter certains exercices."></textarea>
+              </div>
+            </div>
+
+            <div class="note">
+              <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
+              <p><b>Ta santé reste confidentielle.</b> Le questionnaire médical détaillé (antécédents, pathologies) se fera plus tard, dans ton espace membre sécurisé — pas ici. Ici, on reste sur l'essentiel pour te recontacter.</p>
+            </div>
+
+            <div class="consent">
+              <input id="rgpd" type="checkbox" required>
+              <label for="rgpd">J'accepte que kpsul_corps utilise ces informations pour me recontacter et préparer mon accompagnement. Je peux demander leur suppression à tout moment. <a href="#confidentialite">Confidentialité</a></label>
+            </div>
+          </div>
+
+          <p class="form-msg" id="formMsg" role="status"></p>
+          <div class="nav-btns">
+            <button type="button" class="btn btn-ghost" id="backBtn">Retour</button>
+            <button type="button" class="btn btn-primary" id="nextBtn">Suivant</button>
+          </div>
+        </form>
+
+        <div class="success" id="success" role="status" aria-live="polite">
+          <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
+          <h3>Bilan reçu.</h3>
+          <p>Merci. Je reviens vers toi rapidement avec les premières pistes de ton programme.</p>
+          <button class="btn btn-ghost" id="resetBtn" type="button">Renvoyer un bilan</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="seances">
+    <div class="wrap">
+      <div class="kicker-row rise">
+        <div>
+          <span class="eyebrow">S'entraîner ensemble</span>
+          <h2 style="margin-top:16px">On se dépasse, ensemble.</h2>
+        </div>
+        <p class="sub">Coaching en solo ou séance de groupe, même énergie : on se pousse, on progresse, on kiffe l'effort. Repère un créneau, réserve — je confirme.</p>
+      </div>
+
+      <div class="cal-legend rise">
+        <span class="leg"><span class="d solo"></span> Solo — coaching individuel</span>
+        <span class="leg"><span class="d groupe"></span> Groupe — on s'entraîne à plusieurs</span>
+      </div>
+
+      <div class="cal rise" id="cal"></div>
+    </div>
+  </section>
+
+  <section class="section" id="suite">
+    <div class="wrap">
+      <div class="kicker-row rise">
+        <div>
+          <span class="eyebrow">La suite</span>
+          <h2 style="margin-top:16px">Ce qui arrive dans ton espace.</h2>
+        </div>
+        <p class="sub">Le bilan est le point de départ. L'accompagnement complet se construit ensuite, étape par étape.</p>
+      </div>
+      <div class="road rise">
+        <div class="card">
+          <div class="tag">Bientôt</div>
+          <h4>Espace membre</h4>
+          <p>Ton dossier, tes mesures, tes photos de suivi et ton programme, réunis à un seul endroit.</p>
+        </div>
+        <div class="card">
+          <div class="tag">Bientôt</div>
+          <h4>Messagerie privée</h4>
+          <p>Un échange direct entre toi et moi, rien qu'à nous, pour ajuster au fil des semaines.</p>
+        </div>
+        <div class="card">
+          <div class="tag">En option</div>
+          <h4>Assistant IA</h4>
+          <p>Des réponses fiables à tes questions du quotidien, en complément — jamais à ma place.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="confidentialite">
+  <div class="wrap foot-in">
+    <a class="brand" href="#top">
+      <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
+      <span><b>kpsul</b><i>_corps</i></span>
+    </a>
+    <p>Tes données servent uniquement à ton accompagnement. Aucune revente, suppression sur simple demande. · © <span id="year"></span> kpsul_corps</p>
+  </div>
+</footer>
+
+<script>
+  // 📧 Ton adresse email qui reçoit les bilans et les réservations :
+  const CONTACT_EMAIL = "aballkciim70g@gmail.com";
+
+  // 📅 Tes disponibilités — modifie librement (type "Solo" ou "Groupe") :
+  const DISPOS = {
+    "Lundi":    [{h:"18:00", type:"Solo"}, {h:"19:30", type:"Groupe"}],
+    "Mardi":    [{h:"18:00", type:"Solo"}],
+    "Mercredi": [{h:"12:15", type:"Groupe"}, {h:"18:00", type:"Solo"}],
+    "Jeudi":    [{h:"19:00", type:"Solo"}],
+    "Vendredi": [{h:"18:00", type:"Groupe"}],
+    "Samedi":   [{h:"10:00", type:"Groupe"}, {h:"11:30", type:"Solo"}],
+    "Dimanche": []
+  };
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // apparition des chips au chargement
+  if(!reduce){
+    document.querySelectorAll("#chips .chip").forEach((c,i)=>{
+      c.style.opacity=0; c.style.transform="translateY(10px)";
+      c.style.transition="opacity .5s ease, transform .5s ease";
+      setTimeout(()=>{c.style.opacity=1;c.style.transform="none";}, 180 + i*70);
+    });
+  }
+
+  // reveals au scroll
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} });
+  },{threshold:.14});
+  document.querySelectorAll(".rise").forEach(el=>io.observe(el));
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // ---- calendrier des disponibilités ----
+  (function(){
+    const cal = document.getElementById("cal");
+    if(!cal) return;
+    const ordre = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
+    ordre.forEach(jour=>{
+      const row = document.createElement("div");
+      row.className = "calrow";
+      const label = document.createElement("div");
+      label.className = "calday";
+      label.textContent = jour;
+      row.appendChild(label);
+      const slots = document.createElement("div");
+      slots.className = "slots";
+      const list = DISPOS[jour] || [];
+      if(list.length === 0){
+        const repos = document.createElement("span");
+        repos.className = "repos";
+        repos.textContent = "Repos";
+        slots.appendChild(repos);
+      } else {
+        list.forEach(s=>{
+          const t = s.type === "Groupe" ? "groupe" : "solo";
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "slot";
+          btn.innerHTML = `${s.h} <span class="stype ${t}">${s.type}</span>`;
+          btn.addEventListener("click", ()=>{
+            const subject = `Réservation créneau — ${jour} ${s.h} (${s.type})`;
+            const body = `Salut ! Je veux réserver le créneau ${jour} à ${s.h} (${s.type}).\n\nMon prénom : \nMon objectif : \n\nÀ très vite pour se dépasser !`;
+            window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+          });
+          slots.appendChild(btn);
+        });
+      }
+      row.appendChild(slots);
+      cal.appendChild(row);
+    });
+  })();
+
+  // ---- questionnaire en étapes ----
+  const form = document.getElementById("bilanForm");
+  const steps = Array.from(form.querySelectorAll(".step"));
+  const nodes = Array.from(document.querySelectorAll("#stepper .node"));
+  const titles = ["Toi","Ton corps","Ton objectif","Ton entraînement","Alimentation & mode de vie"];
+  const backBtn = document.getElementById("backBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const stepCount = document.getElementById("stepCount");
+  const msg = document.getElementById("formMsg");
+  const success = document.getElementById("success");
+  let current = 0;
+  const last = steps.length - 1;
+
+  function render(){
+    steps.forEach((s,i)=>s.classList.toggle("active", i===current));
+    nodes.forEach((n,i)=>{
+      n.classList.toggle("done", i<current);
+      n.classList.toggle("active", i===current);
+      n.querySelector(".dot").textContent = i<current ? "✓" : (i+1);
+    });
+    stepCount.textContent = `Étape ${current+1} sur ${steps.length} · ${titles[current]}`;
+    backBtn.classList.toggle("hidden", current===0);
+    nextBtn.textContent = current===last ? "Envoyer mon bilan" : "Suivant";
+    msg.className = "form-msg"; msg.textContent = "";
+  }
+
+  function validateStep(stepEl){
+    stepEl.querySelectorAll(".invalid").forEach(el=>el.classList.remove("invalid"));
+    let firstBad = null;
+    stepEl.querySelectorAll("[required]").forEach(el=>{
+      const ok = el.type==="checkbox" ? el.checked : el.value.trim()!=="";
+      if(!ok){ el.classList.add("invalid"); if(!firstBad) firstBad = el; }
+    });
+    const email = stepEl.querySelector('input[type="email"]');
+    if(email && email.value && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value)){
+      email.classList.add("invalid"); if(!firstBad) firstBad = email;
+    }
+    if(firstBad){
+      msg.className = "form-msg error";
+      msg.textContent = current===last
+        ? "Il manque ton accord (ou un champ) — vérifie ce qui est surligné."
+        : "Il manque quelques infos — vérifie les champs surlignés.";
+      firstBad.focus();
+      return false;
+    }
+    return true;
+  }
+
+  function scrollToForm(){
+    document.querySelector(".form-shell").scrollIntoView({behavior: reduce ? "auto":"smooth", block:"start"});
+  }
+
+  function goNext(){
+    if(!validateStep(steps[current])) return;
+    if(current===last){ sendForm(); return; }
+    current++; render(); scrollToForm();
+    steps[current].focus({preventScroll:true});
+  }
+  function goBack(){
+    if(current===0) return;
+    current--; render(); scrollToForm();
+    steps[current].focus({preventScroll:true});
+  }
+
+  function sendForm(){
+    const data = new FormData(form);
+    let body = "Nouveau bilan kpsul_corps\n\n";
+    for(const [k,v] of data.entries()){
+      if(k==="rgpd") continue;
+      if(String(v).trim()!=="") body += `${k} : ${v}\n`;
+    }
+    const prenom = data.get("Prénom") || "";
+    const subject = `Bilan kpsul_corps — ${prenom}`;
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    form.style.display = "none";
+    success.classList.add("show");
+    success.scrollIntoView({behavior: reduce ? "auto":"smooth", block:"center"});
+  }
+
+  nextBtn.addEventListener("click", goNext);
+  backBtn.addEventListener("click", goBack);
+  form.addEventListener("submit", (e)=>{ e.preventDefault(); goNext(); });
+  document.getElementById("resetBtn").addEventListener("click", ()=>{
+    form.reset(); current = 0; render();
+    form.style.display = ""; success.classList.remove("show");
+    scrollToForm();
+  });
+
+  render();
+</script>
+</body>
+</html>
