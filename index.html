@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- KPSUL CORPS V1.5 ADMIN RÉEL — fichier unique index.html -->
+<!-- KPSUL CORPS V1.6 CRM ADMIN — fichier unique index.html -->
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
@@ -516,6 +516,37 @@
   .client-data span{font-size:12px;color:#B9C6C0;border:1px solid var(--line);border-radius:999px;padding:6px 9px}
   @media(max-width:700px){.real-kpi-grid{grid-template-columns:1fr 1fr}.admin-client .client-data{grid-template-columns:1fr}}
 
+
+  /* ---------- KPSUL V1.6 CRM Admin ---------- */
+  #adminDashboard{display:none;padding:86px 0 70px}
+  body.admin-mode #adminDashboard{display:block}
+  body.admin-mode main, body.admin-mode header, body.admin-mode #concept, body.admin-mode footer{display:none}
+  .admin-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;flex-wrap:wrap;margin-bottom:24px}
+  .admin-head h1{margin:0;font-size:clamp(30px,5vw,48px)}
+  .admin-switch{display:flex;gap:10px;flex-wrap:wrap}
+  .admin-crm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0 26px}
+  .admin-crm-kpi{border:1px solid var(--line);border-radius:18px;background:var(--ink-800);padding:20px}
+  .admin-crm-kpi b{display:block;font-family:var(--disp);font-size:34px;color:var(--core);line-height:1}
+  .admin-crm-kpi span{display:block;color:#8A9A93;font-size:13px;margin-top:8px}
+  .admin-layout{display:grid;grid-template-columns:360px 1fr;gap:18px}
+  .client-list,.client-detail{border:1px solid var(--line);border-radius:20px;background:var(--ink-800);padding:18px}
+  .client-search{margin-bottom:14px}
+  .client-row{width:100%;text-align:left;border:1px solid var(--line);border-radius:14px;background:var(--ink-900);padding:14px;margin-bottom:10px;color:var(--paper);cursor:pointer}
+  .client-row.active{border-color:var(--core);box-shadow:0 0 0 3px var(--core-dim)}
+  .client-row b{display:block;font-family:var(--disp);font-size:16px}
+  .client-row span{display:block;color:#8A9A93;font-size:12px;margin-top:3px}
+  .detail-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+  .detail-tab{border:1px solid var(--line);background:var(--ink-900);color:#B9C6C0;border-radius:999px;padding:8px 11px;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;cursor:pointer}
+  .detail-tab.active{background:var(--core);border-color:var(--core);color:#04110E}
+  .detail-panel{display:none}
+  .detail-panel.active{display:block}
+  .admin-data-list{display:grid;gap:10px}
+  .admin-data-item{border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025);padding:14px}
+  .admin-data-item b{display:block;font-family:var(--disp)}
+  .admin-data-item span{display:block;color:#8A9A93;font-size:13px;margin-top:4px}
+  .program-form{border:1px solid rgba(52,224,200,.3);border-radius:16px;padding:16px;background:rgba(52,224,200,.045);margin-bottom:14px}
+  @media(max-width:900px){.admin-crm-grid{grid-template-columns:1fr 1fr}.admin-layout{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -696,6 +727,73 @@
       </div>
 
       <button id="logoutBtn" class="btn btn-ghost" type="button">Se déconnecter</button>
+    </div>
+  </div>
+</section>
+
+
+<section id="adminDashboard" aria-live="polite">
+  <div class="wrap">
+    <div class="admin-head">
+      <div>
+        <span class="eyebrow">Admin Kpsul</span>
+        <h1>Tableau de bord réel</h1>
+        <p class="sub">Aucune donnée fictive. Tout vient de Supabase.</p>
+      </div>
+      <div class="admin-switch">
+        <button class="btn btn-ghost" id="viewClientSiteBtn" type="button">Voir le site client</button>
+        <button class="btn btn-primary" id="refreshAdminBtn" type="button">Rafraîchir</button>
+      </div>
+    </div>
+
+    <div class="admin-crm-grid">
+      <div class="admin-crm-kpi"><b id="crmClients">0</b><span>Clients réels</span></div>
+      <div class="admin-crm-kpi"><b id="crmMeals">0</b><span>Repas saisis</span></div>
+      <div class="admin-crm-kpi"><b id="crmExercises">0</b><span>Exercices saisis</span></div>
+      <div class="admin-crm-kpi"><b id="crmMessages">0</b><span>Messages</span></div>
+    </div>
+
+    <div class="admin-layout">
+      <div class="client-list">
+        <h3 style="font-family:var(--disp);margin-bottom:10px">Clients</h3>
+        <input class="client-search" id="clientSearch" placeholder="Rechercher un client">
+        <div id="crmClientList">
+          <div class="admin-data-item"><b>Aucun client</b><span>Les clients inscrits apparaîtront ici.</span></div>
+        </div>
+      </div>
+
+      <div class="client-detail">
+        <h3 id="selectedClientName" style="font-family:var(--disp);margin-bottom:4px">Sélectionne un client</h3>
+        <p class="private-note" id="selectedClientMeta">Ses données apparaîtront ici.</p>
+
+        <div class="detail-tabs">
+          <button class="detail-tab active" data-detail="dOverview" type="button">Résumé</button>
+          <button class="detail-tab" data-detail="dMeals" type="button">Alimentation</button>
+          <button class="detail-tab" data-detail="dExercises" type="button">Progression</button>
+          <button class="detail-tab" data-detail="dHabits" type="button">Habitudes</button>
+          <button class="detail-tab" data-detail="dGoals" type="button">Objectifs</button>
+          <button class="detail-tab" data-detail="dMessages" type="button">Messages</button>
+          <button class="detail-tab" data-detail="dProgram" type="button">Programme</button>
+        </div>
+
+        <div class="detail-panel active" id="dOverview"><div class="admin-data-list" id="detailOverview"></div></div>
+        <div class="detail-panel" id="dMeals"><div class="admin-data-list" id="detailMeals"></div></div>
+        <div class="detail-panel" id="dExercises"><div class="admin-data-list" id="detailExercises"></div></div>
+        <div class="detail-panel" id="dHabits"><div class="admin-data-list" id="detailHabits"></div></div>
+        <div class="detail-panel" id="dGoals"><div class="admin-data-list" id="detailGoals"></div></div>
+        <div class="detail-panel" id="dMessages"><div class="admin-data-list" id="detailMessages"></div></div>
+        <div class="detail-panel" id="dProgram">
+          <div class="program-form">
+            <h4 style="font-family:var(--disp);margin-bottom:10px">Attribuer un programme</h4>
+            <input id="adminProgramTitle" placeholder="Titre du programme">
+            <input id="adminProgramGoal" placeholder="Objectif" style="margin-top:10px">
+            <textarea id="adminProgramContent" placeholder="Programme : exercices, séries, reps, consignes..." style="margin-top:10px"></textarea>
+            <button class="btn btn-primary" id="saveAdminProgramBtn" type="button" style="margin-top:10px">Envoyer au client</button>
+            <div class="tool-status" id="adminProgramStatus"></div>
+          </div>
+          <div class="admin-data-list" id="detailPrograms"></div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -1367,7 +1465,14 @@
         const name = (session.user.user_metadata && session.user.user_metadata.full_name) || "";
         memberHello.textContent = name ? ("Salut " + name + " !") : "Ton espace";
         authBtn.textContent = "Se déconnecter";
-        ensureProfile(session).then(()=>loadMemberData(session));
+        ensureProfile(session).then(async (profile)=>{
+          await loadMemberData(session);
+          const role = profile?.role || currentProfileRole;
+          if(["admin","coach"].includes(role)){
+            document.body.classList.add("admin-mode");
+            loadCrmAdmin();
+          }
+        });
       } else {
         authBtn.textContent = "Espace membre";
       }
@@ -1421,6 +1526,141 @@
       if(lastWorkout) lastWorkout.textContent = exercises[0]?.exercise_name || "—";
     }
 
+
+
+    // ---------- CRM Admin réel ----------
+    let crmData = {profiles:[], foods:[], exercises:[], habits:[], goals:[], messages:[], programs:[]};
+    let selectedClientId = null;
+
+    function setCrmText(id, value){
+      const el = document.getElementById(id);
+      if(el) el.textContent = value;
+    }
+
+    function renderItems(targetId, rows, empty, render){
+      const el = document.getElementById(targetId);
+      if(!el) return;
+      el.innerHTML = rows && rows.length ? rows.map(render).join("") : `<div class="admin-data-item"><b>Aucune donnée</b><span>${htmlSafe(empty)}</span></div>`;
+    }
+
+    async function loadCrmAdmin(){
+      if(!["admin","coach"].includes(currentProfileRole)) return;
+      const [profilesRes, foodRes, exerciseRes, habitRes, goalRes, msgRes, progRes] = await Promise.all([
+        sb.from("profiles").select("*").order("created_at", { ascending:false }),
+        sb.from("nutrition_logs").select("*").order("created_at", { ascending:false }),
+        sb.from("workout_exercise_logs").select("*").order("created_at", { ascending:false }),
+        sb.from("habit_logs").select("*").order("created_at", { ascending:false }),
+        sb.from("client_goals").select("*").order("created_at", { ascending:false }),
+        sb.from("messages").select("*").order("created_at", { ascending:false }),
+        sb.from("programs").select("*").order("created_at", { ascending:false })
+      ]);
+
+      crmData = {
+        profiles: profilesRes.data || [],
+        foods: foodRes.data || [],
+        exercises: exerciseRes.data || [],
+        habits: habitRes.data || [],
+        goals: goalRes.data || [],
+        messages: msgRes.data || [],
+        programs: progRes.data || []
+      };
+
+      const clients = crmData.profiles.filter(p => (p.role || "client") === "client");
+      setCrmText("crmClients", clients.length);
+      setCrmText("crmMeals", crmData.foods.length);
+      setCrmText("crmExercises", crmData.exercises.length);
+      setCrmText("crmMessages", crmData.messages.length);
+      renderClientList();
+
+      if(!selectedClientId && clients[0]) selectClient(clients[0].id);
+      else if(selectedClientId) selectClient(selectedClientId);
+    }
+
+    function renderClientList(){
+      const list = document.getElementById("crmClientList");
+      if(!list) return;
+      const q = (document.getElementById("clientSearch")?.value || "").toLowerCase();
+      const clients = crmData.profiles.filter(p => (p.role || "client") === "client")
+        .filter(p => String(p.prenom || p.id).toLowerCase().includes(q));
+      if(!clients.length){
+        list.innerHTML = `<div class="admin-data-item"><b>0 client</b><span>Aucun client réel trouvé.</span></div>`;
+        return;
+      }
+      list.innerHTML = clients.map(p => {
+        const lastMsg = crmData.messages.find(m => m.user_id === p.id);
+        return `<button class="client-row ${p.id===selectedClientId?'active':''}" type="button" data-client="${htmlSafe(p.id)}">
+          <b>${htmlSafe(p.prenom || "Client sans prénom")}</b>
+          <span>${htmlSafe(p.id)}</span>
+          <span>Dernier message : ${htmlSafe(lastMsg?.message || "—")}</span>
+        </button>`;
+      }).join("");
+      list.querySelectorAll("[data-client]").forEach(btn=>{
+        btn.addEventListener("click", ()=>selectClient(btn.dataset.client));
+      });
+    }
+
+    function selectClient(uid){
+      selectedClientId = uid;
+      const p = crmData.profiles.find(x => x.id === uid);
+      const meals = crmData.foods.filter(x => x.user_id === uid);
+      const exercises = crmData.exercises.filter(x => x.user_id === uid);
+      const habits = crmData.habits.filter(x => x.user_id === uid);
+      const goals = crmData.goals.filter(x => x.user_id === uid);
+      const messages = crmData.messages.filter(x => x.user_id === uid);
+      const programs = crmData.programs.filter(x => x.user_id === uid);
+
+      setCrmText("selectedClientName", p?.prenom || "Client");
+      setCrmText("selectedClientMeta", "ID client : " + uid);
+
+      renderClientList();
+
+      renderItems("detailOverview", [
+        {k:"Repas saisis", v:meals.length},
+        {k:"Exercices saisis", v:exercises.length},
+        {k:"Habitudes saisies", v:habits.length},
+        {k:"Messages", v:messages.length},
+        {k:"Programmes", v:programs.length}
+      ], "Sélectionne un client.", r => `<div class="admin-data-item"><b>${htmlSafe(r.v)}</b><span>${htmlSafe(r.k)}</span></div>`);
+
+      renderItems("detailMeals", meals, "Aucun repas saisi.", f => `<div class="admin-data-item"><b>${htmlSafe(f.meal_name)} · ${htmlSafe(f.calories || 0)} kcal</b><span>${htmlSafe(f.log_date)} · P ${htmlSafe(f.protein_g||0)} / G ${htmlSafe(f.carbs_g||0)} / L ${htmlSafe(f.fat_g||0)}</span><span>${htmlSafe(f.content || "")}</span></div>`);
+      renderItems("detailExercises", exercises, "Aucun exercice saisi.", e => `<div class="admin-data-item"><b>${htmlSafe(e.exercise_name)}</b><span>${htmlSafe(e.sets)} séries · ${htmlSafe(e.reps)} reps · ${htmlSafe(e.load_kg || 0)} kg</span><span>${htmlSafe(e.log_date)} · ${htmlSafe(e.note || "")}</span></div>`);
+      renderItems("detailHabits", habits, "Aucune habitude saisie.", h => `<div class="admin-data-item"><b>${htmlSafe(h.log_date)}</b><span>Sommeil ${htmlSafe(h.sleep_hours || "—")}h · Eau ${htmlSafe(h.water_liters || "—")}L · Pas ${htmlSafe(h.steps || "—")}</span><span>Stress ${htmlSafe(h.stress_level || "—")} · Énergie ${htmlSafe(h.energy_level || "—")}</span></div>`);
+      renderItems("detailGoals", goals, "Aucun objectif saisi.", g => `<div class="admin-data-item"><b>${htmlSafe(g.main_goal || "Objectif")}</b><span>Poids cible ${htmlSafe(g.target_weight_kg || "—")} kg · Deadline ${htmlSafe(g.deadline || "—")}</span><span>${htmlSafe(g.notes || "")}</span></div>`);
+      renderItems("detailMessages", messages, "Aucun message.", m => `<div class="admin-data-item"><b>${htmlSafe(m.sender || "client")}</b><span>${htmlSafe(m.created_at ? new Date(m.created_at).toLocaleString("fr-FR") : "")}</span><span>${htmlSafe(m.message || "")}</span></div>`);
+      renderItems("detailPrograms", programs, "Aucun programme attribué.", pr => `<div class="admin-data-item"><b>${htmlSafe(pr.titre || "Programme")}</b><span>${htmlSafe(pr.objectif || "")}</span><span>${htmlSafe(pr.contenu || "")}</span></div>`);
+    }
+
+    async function saveAdminProgram(){
+      if(!selectedClientId) return;
+      const status = document.getElementById("adminProgramStatus");
+      const payload = {
+        user_id: selectedClientId,
+        titre: document.getElementById("adminProgramTitle").value.trim(),
+        objectif: document.getElementById("adminProgramGoal").value.trim(),
+        contenu: document.getElementById("adminProgramContent").value.trim()
+      };
+      if(!payload.titre || !payload.contenu){
+        if(status) status.textContent = "Titre et contenu obligatoires.";
+        return;
+      }
+      const { error } = await sb.from("programs").insert(payload);
+      if(status) status.textContent = error ? "Erreur : " + error.message : "Programme envoyé au client.";
+      if(!error) loadCrmAdmin();
+    }
+
+    document.querySelectorAll(".detail-tab").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        document.querySelectorAll(".detail-tab").forEach(b=>b.classList.remove("active"));
+        document.querySelectorAll(".detail-panel").forEach(p=>p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(btn.dataset.detail)?.classList.add("active");
+      });
+    });
+
+    document.getElementById("clientSearch")?.addEventListener("input", renderClientList);
+    document.getElementById("refreshAdminBtn")?.addEventListener("click", loadCrmAdmin);
+    document.getElementById("saveAdminProgramBtn")?.addEventListener("click", saveAdminProgram);
+    document.getElementById("viewClientSiteBtn")?.addEventListener("click", ()=>document.body.classList.remove("admin-mode"));
 
     async function loadAdminData(){
       if(!["admin","coach"].includes(currentProfileRole)) return;
