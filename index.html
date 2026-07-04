@@ -1,10 +1,11 @@
 <!DOCTYPE html>
+<!-- KPSUL CORPS V1.1 PREMIUM — fichier unique index.html -->
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>kpsul_corps — coaching musculation sur-mesure</title>
-<meta name="description" content="Un programme construit à partir de tout ce qui te compose : mesures, objectif, alimentation, mode de vie, morphologie. Rien de générique." />
+<title>Kpsul Corps — La Capsule de transformation physique</title>
+<meta name="description" content="Kpsul Corps transforme ton profil, ta morphologie, ton rythme de vie et tes objectifs en une expérience de coaching physique sur-mesure. Entre dans la Capsule." />
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -309,9 +310,174 @@
     .rise{opacity:1;transform:none}
     html{scroll-behavior:auto}
   }
+
+  /* ---------- KPSUL V1.1 premium layer ---------- */
+  :root{
+    --glow:0 0 42px rgba(52,224,200,.22);
+    --glass:rgba(255,255,255,.045);
+    --glass-2:rgba(255,255,255,.075);
+  }
+
+  .kpsul-intro{
+    position:fixed;inset:0;z-index:500;
+    background:radial-gradient(circle at 50% 45%, rgba(52,224,200,.13), transparent 30%), #030807;
+    display:grid;place-items:center;
+    transition:opacity .75s ease,visibility .75s ease;
+  }
+  .kpsul-intro.hide{opacity:0;visibility:hidden;pointer-events:none}
+  .intro-inner{text-align:center;padding:30px;max-width:720px}
+  .intro-capsule{
+    width:112px;height:52px;border-radius:999px;overflow:hidden;margin:0 auto 30px;
+    display:flex;transform:rotate(-18deg);
+    box-shadow:0 0 0 1px rgba(52,224,200,.35), var(--glow);
+    animation:introFloat 2.8s ease-in-out infinite;
+  }
+  .intro-capsule span{width:50%;height:100%;display:block}
+  .intro-capsule .left{background:var(--shell)}
+  .intro-capsule .right{background:var(--core)}
+  .intro-line{
+    font-family:var(--disp);font-weight:700;font-size:clamp(30px,6vw,64px);
+    line-height:1.04;letter-spacing:-.04em;color:var(--paper);
+    opacity:0;transform:translateY(14px);
+    animation:introText 4.3s ease forwards;
+  }
+  .intro-line strong{color:var(--core);font-weight:700}
+  .intro-skip{
+    margin-top:28px;background:transparent;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:10px 16px;
+    font-family:var(--mono);font-size:12px;letter-spacing:.08em;cursor:pointer;
+  }
+  @keyframes introFloat{0%,100%{transform:rotate(-18deg) translateY(0)}50%{transform:rotate(-18deg) translateY(-10px)}}
+  @keyframes introText{
+    0%{opacity:0;transform:translateY(14px)}
+    18%,72%{opacity:1;transform:none}
+    100%{opacity:1;transform:none}
+  }
+
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(circle at 15% 22%, rgba(52,224,200,.10), transparent 28%),
+      radial-gradient(circle at 85% 18%, rgba(231,217,196,.08), transparent 22%);
+    pointer-events:none;
+  }
+  .hero-grid{position:relative;z-index:2}
+  .hero-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .hero-badge{
+    font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:#B9C6C0;border:1px solid var(--line);background:var(--glass);
+    padding:7px 11px;border-radius:999px;
+  }
+  .signature{
+    margin-top:28px;padding:18px 20px;border-left:2px solid var(--core);
+    background:linear-gradient(90deg,rgba(52,224,200,.08),transparent);
+    color:#D5DDD8;border-radius:0 14px 14px 0;max-width:560px;
+  }
+  .signature b{color:var(--core)}
+
+  .capsule-orbit{
+    position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:1;
+  }
+  .orbit-word{
+    position:absolute;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    color:rgba(236,239,233,.62);border:1px solid rgba(52,224,200,.24);
+    padding:6px 9px;border-radius:999px;background:rgba(11,20,19,.56);
+    animation:orbitPulse 4s ease-in-out infinite;
+  }
+  .orbit-word:nth-child(1){transform:translate(-120px,-105px)}
+  .orbit-word:nth-child(2){transform:translate(112px,-92px)}
+  .orbit-word:nth-child(3){transform:translate(-150px,12px)}
+  .orbit-word:nth-child(4){transform:translate(142px,28px)}
+  .orbit-word:nth-child(5){transform:translate(-72px,116px)}
+  .orbit-word:nth-child(6){transform:translate(82px,118px)}
+  @keyframes orbitPulse{0%,100%{opacity:.46}50%{opacity:1;box-shadow:0 0 24px rgba(52,224,200,.16)}}
+
+  .capsule-meter{
+    margin-top:24px;border:1px solid var(--line);border-radius:14px;background:var(--ink-900);padding:14px;
+    position:relative;z-index:3;
+  }
+  .meter-top{display:flex;justify-content:space-between;gap:14px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px}
+  .meter-bar{height:9px;border-radius:999px;background:#07110f;overflow:hidden;border:1px solid var(--line)}
+  .meter-fill{height:100%;width:17%;background:linear-gradient(90deg,var(--core),#E7D9C4);border-radius:inherit;transition:width .55s ease;box-shadow:0 0 22px rgba(52,224,200,.25)}
+
+  .manifesto{
+    border:1px solid var(--line);border-radius:22px;padding:clamp(26px,4vw,46px);
+    background:
+      linear-gradient(160deg,rgba(52,224,200,.075),transparent 48%),
+      var(--ink-800);
+    position:relative;overflow:hidden;
+  }
+  .manifesto::after{
+    content:"KPSUL";position:absolute;right:-16px;bottom:-42px;
+    font-family:var(--disp);font-weight:700;font-size:120px;letter-spacing:-.08em;
+    color:rgba(255,255,255,.025);pointer-events:none;
+  }
+  .manifesto h2{max-width:18ch}
+  .manifesto p{max-width:62ch;color:#C6D0CB;margin-top:18px}
+  .manifesto-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+  .mitem{border:1px solid var(--line);border-radius:15px;padding:18px;background:rgba(4,10,9,.28)}
+  .mitem .tag{font-family:var(--mono);font-size:11px;color:var(--core);letter-spacing:.12em;text-transform:uppercase}
+  .mitem h4{font-family:var(--disp);font-size:18px;margin:9px 0 5px}
+  .mitem p{font-size:14px;margin:0;color:#B9C6C0}
+
+  .lab-preview{
+    display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:28px;
+  }
+  .lab-card{
+    border:1px solid var(--line);border-radius:18px;background:var(--ink-800);
+    padding:22px;position:relative;overflow:hidden;
+  }
+  .lab-card::before{
+    content:"";position:absolute;inset:auto -20% -40% auto;width:70%;height:80%;
+    background:radial-gradient(closest-side,rgba(52,224,200,.11),transparent);
+  }
+  .lab-card .tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .lab-card h3{font-family:var(--disp);font-size:24px;letter-spacing:-.02em;margin:12px 0 8px}
+  .lab-stat{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px;margin-top:12px;color:#C6D0CB}
+  .lab-stat b{color:var(--core)}
+
+  .coach-panel{
+    border:1px solid var(--line);border-radius:22px;background:var(--ink-800);padding:26px;
+  }
+  .coach-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:22px}
+  .coach-kpi{border:1px solid var(--line);border-radius:16px;background:var(--ink-900);padding:18px}
+  .coach-kpi b{display:block;font-family:var(--disp);font-size:30px;color:var(--core);line-height:1}
+  .coach-kpi span{display:block;margin-top:8px;font-size:13px;color:#B9C6C0}
+
+  .question-pill{
+    display:inline-flex;gap:8px;align-items:center;font-family:var(--mono);font-size:11px;
+    color:var(--core);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;
+  }
+  .question-pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--core);box-shadow:0 0 16px var(--core)}
+
+  .step.active .step-head::before{
+    content:"Capsule active";font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--core);border:1px solid var(--line);border-radius:999px;padding:4px 8px;margin-right:4px;
+  }
+
+  .ai-note{
+    margin-top:16px;border:1px solid rgba(52,224,200,.32);border-radius:16px;padding:18px;
+    background:rgba(52,224,200,.055);color:#C6D0CB;font-size:14px;
+  }
+  .ai-note b{color:var(--core)}
+
+  @media(max-width:880px){
+    .manifesto-grid,.lab-preview,.coach-grid{grid-template-columns:1fr}
+    .orbit-word{display:none}
+  }
+
 </style>
 </head>
 <body>
+
+<div class="kpsul-intro" id="kpsulIntro" aria-label="Introduction Kpsul Corps">
+  <div class="intro-inner">
+    <div class="intro-capsule" aria-hidden="true"><span class="left"></span><span class="right"></span></div>
+    <div class="intro-line">Chaque corps possède une histoire.<br><strong>La tienne commence dans la Capsule.</strong></div>
+    <button class="intro-skip" id="introSkip" type="button">Entrer dans Kpsul</button>
+  </div>
+</div>
+
 
 <nav>
   <div class="wrap nav-in">
@@ -319,7 +485,7 @@
       <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
       <span><b>kpsul</b><i>_corps</i></span>
     </a>
-    <button id="authBtn" class="nav-auth" type="button">Espace membre</button>
+    <div style="display:flex;gap:10px;align-items:center"><a class="nav-cta" href="#laboratoire">Laboratoire</a><button id="authBtn" class="nav-auth" type="button">Espace membre</button></div>
   </div>
 </nav>
 
@@ -330,8 +496,12 @@
       <h2 id="memberHello">Ton espace</h2>
       <p>Bienvenue dans ton espace kpsul_corps. C'est ici que tout ton suivi va vivre.</p>
       <div class="member-tiles">
-        <div class="mtile"><div class="tag">Bientôt</div><h4>Mes séances</h4><p>Reps, séries, repos, charge, exos.</p></div>
-        <div class="mtile"><div class="tag">Bientôt</div><h4>Ma diet</h4><p>Repas, calories, jour par jour.</p></div>
+        <div class="mtile"><div class="tag">Capsule</div><h4>Score Capsule</h4><p>Analyse globale de ton évolution.</p></div>
+        <div class="mtile"><div class="tag">Training</div><h4>Mes séances</h4><p>Reps, séries, repos, charge, exos.</p></div>
+        <div class="mtile"><div class="tag">Nutrition</div><h4>Ma diet</h4><p>Calories, macros, repas jour par jour.</p></div>
+        <div class="mtile"><div class="tag">Progression</div><h4>Mensurations</h4><p>Poids, taille, bras, cuisses, photos.</p></div>
+        <div class="mtile"><div class="tag">Coach</div><h4>Messages</h4><p>Échanges privés et ajustements.</p></div>
+        <div class="mtile"><div class="tag">Planning</div><h4>Réservations</h4><p>Séances solo, groupe et suivis.</p></div>
       </div>
       <button id="logoutBtn" class="btn btn-ghost" type="button">Se déconnecter</button>
     </div>
@@ -341,12 +511,18 @@
 <header class="hero" id="top">
   <div class="wrap hero-grid">
     <div>
-      <span class="eyebrow">Coaching musculation · sur-mesure</span>
-      <h1>Un programme construit à partir de <em>tout ce qui te compose.</em></h1>
-      <p class="lede">Tes mesures, ton objectif, ton alimentation, ton mode de vie, ta morphologie. On rassemble chaque paramètre dans une seule capsule : ton plan. Rien de générique, rien de copié-collé.</p>
+      <span class="eyebrow">Plateforme de transformation physique</span>
+      <h1>Entre dans la Capsule. <em>Ressors avec ton plan.</em></h1>
+      <p class="lede">Kpsul Corps analyse ton corps, ton rythme de vie, ton objectif, tes contraintes et ta progression pour construire une transformation vraiment personnelle.</p>
+      <div class="hero-badges">
+        <span class="hero-badge">Analyse morphologique</span>
+        <span class="hero-badge">Coaching premium</span>
+        <span class="hero-badge">Laboratoire membre</span>
+      </div>
+      <div class="signature"><b>Signature Kpsul :</b> tout ce que tu es entre dans la Capsule. Tout ce que tu peux devenir en ressort.</div>
       <div class="cta-row">
-        <a class="btn btn-primary" href="#bilan">Faire mon bilan</a>
-        <a class="btn btn-ghost" href="#approche">Voir l'approche</a>
+        <a class="btn btn-primary" href="#bilan">Entrer dans la Capsule</a>
+        <a class="btn btn-ghost" href="#laboratoire">Voir le Laboratoire</a>
       </div>
     </div>
 
@@ -371,6 +547,23 @@
     </div>
   </div>
 </header>
+
+
+<section class="section" id="concept">
+  <div class="wrap">
+    <div class="manifesto rise">
+      <span class="eyebrow">Le concept</span>
+      <h2 style="margin-top:16px">Pas un programme. Un système de transformation.</h2>
+      <p>Kpsul Corps ne se limite pas à vendre des séances ou un PDF. La plateforme apprend à connaître la personne : son corps, son quotidien, son énergie, ses blocages, son alimentation et sa façon de progresser. Le but est simple : créer un plan qui ne ressemble à aucun autre.</p>
+      <div class="manifesto-grid">
+        <div class="mitem"><div class="tag">01</div><h4>Analyse</h4><p>On collecte les données utiles sans rendre l’expérience lourde.</p></div>
+        <div class="mitem"><div class="tag">02</div><h4>Construction</h4><p>Le plan est adapté à la morphologie, aux horaires et au niveau réel.</p></div>
+        <div class="mitem"><div class="tag">03</div><h4>Évolution</h4><p>Le suivi transforme les résultats en ajustements concrets.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
 
 <main>
   <section class="section" id="approche">
@@ -453,6 +646,10 @@
             <div class="grid2">
               <div class="field"><label class="lb" for="taille">Taille (cm)</label><input id="taille" name="Taille (cm)" type="number" min="120" max="230" required placeholder="178"></div>
               <div class="field"><label class="lb" for="poids">Poids (kg)</label><input id="poids" name="Poids (kg)" type="number" min="35" max="250" required placeholder="74"></div>
+              <div class="field"><label class="lb" for="tourtaille">Tour de taille (cm) <span class="opt">— optionnel</span></label><input id="tourtaille" name="Tour de taille (cm)" type="number" min="40" max="200" placeholder="82"></div>
+              <div class="field"><label class="lb" for="tourbras">Tour de bras (cm) <span class="opt">— optionnel</span></label><input id="tourbras" name="Tour de bras (cm)" type="number" min="15" max="80" placeholder="38"></div>
+              <div class="field"><label class="lb" for="activite">Métier / activité <span class="opt">— important</span></label><input id="activite" name="Métier / activité" placeholder="Travail physique, bureau, horaires tôt..."></div>
+              <div class="field"><label class="lb" for="pas">Pas moyens / jour <span class="opt">— optionnel</span></label><input id="pas" name="Pas moyens / jour" type="number" min="0" max="50000" placeholder="8000"></div>
               <div class="field full">
                 <label class="lb" for="morpho">Morphologie ressentie <span class="opt">— si tu sais</span></label>
                 <select id="morpho" name="Morphologie">
@@ -540,10 +737,29 @@
                 <label class="lb" for="regime">Régime ou préférences alimentaires <span class="opt">— optionnel</span></label>
                 <input id="regime" name="Régime" placeholder="Végétarien, sans lactose, allergies, aliments que tu détestes...">
               </div>
+              <div class="field">
+                <label class="lb" for="stress">Niveau de stress</label>
+                <select id="stress" name="Stress">
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Faible</option><option>Moyen</option><option>Élevé</option><option>Très élevé</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="lb" for="budget">Budget alimentation / semaine</label>
+                <select id="budget" name="Budget alimentation">
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Moins de 50 €</option><option>50 à 80 €</option><option>80 à 120 €</option><option>120 € et +</option>
+                </select>
+              </div>
               <div class="field full">
                 <label class="lb" for="limites">Blessures ou limitations physiques <span class="opt">— optionnel</span></label>
                 <textarea id="limites" name="Limitations" placeholder="Une gêne au genou, au dos, une épaule fragile... ce qui pourrait limiter certains exercices."></textarea>
               </div>
+              <div class="field full">
+                <label class="lb" for="photos">Photos d’évolution <span class="opt">— bientôt via Supabase Storage</span></label>
+                <input id="photos" name="Photos prévues" placeholder="Face, profil, dos — fonctionnalité préparée pour la prochaine version">
+              </div>
+              <div class="ai-note"><b>Préparation IA :</b> ces données sont pensées pour générer plus tard un programme, une nutrition et des ajustements beaucoup plus précis.</div>
             </div>
 
             <div class="note">
@@ -590,6 +806,54 @@
       </div>
 
       <div class="cal rise" id="cal"></div>
+    </div>
+  </section>
+
+
+  <section class="section" id="laboratoire">
+    <div class="wrap">
+      <div class="kicker-row rise">
+        <div>
+          <span class="eyebrow">Le Laboratoire</span>
+          <h2 style="margin-top:16px">L'espace membre devient une salle de contrôle.</h2>
+        </div>
+        <p class="sub">Le client ne consulte pas seulement un programme. Il suit son évolution, ses données, ses séances, son alimentation et ses prochaines actions.</p>
+      </div>
+      <div class="lab-preview rise">
+        <div class="lab-card">
+          <div class="tag">Capsule client</div>
+          <h3>Analyse synchronisée</h3>
+          <p class="sub">Score global, progression, séance du jour, nutrition, récupération et objectifs.</p>
+          <div class="lab-stat"><span>Analyse</span><b>97%</b></div>
+          <div class="lab-stat"><span>Force</span><b>+18%</b></div>
+          <div class="lab-stat"><span>Tour de taille</span><b>-5 cm</b></div>
+        </div>
+        <div class="lab-card">
+          <div class="tag">Interface coach</div>
+          <h3>Priorités immédiates</h3>
+          <p class="sub">Les clients à relancer, blessures signalées, check-ins manquants et programmes à valider.</p>
+          <div class="lab-stat"><span>Nouveaux bilans</span><b>6</b></div>
+          <div class="lab-stat"><span>À relancer</span><b>3</b></div>
+          <div class="lab-stat"><span>Programmes</span><b>14</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="coach">
+    <div class="wrap">
+      <div class="coach-panel rise">
+        <span class="eyebrow">Côté coach</span>
+        <h2 style="margin-top:16px">Tout gérer sans se noyer.</h2>
+        <p class="sub" style="margin-top:12px">Cette zone prépare la future interface coach : clients, alertes, programmes, réservations, paiements et messages.</p>
+        <div class="coach-grid">
+          <div class="coach-kpi"><b>184</b><span>Clients</span></div>
+          <div class="coach-kpi"><b>6</b><span>Nouveaux bilans</span></div>
+          <div class="coach-kpi"><b>3</b><span>À relancer</span></div>
+          <div class="coach-kpi"><b>2</b><span>Blessures</span></div>
+          <div class="coach-kpi"><b>14</b><span>Programmes</span></div>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -931,6 +1195,55 @@
     sb.auth.getSession().then(({ data })=> setAuthUI(data.session));
     sb.auth.onAuthStateChange((_e, session)=> setAuthUI(session));
   })();
+
+  // ---- KPSUL V1.1 premium interactions ----
+  (function(){
+    const intro = document.getElementById("kpsulIntro");
+    const skip = document.getElementById("introSkip");
+    const hideIntro = ()=>{
+      if(!intro) return;
+      intro.classList.add("hide");
+      try{ sessionStorage.setItem("kpsulIntroSeen","1"); }catch(e){}
+    };
+    if(intro){
+      let seen = false;
+      try{ seen = sessionStorage.getItem("kpsulIntroSeen")==="1"; }catch(e){}
+      if(seen){ intro.classList.add("hide"); }
+      else { setTimeout(hideIntro, 4300); }
+      if(skip) skip.addEventListener("click", hideIntro);
+    }
+
+    const meterFill = document.getElementById("meterFill");
+    const meterPct = document.getElementById("meterPct");
+    const stepNodes = document.querySelectorAll("#stepper .node");
+    const updateCapsuleMeter = ()=>{
+      const active = document.querySelector("#stepper .node.active");
+      let idx = 0;
+      stepNodes.forEach((n,i)=>{ if(n===active) idx = i; });
+      const pct = Math.round(((idx+1) / Math.max(stepNodes.length,1)) * 100);
+      if(meterFill) meterFill.style.width = pct + "%";
+      if(meterPct) meterPct.textContent = pct + "%";
+    };
+    document.addEventListener("click", (e)=>{
+      if(e.target && (e.target.id === "nextBtn" || e.target.id === "backBtn")){
+        setTimeout(updateCapsuleMeter, 60);
+      }
+    });
+    updateCapsuleMeter();
+
+    document.querySelectorAll("input,select,textarea").forEach(el=>{
+      el.addEventListener("change", ()=>{
+        if(meterFill){
+          meterFill.animate([
+            {filter:"brightness(1)", transform:"scaleX(1)"},
+            {filter:"brightness(1.8)", transform:"scaleX(1.015)"},
+            {filter:"brightness(1)", transform:"scaleX(1)"}
+          ],{duration:420,easing:"ease-out"});
+        }
+      });
+    });
+  })();
+
 </script>
 </body>
 </html>
