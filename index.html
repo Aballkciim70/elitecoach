@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- KPSUL CORPS V1.4 LABORATOIRE — fichier unique index.html -->
+<!-- KPSUL CORPS V1.5 ADMIN RÉEL — fichier unique index.html -->
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
@@ -503,6 +503,19 @@
   .private-note{font-size:12.5px;color:#8A9A93;margin-top:10px}
   @media(max-width:700px){.metric-row{grid-template-columns:1fr 1fr}}
 
+
+  /* ---------- KPSUL V1.5 admin réel ---------- */
+  .real-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+  .real-kpi{border:1px solid var(--line);border-radius:14px;background:rgba(4,10,9,.36);padding:14px}
+  .real-kpi b{display:block;font-family:var(--disp);font-size:26px;color:var(--core);line-height:1}
+  .real-kpi span{display:block;font-size:12px;color:#8A9A93;margin-top:6px}
+  .admin-client{border:1px solid var(--line);border-radius:14px;padding:14px;background:rgba(255,255,255,.025);margin-top:10px}
+  .admin-client b{font-family:var(--disp);font-size:16px;color:var(--paper)}
+  .admin-client small{display:block;color:#8A9A93;margin-top:2px}
+  .admin-client .client-data{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+  .client-data span{font-size:12px;color:#B9C6C0;border:1px solid var(--line);border-radius:999px;padding:6px 9px}
+  @media(max-width:700px){.real-kpi-grid{grid-template-columns:1fr 1fr}.admin-client .client-data{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -1003,17 +1016,17 @@
           <div class="tag">Capsule client</div>
           <h3>Analyse synchronisée</h3>
           <p class="sub">Score global, progression, séance du jour, nutrition, récupération et objectifs.</p>
-          <div class="lab-stat"><span>Analyse</span><b>97%</b></div>
-          <div class="lab-stat"><span>Force</span><b>+18%</b></div>
-          <div class="lab-stat"><span>Tour de taille</span><b>-5 cm</b></div>
+          <div class="lab-stat"><span>Analyse</span><b>—</b></div>
+          <div class="lab-stat"><span>Force</span><b>—</b></div>
+          <div class="lab-stat"><span>Tour de taille</span><b>—</b></div>
         </div>
         <div class="lab-card">
           <div class="tag">Interface coach</div>
           <h3>Priorités immédiates</h3>
           <p class="sub">Les clients à relancer, blessures signalées, check-ins manquants et programmes à valider.</p>
-          <div class="lab-stat"><span>Nouveaux bilans</span><b>6</b></div>
-          <div class="lab-stat"><span>À relancer</span><b>3</b></div>
-          <div class="lab-stat"><span>Programmes</span><b>14</b></div>
+          <div class="lab-stat"><span>Nouveaux bilans</span><b>—</b></div>
+          <div class="lab-stat"><span>À relancer</span><b>—</b></div>
+          <div class="lab-stat"><span>Programmes</span><b>—</b></div>
         </div>
       </div>
     </div>
@@ -1024,13 +1037,13 @@
       <div class="coach-panel rise">
         <span class="eyebrow">Côté coach</span>
         <h2 style="margin-top:16px">Tout gérer sans se noyer.</h2>
-        <p class="sub" style="margin-top:12px">Cette zone prépare la future interface coach : clients, alertes, programmes, réservations, paiements et messages.</p>
+        <p class="sub" style="margin-top:12px">Cette zone ne doit afficher que des statistiques réelles issues de Supabase. Aucun chiffre inventé.</p>
         <div class="coach-grid">
-          <div class="coach-kpi"><b>184</b><span>Clients</span></div>
-          <div class="coach-kpi"><b>6</b><span>Nouveaux bilans</span></div>
-          <div class="coach-kpi"><b>3</b><span>À relancer</span></div>
-          <div class="coach-kpi"><b>2</b><span>Blessures</span></div>
-          <div class="coach-kpi"><b>14</b><span>Programmes</span></div>
+          <div class="coach-kpi"><b>—</b><span>Clients réels</span></div>
+          <div class="coach-kpi"><b>—</b><span>Bilans réels</span></div>
+          <div class="coach-kpi"><b>—</b><span>À relancer</span></div>
+          <div class="coach-kpi"><b>—</b><span>Blessures</span></div>
+          <div class="coach-kpi"><b>—</b><span>Programmes réels</span></div>
         </div>
       </div>
     </div>
@@ -1408,6 +1421,71 @@
       if(lastWorkout) lastWorkout.textContent = exercises[0]?.exercise_name || "—";
     }
 
+
+    async function loadAdminData(){
+      if(!["admin","coach"].includes(currentProfileRole)) return;
+
+      const status = document.getElementById("adminStatus");
+      if(status) status.textContent = "Chargement des vraies données Supabase...";
+
+      const [profilesRes, foodRes, exerciseRes, habitRes, goalRes, msgRes] = await Promise.all([
+        sb.from("profiles").select("*").order("created_at", { ascending:false }),
+        sb.from("nutrition_logs").select("*").order("created_at", { ascending:false }),
+        sb.from("workout_exercise_logs").select("*").order("created_at", { ascending:false }),
+        sb.from("habit_logs").select("*").order("created_at", { ascending:false }),
+        sb.from("client_goals").select("*").order("created_at", { ascending:false }),
+        sb.from("messages").select("*").order("created_at", { ascending:false })
+      ]);
+
+      const profiles = profilesRes.data || [];
+      const foods = foodRes.data || [];
+      const exercises = exerciseRes.data || [];
+      const habits = habitRes.data || [];
+      const goals = goalRes.data || [];
+      const messages = msgRes.data || [];
+
+      const setText = (id, val)=>{ const el = document.getElementById(id); if(el) el.textContent = val; };
+      setText("adminClientsCount", profiles.filter(p => (p.role || "client") === "client").length);
+      setText("adminFoodCount", foods.length);
+      setText("adminExerciseCount", exercises.length);
+      setText("adminMessageCount", messages.length);
+
+      const list = document.getElementById("adminClientsList");
+      if(list){
+        if(!profiles.length){
+          list.innerHTML = `<div class="tool-item"><b>Aucun client</b><span>Aucun profil client trouvé dans Supabase.</span></div>`;
+        } else {
+          list.innerHTML = profiles.map(p => {
+            const uid = p.id;
+            const lastFood = foods.find(f => f.user_id === uid);
+            const lastExercise = exercises.find(e => e.user_id === uid);
+            const lastHabit = habits.find(h => h.user_id === uid);
+            const lastGoal = goals.find(g => g.user_id === uid);
+            const lastMsg = messages.find(m => m.user_id === uid);
+            return `
+              <div class="admin-client">
+                <b>${htmlSafe(p.prenom || p.id)}</b>
+                <small>Rôle : ${htmlSafe(p.role || "client")} · ID : ${htmlSafe(p.id)}</small>
+                <div class="client-data">
+                  <span>Objectif : ${htmlSafe(lastGoal?.main_goal || "—")}</span>
+                  <span>Dernier repas : ${htmlSafe(lastFood?.meal_name || "—")}</span>
+                  <span>Dernier exercice : ${htmlSafe(lastExercise?.exercise_name || "—")}</span>
+                  <span>Sommeil : ${htmlSafe(lastHabit?.sleep_hours || "—")} h</span>
+                  <span>Message : ${htmlSafe(lastMsg?.message || "—")}</span>
+                  <span>Mise à jour : ${htmlSafe(lastFood?.created_at || lastExercise?.created_at || lastHabit?.created_at || "—")}</span>
+                </div>
+              </div>
+            `;
+          }).join("");
+        }
+      }
+
+      if(status){
+        const errors = [profilesRes.error, foodRes.error, exerciseRes.error, habitRes.error, goalRes.error, msgRes.error].filter(Boolean);
+        status.textContent = errors.length ? "Certaines données ne sont pas accessibles : vérifie les policies admin." : "Données réelles chargées.";
+      }
+    }
+
     async function loadMemberData(session){
       if(!session || !session.user) return;
       const uid = session.user.id;
@@ -1459,6 +1537,7 @@
       `);
 
       updateScore({foods, exercises, habits, goals});
+      loadAdminData();
     }
 
     async function getSessionOrOpen(){
