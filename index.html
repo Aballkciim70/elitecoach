@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- KPSUL CORPS V2.1 DOCUMENTS UPLOAD — fichier unique index.html -->
+<!-- KPSUL CORPS V2.2 ROLES VISIBILITE — fichier unique index.html -->
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
@@ -635,6 +635,14 @@
   .doc-card button{margin-top:10px;border:1px solid var(--line);background:var(--ink-900);color:var(--core);border-radius:999px;padding:8px 10px;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;cursor:pointer}
   .doc-card button:hover{border-color:var(--core)}
   @media(max-width:700px){.doc-grid{grid-template-columns:1fr}}
+
+
+  /* ---------- KPSUL V2.2 séparation visiteurs / clients / admin ---------- */
+  body:not(.admin-mode) #adminDashboard{display:none!important}
+  body.authed main{display:none!important}
+  body.authed #benefices, body.authed #confidentialite{display:none!important}
+  body.admin-mode #member{display:none!important}
+  body.admin-mode main, body.admin-mode header, body.admin-mode #concept, body.admin-mode #benefices, body.admin-mode #confidentialite, body.admin-mode footer{display:none!important}
 
 </style>
 </head>
@@ -1367,29 +1375,32 @@
           <div class="lab-stat"><span>Tour de taille</span><b>—</b></div>
         </div>
         <div class="lab-card">
-          <div class="tag">Interface coach</div>
-          <h3>Priorités immédiates</h3>
-          <p class="sub">Les clients à relancer, blessures signalées, check-ins manquants et programmes à valider.</p>
-          <div class="lab-stat"><span>Nouveaux bilans</span><b>—</b></div>
-          <div class="lab-stat"><span>À relancer</span><b>—</b></div>
-          <div class="lab-stat"><span>Programmes</span><b>—</b></div>
+          <div class="tag">Espace membre</div>
+          <h3>Ton suivi au même endroit</h3>
+          <p class="sub">Après inscription, tu retrouves ton programme, tes repas, tes documents, tes rendez-vous et tes messages avec le coach.</p>
+          <div class="lab-stat"><span>Programme</span><b>Privé</b></div>
+          <div class="lab-stat"><span>Documents</span><b>Privé</b></div>
+          <div class="lab-stat"><span>Messages</span><b>Privé</b></div>
         </div>
       </div>
     </div>
   </section>
-
-  <section class="section" id="coach">
+  <section class="section" id="benefices">
     <div class="wrap">
       <div class="coach-panel rise">
-        <span class="eyebrow">Côté coach</span>
-        <h2 style="margin-top:16px">Tout gérer sans se noyer.</h2>
-        <p class="sub" style="margin-top:12px">Cette zone ne doit afficher que des statistiques réelles issues de Supabase. Aucun chiffre inventé.</p>
+        <span class="eyebrow">Pourquoi créer ton compte</span>
+        <h2 style="margin-top:16px">Ton suivi devient simple, clair et privé.</h2>
+        <p class="sub" style="margin-top:12px">L’espace membre sert uniquement à suivre ta transformation avec ton coach. Tes données ne sont pas publiques : programme, alimentation, documents et messages restent dans ton espace.</p>
         <div class="coach-grid">
-          <div class="coach-kpi"><b>—</b><span>Clients réels</span></div>
-          <div class="coach-kpi"><b>—</b><span>Bilans réels</span></div>
-          <div class="coach-kpi"><b>—</b><span>À relancer</span></div>
-          <div class="coach-kpi"><b>—</b><span>Blessures</span></div>
-          <div class="coach-kpi"><b>—</b><span>Programmes réels</span></div>
+          <div class="coach-kpi"><b>01</b><span>Programme personnalisé</span></div>
+          <div class="coach-kpi"><b>02</b><span>Suivi alimentaire</span></div>
+          <div class="coach-kpi"><b>03</b><span>Progression séance</span></div>
+          <div class="coach-kpi"><b>04</b><span>Documents privés</span></div>
+          <div class="coach-kpi"><b>05</b><span>Messagerie coach</span></div>
+        </div>
+        <div class="cta-row" style="margin-top:24px">
+          <button class="btn btn-primary" type="button" onclick="document.getElementById('authBtn')?.click()">Créer mon espace</button>
+          <a class="btn btn-ghost" href="#bilan">Remplir mon bilan</a>
         </div>
       </div>
     </div>
