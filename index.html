@@ -246,6 +246,45 @@
   .rise{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
   .rise.in{opacity:1;transform:none}
 
+  /* ---------- espace membre / auth ---------- */
+  .nav-auth{
+    font-family:var(--mono);font-size:13px;letter-spacing:.04em;
+    border:1px solid var(--core);color:var(--core);background:transparent;
+    padding:9px 15px;border-radius:99px;cursor:pointer;white-space:nowrap;
+    transition:background .2s,color .2s;
+  }
+  .nav-auth:hover{background:var(--core);color:#04110E}
+
+  .modal{position:fixed;inset:0;z-index:200;display:none;background:rgba(4,10,9,.74);backdrop-filter:blur(5px);padding:22px;overflow-y:auto}
+  .modal.show{display:flex;align-items:center;justify-content:center}
+  .modal-card{width:100%;max-width:420px;background:var(--ink-800);border:1px solid var(--line);border-radius:20px;padding:30px 24px;position:relative}
+  .modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);font-size:26px;line-height:1;cursor:pointer}
+  .modal-card .cap{margin-bottom:16px}
+  .modal-card h3{font-family:var(--disp);font-weight:700;font-size:22px;margin-bottom:5px}
+  .modal-card .msub{color:var(--muted);font-size:14px;margin-bottom:22px}
+  .tabs{display:flex;gap:5px;background:var(--ink-900);border:1px solid var(--line);border-radius:99px;padding:4px;margin-bottom:20px}
+  .tab{flex:1;text-align:center;padding:9px;border-radius:99px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border:none;background:none;transition:background .2s,color .2s}
+  .tab.active{background:var(--core);color:#04110E}
+  .auth-field{margin-bottom:14px}
+  .auth-field label{display:block;font-size:13px;color:#C6D0CB;margin-bottom:6px}
+  .auth-msg{font-size:13.5px;margin:4px 0 14px;min-height:18px}
+  .auth-msg.error{color:var(--err)}
+  .auth-msg.ok{color:var(--core)}
+
+  #member{display:none;padding:96px 0 80px}
+  body.authed #member{display:block}
+  body.authed main{display:none}
+  .member-card{max-width:640px;margin:0 auto;border:1px solid var(--line);border-radius:20px;background:var(--ink-800);padding:clamp(24px,4vw,40px)}
+  .member-card .cap{margin-bottom:18px}
+  .member-card h2{font-family:var(--disp);font-weight:700;font-size:clamp(26px,4vw,34px);margin-bottom:10px}
+  .member-card>p{color:#C6D0CB;margin-bottom:8px}
+  .member-tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0}
+  .mtile{border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--ink-900)}
+  .mtile .tag{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .mtile h4{font-family:var(--disp);font-weight:700;font-size:17px;margin:10px 0 4px}
+  .mtile p{font-size:13.5px;color:#8A9A93;margin:0}
+  @media(max-width:560px){ .member-tiles{grid-template-columns:1fr} }
+
   /* ---------- responsive ---------- */
   @media(max-width:880px){
     .section{padding:66px 0}
@@ -280,9 +319,24 @@
       <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
       <span><b>kpsul</b><i>_corps</i></span>
     </a>
-    <a class="nav-cta" href="#bilan">Commencer mon bilan</a>
+    <button id="authBtn" class="nav-auth" type="button">Espace membre</button>
   </div>
 </nav>
+
+<section id="member" aria-live="polite">
+  <div class="wrap">
+    <div class="member-card">
+      <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
+      <h2 id="memberHello">Ton espace</h2>
+      <p>Bienvenue dans ton espace kpsul_corps. C'est ici que tout ton suivi va vivre.</p>
+      <div class="member-tiles">
+        <div class="mtile"><div class="tag">Bientôt</div><h4>Mes séances</h4><p>Reps, séries, repos, charge, exos.</p></div>
+        <div class="mtile"><div class="tag">Bientôt</div><h4>Ma diet</h4><p>Repas, calories, jour par jour.</p></div>
+      </div>
+      <button id="logoutBtn" class="btn btn-ghost" type="button">Se déconnecter</button>
+    </div>
+  </div>
+</section>
 
 <header class="hero" id="top">
   <div class="wrap hero-grid">
@@ -579,6 +633,38 @@
   </div>
 </footer>
 
+<!-- Fenêtre inscription / connexion -->
+<div class="modal" id="authModal" role="dialog" aria-modal="true" aria-label="Espace membre">
+  <div class="modal-card">
+    <button class="modal-close" id="authClose" type="button" aria-label="Fermer">&times;</button>
+    <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
+    <h3>Ton espace membre</h3>
+    <p class="msub">Connecte-toi ou crée ton compte pour accéder à ton suivi.</p>
+
+    <div class="tabs">
+      <button class="tab active" id="tabLogin" type="button">Connexion</button>
+      <button class="tab" id="tabSignup" type="button">Inscription</button>
+    </div>
+
+    <div class="auth-field" id="nameField" style="display:none">
+      <label for="authName">Prénom</label>
+      <input id="authName" type="text" placeholder="Alex" autocomplete="given-name">
+    </div>
+    <div class="auth-field">
+      <label for="authEmail">Email</label>
+      <input id="authEmail" type="email" placeholder="alex@email.com" autocomplete="email">
+    </div>
+    <div class="auth-field">
+      <label for="authPassword">Mot de passe</label>
+      <input id="authPassword" type="password" placeholder="Au moins 6 caractères" autocomplete="current-password">
+    </div>
+
+    <p class="auth-msg" id="authMsg" role="status"></p>
+    <button class="btn btn-primary" id="authSubmit" type="button" style="width:100%;justify-content:center">Se connecter</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   // 📧 Ton adresse email qui reçoit les bilans et les réservations :
   const CONTACT_EMAIL = "aballkciim70g@gmail.com";
@@ -742,6 +828,109 @@
   });
 
   render();
+
+  // ---- espace membre (comptes Supabase) ----
+  (function(){
+    const SUPABASE_URL = "https://ipsewfhxgomishbjrkkc.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_WEm3fy7xB83P1S7h4CWWZg_4RlwlPP6";
+    if(!window.supabase) return;
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const modal = document.getElementById("authModal");
+    const authBtn = document.getElementById("authBtn");
+    const closeBtn = document.getElementById("authClose");
+    const tabLogin = document.getElementById("tabLogin");
+    const tabSignup = document.getElementById("tabSignup");
+    const nameField = document.getElementById("nameField");
+    const nameInput = document.getElementById("authName");
+    const emailInput = document.getElementById("authEmail");
+    const pwInput = document.getElementById("authPassword");
+    const submitBtn = document.getElementById("authSubmit");
+    const authMsg = document.getElementById("authMsg");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const memberHello = document.getElementById("memberHello");
+
+    let mode = "login";
+
+    function setMode(m){
+      mode = m;
+      const signup = m === "signup";
+      tabSignup.classList.toggle("active", signup);
+      tabLogin.classList.toggle("active", !signup);
+      nameField.style.display = signup ? "" : "none";
+      submitBtn.textContent = signup ? "Créer mon compte" : "Se connecter";
+      pwInput.setAttribute("autocomplete", signup ? "new-password" : "current-password");
+      authMsg.className = "auth-msg"; authMsg.textContent = "";
+    }
+    function openModal(){ modal.classList.add("show"); setMode("login"); setTimeout(()=>emailInput.focus(), 50); }
+    function closeModal(){ modal.classList.remove("show"); }
+    function say(txt, ok){ authMsg.className = "auth-msg " + (ok ? "ok" : "error"); authMsg.textContent = txt; }
+
+    function traduire(msg){
+      const m = (msg || "").toLowerCase();
+      if(m.includes("invalid login")) return "Email ou mot de passe incorrect.";
+      if(m.includes("already registered") || m.includes("already been registered")) return "Un compte existe déjà avec cet email — connecte-toi.";
+      if(m.includes("email not confirmed")) return "Ton email n'est pas encore confirmé. Vérifie ta boîte mail.";
+      return "Erreur : " + msg;
+    }
+
+    async function submit(){
+      const email = emailInput.value.trim();
+      const pw = pwInput.value;
+      if(!email || !pw){ say("Renseigne ton email et ton mot de passe."); return; }
+      if(pw.length < 6){ say("Le mot de passe doit faire au moins 6 caractères."); return; }
+      submitBtn.disabled = true;
+      const prev = submitBtn.textContent;
+      submitBtn.textContent = "…";
+      try{
+        if(mode === "signup"){
+          const { data, error } = await sb.auth.signUp({
+            email, password: pw,
+            options: { data: { full_name: nameInput.value.trim() } }
+          });
+          if(error){ say(traduire(error.message)); }
+          else if(data.session){ closeModal(); }
+          else { say("Compte créé ! Vérifie ta boîte mail pour confirmer, puis connecte-toi.", true); setMode("login"); }
+        } else {
+          const { error } = await sb.auth.signInWithPassword({ email, password: pw });
+          if(error){ say(traduire(error.message)); }
+          else { closeModal(); }
+        }
+      } catch(e){
+        say("Un souci est survenu. Réessaie dans un instant.");
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = prev;
+      }
+    }
+
+    function setAuthUI(session){
+      const authed = !!session;
+      document.body.classList.toggle("authed", authed);
+      if(authed){
+        const name = (session.user.user_metadata && session.user.user_metadata.full_name) || "";
+        memberHello.textContent = name ? ("Salut " + name + " !") : "Ton espace";
+        authBtn.textContent = "Se déconnecter";
+      } else {
+        authBtn.textContent = "Espace membre";
+      }
+    }
+
+    authBtn.addEventListener("click", ()=>{
+      if(document.body.classList.contains("authed")){ sb.auth.signOut(); }
+      else { openModal(); }
+    });
+    closeBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e)=>{ if(e.target === modal) closeModal(); });
+    tabLogin.addEventListener("click", ()=>setMode("login"));
+    tabSignup.addEventListener("click", ()=>setMode("signup"));
+    submitBtn.addEventListener("click", submit);
+    pwInput.addEventListener("keydown", (e)=>{ if(e.key === "Enter") submit(); });
+    if(logoutBtn) logoutBtn.addEventListener("click", ()=>sb.auth.signOut());
+
+    sb.auth.getSession().then(({ data })=> setAuthUI(data.session));
+    sb.auth.onAuthStateChange((_e, session)=> setAuthUI(session));
+  })();
 </script>
 </body>
 </html>
