@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- KPSUL CORPS V2.0 ADMIN SAAS — fichier unique index.html -->
+<!-- KPSUL CORPS V2.1 DOCUMENTS UPLOAD — fichier unique index.html -->
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
@@ -620,6 +620,22 @@
   .quick-actions-row button:hover{color:var(--core);border-color:var(--core)}
   @media(max-width:900px){.activity-grid,.v2-tools-grid{grid-template-columns:1fr}.client-profile-grid{grid-template-columns:1fr 1fr}}
 
+
+  /* ---------- KPSUL V2.1 Documents Upload ---------- */
+  .doc-upload-box{border:1px solid rgba(52,224,200,.34);border-radius:18px;padding:18px;background:linear-gradient(160deg,rgba(52,224,200,.07),rgba(255,255,255,.02));margin:14px 0}
+  .doc-upload-box h4{font-family:var(--disp);font-size:20px;margin-bottom:8px}
+  .doc-upload-box p{font-size:13.5px;color:#8A9A93;margin-bottom:12px}
+  .doc-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .file-input-wrap{border:1px dashed var(--line);border-radius:14px;padding:16px;background:rgba(4,10,9,.32);margin-top:10px}
+  .file-input-wrap input{border:none;background:transparent;padding:0}
+  .doc-list{display:grid;gap:10px;margin-top:12px}
+  .doc-card{border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025);padding:14px}
+  .doc-card b{display:block;font-family:var(--disp);font-size:16px}
+  .doc-card span{display:block;color:#8A9A93;font-size:13px;margin-top:4px}
+  .doc-card button{margin-top:10px;border:1px solid var(--line);background:var(--ink-900);color:var(--core);border-radius:999px;padding:8px 10px;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;cursor:pointer}
+  .doc-card button:hover{border-color:var(--core)}
+  @media(max-width:700px){.doc-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -656,6 +672,7 @@
         <div class="mtile"><div class="tag">Progression</div><h4>Mensurations</h4><p>Poids, taille, bras, cuisses, photos.</p></div>
         <div class="mtile"><div class="tag">Coach</div><h4>Messages</h4><p>Échanges privés et ajustements.</p></div>
         <div class="mtile"><div class="tag">Planning</div><h4>Réservations</h4><p>Séances solo, groupe et suivis.</p></div>
+        <div class="mtile"><div class="tag">Documents</div><h4>Mes documents</h4><p>PDF, bilans, programmes et fichiers reçus.</p></div>
       </div>
 
       <div class="kpsul-lab-title">
@@ -685,6 +702,7 @@
         <button class="module-tab" data-module="modHabits" type="button">Habitudes</button>
         <button class="module-tab" data-module="modGoals" type="button">Objectif</button>
         <button class="module-tab" data-module="modMessages" type="button">Messages</button>
+        <button class="module-tab" data-module="modDocuments" type="button">Documents</button>
         <button class="module-tab admin-zone" data-module="modAdmin" type="button">Admin</button>
       </div>
 
@@ -785,6 +803,16 @@
             <button class="btn btn-primary" id="saveMessageBtn" type="button" style="margin-top:10px">Envoyer le message</button>
             <div class="tool-status" id="messageStatus"></div>
             <div class="tool-list" id="messageList"></div>
+          </div>
+        </div>
+
+        <div class="module-panel" id="modDocuments">
+          <div class="tool-panel" id="clientDocumentsPanel">
+            <h3>📂 Mes documents</h3>
+            <p>Ici tu retrouves les fichiers envoyés par le coach : bilans, programmes, PDF, documents.</p>
+            <div class="doc-list" id="clientDocumentsList">
+              <div class="doc-card"><b>Aucun document</b><span>Quand ton coach t’enverra un fichier, il apparaîtra ici.</span></div>
+            </div>
           </div>
         </div>
 
@@ -979,12 +1007,26 @@
 
         <div class="detail-panel" id="dDocs">
           <div class="v2-panel">
-            <h3>📂 Documents</h3>
-            <p>Bilans, PDF, documents administratifs, analyses. L’upload sera connecté à Supabase Storage.</p>
-            <div class="docs-builder">
-              <input id="docTitle" placeholder="Titre du document">
-              <textarea id="docNote" placeholder="Note ou résumé du document"></textarea>
-              <button class="btn btn-ghost" type="button">Préparer l’ajout document</button>
+            <h3>📂 Documents client</h3>
+            <p>Envoie au client un PDF, Word, Excel, Numbers, image, vidéo, audio ou autre document.</p>
+
+            <div class="doc-upload-box">
+              <h4>Envoyer un document</h4>
+              <p>Le fichier sera stocké dans Supabase Storage puis affiché dans l’espace membre du client.</p>
+              <div class="doc-grid">
+                <input id="docTitle" placeholder="Titre : Bilan semaine 1">
+                <input id="docCategory" placeholder="Catégorie : bilan, programme, facture...">
+              </div>
+              <textarea id="docNote" placeholder="Note pour le client : consignes, explication, priorité..." style="margin-top:10px"></textarea>
+              <div class="file-input-wrap">
+                <input id="docFile" type="file">
+              </div>
+              <button class="btn btn-primary" id="uploadClientDocBtn" type="button" style="margin-top:12px">Envoyer le document</button>
+              <div class="tool-status" id="docUploadStatus"></div>
+            </div>
+
+            <div class="doc-list" id="detailDocs">
+              <div class="doc-card"><b>Aucun document</b><span>Les documents envoyés apparaîtront ici.</span></div>
             </div>
           </div>
         </div>
@@ -2063,6 +2105,112 @@
     }
 
 
+
+    // ---------- Documents client V2.1 ----------
+    function formatFileSize(bytes){
+      if(!bytes && bytes !== 0) return "—";
+      const units = ["o","Ko","Mo","Go"];
+      let size = Number(bytes);
+      let i = 0;
+      while(size >= 1024 && i < units.length-1){ size /= 1024; i++; }
+      return `${size.toFixed(i === 0 ? 0 : 1)} ${units[i]}`;
+    }
+
+    async function getSignedDocUrl(path){
+      const { data, error } = await sb.storage.from("client-documents").createSignedUrl(path, 60 * 10);
+      if(error) throw error;
+      return data.signedUrl;
+    }
+
+    async function openClientDocument(path){
+      try{
+        const url = await getSignedDocUrl(path);
+        window.open(url, "_blank");
+      }catch(e){
+        alert("Impossible d’ouvrir le document : " + (e.message || JSON.stringify(e)));
+      }
+    }
+
+    function renderDocuments(targetId, docs, emptyText){
+      const el = document.getElementById(targetId);
+      if(!el) return;
+      if(!docs || !docs.length){
+        el.innerHTML = `<div class="doc-card"><b>Aucun document</b><span>${htmlSafe(emptyText)}</span></div>`;
+        return;
+      }
+      el.innerHTML = docs.map(d=>`
+        <div class="doc-card">
+          <b>${htmlSafe(d.title || d.file_name || "Document")}</b>
+          <span>${htmlSafe(d.note || "")}</span>
+          <span>${htmlSafe(d.file_name || "")} · ${htmlSafe(d.mime_type || "fichier")} · ${formatFileSize(d.file_size)}</span>
+          <span>${htmlSafe(d.created_at ? new Date(d.created_at).toLocaleString("fr-FR") : "")}</span>
+          <button type="button" data-open-doc="${htmlSafe(d.file_path)}">Ouvrir / télécharger</button>
+        </div>
+      `).join("");
+      el.querySelectorAll("[data-open-doc]").forEach(btn=>{
+        btn.addEventListener("click", ()=>openClientDocument(btn.dataset.openDoc));
+      });
+    }
+
+    async function uploadClientDocument(){
+      const status = document.getElementById("docUploadStatus");
+      if(!selectedClientId){
+        if(status) status.textContent = "Choisis d’abord un client.";
+        return;
+      }
+
+      const fileInput = document.getElementById("docFile");
+      const file = fileInput?.files?.[0];
+      if(!file){
+        if(status) status.textContent = "Choisis un fichier à envoyer.";
+        return;
+      }
+
+      const title = document.getElementById("docTitle")?.value.trim() || file.name;
+      const note = document.getElementById("docNote")?.value.trim() || "";
+      const category = document.getElementById("docCategory")?.value.trim() || "document";
+
+      const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
+      const filePath = `${selectedClientId}/${Date.now()}_${safeName}`;
+
+      if(status) status.textContent = "Upload du fichier en cours...";
+
+      const upload = await sb.storage
+        .from("client-documents")
+        .upload(filePath, file, {
+          cacheControl: "3600",
+          upsert: false,
+          contentType: file.type || "application/octet-stream"
+        });
+
+      if(upload.error){
+        if(status) status.textContent = "Erreur upload : " + (upload.error.message || JSON.stringify(upload.error));
+        return;
+      }
+
+      const insert = await sb.from("client_documents").insert({
+        user_id: selectedClientId,
+        title: title,
+        note: note || category,
+        file_name: file.name,
+        file_path: filePath,
+        file_size: file.size,
+        mime_type: file.type || "application/octet-stream"
+      });
+
+      if(insert.error){
+        if(status) status.textContent = "Fichier envoyé mais erreur base : " + (insert.error.message || JSON.stringify(insert.error));
+        return;
+      }
+
+      if(status) status.textContent = "Document envoyé au client.";
+      ["docTitle","docNote","docCategory"].forEach(id=>{ const el = document.getElementById(id); if(el) el.value = ""; });
+      if(fileInput) fileInput.value = "";
+      if(typeof loadCrmAdmin === "function") loadCrmAdmin();
+    }
+
+    document.getElementById("uploadClientDocBtn")?.addEventListener("click", uploadClientDocument);
+
     // ---------- KPSUL V2.0 Admin SaaS functions ----------
     function renderAdminActivity(){
       const activity = document.getElementById("adminActivityList");
@@ -2162,7 +2310,7 @@ Consignes :
 
     async function loadCrmAdmin(){
       if(!["admin","coach"].includes(currentProfileRole)) return;
-      const [profilesRes, foodRes, exerciseRes, habitRes, goalRes, msgRes, progRes, bookingsRes] = await Promise.all([
+      const [profilesRes, foodRes, exerciseRes, habitRes, goalRes, msgRes, progRes, bookingsRes, docsRes] = await Promise.all([
         sb.from("profiles").select("*").order("created_at", { ascending:false }),
         sb.from("nutrition_logs").select("*").order("created_at", { ascending:false }),
         sb.from("workout_exercise_logs").select("*").order("created_at", { ascending:false }),
@@ -2170,7 +2318,8 @@ Consignes :
         sb.from("client_goals").select("*").order("created_at", { ascending:false }),
         sb.from("messages").select("*").order("created_at", { ascending:false }),
         sb.from("programs").select("*").order("created_at", { ascending:false }),
-        sb.from("bookings").select("*").order("created_at", { ascending:false })
+        sb.from("bookings").select("*").order("created_at", { ascending:false }),
+        sb.from("client_documents").select("*").order("created_at", { ascending:false })
       ]);
 
       crmData = {
@@ -2181,7 +2330,8 @@ Consignes :
         goals: goalRes.data || [],
         messages: msgRes.data || [],
         programs: progRes.data || [],
-        bookings: bookingsRes?.data || []
+        bookings: bookingsRes?.data || [],
+        documents: docsRes?.data || []
       };
 
       const clients = crmData.profiles.filter(p => (p.role || "client") === "client");
@@ -2231,6 +2381,7 @@ Consignes :
       const messages = crmData.messages.filter(x => x.user_id === uid);
       const programs = crmData.programs.filter(x => x.user_id === uid);
       const bookings = (crmData.bookings || []).filter(x => x.user_id === uid);
+      const docs = (crmData.documents || []).filter(x => x.user_id === uid);
 
       setCrmText("selectedClientName", p?.prenom || p?.full_name || p?.email || "Client");
       setCrmText("selectedClientMeta", "ID client : " + uid);
@@ -2260,6 +2411,7 @@ Consignes :
       renderItems("detailMessages", messages, "Aucun message.", m => `<div class="admin-data-item"><b>${htmlSafe(m.sender || "client")}</b><span>${htmlSafe(m.created_at ? new Date(m.created_at).toLocaleString("fr-FR") : "")}</span><span>${htmlSafe(m.message || "")}</span></div>`);
       renderItems("detailPrograms", programs, "Aucun programme attribué.", pr => `<div class="admin-data-item"><b>${htmlSafe(pr.titre || "Programme")}</b><span>${htmlSafe(pr.objectif || "")}</span><span>${htmlSafe(pr.contenu || "")}</span></div>`);
       renderItems("detailBookings", bookings, "Aucun rendez-vous créé.", b => `<div class="admin-data-item"><b>${htmlSafe(b.type || "Rendez-vous")}</b><span>${htmlSafe(b.jour || "—")} · ${htmlSafe(b.heure || "—")} · ${htmlSafe(b.status || "—")}</span></div>`);
+      renderDocuments("detailDocs", docs, "Aucun document envoyé à ce client.");
     }
 
     async function saveAdminProgram(){
@@ -2315,6 +2467,7 @@ Consignes :
       const habits = habitRes.data || [];
       const goals = goalRes.data || [];
       const messages = msgRes.data || [];
+      const documents = docRes?.data || [];
 
       const setText = (id, val)=>{ const el = document.getElementById(id); if(el) el.textContent = val; };
       setText("adminClientsCount", profiles.filter(p => (p.role || "client") === "client").length);
@@ -2368,13 +2521,14 @@ Consignes :
       const roleBadge = document.getElementById("roleBadge");
       if(roleBadge) roleBadge.textContent = currentProfileRole;
 
-      const [programRes, foodRes, exerciseRes, habitRes, goalRes, msgRes] = await Promise.all([
+      const [programRes, foodRes, exerciseRes, habitRes, goalRes, msgRes, docRes] = await Promise.all([
         sb.from("programs").select("*").eq("user_id", uid).order("created_at", { ascending:false }).limit(5),
         sb.from("nutrition_logs").select("*").eq("user_id", uid).order("log_date", { ascending:false }).limit(6),
         sb.from("workout_exercise_logs").select("*").eq("user_id", uid).order("log_date", { ascending:false }).limit(8),
         sb.from("habit_logs").select("*").eq("user_id", uid).order("log_date", { ascending:false }).limit(5),
         sb.from("client_goals").select("*").eq("user_id", uid).order("created_at", { ascending:false }).limit(3),
-        sb.from("messages").select("*").eq("user_id", uid).order("created_at", { ascending:false }).limit(8)
+        sb.from("messages").select("*").eq("user_id", uid).order("created_at", { ascending:false }).limit(8),
+        sb.from("client_documents").select("*").eq("user_id", uid).order("created_at", { ascending:false }).limit(20)
       ]);
 
       const programs = programRes.data || [];
@@ -2383,6 +2537,7 @@ Consignes :
       const habits = habitRes.data || [];
       const goals = goalRes.data || [];
       const messages = msgRes.data || [];
+      const documents = docRes?.data || [];
 
       setList(document.getElementById("programList"), programs, "Quand tu ajouteras un programme dans Supabase, il apparaîtra ici.", p => `
         <div class="tool-item"><b>${htmlSafe(p.titre || p.title || "Programme")}</b><span>${htmlSafe(p.objectif || p.goal || "")}</span><span>${htmlSafe(p.contenu || p.notes || "")}</span></div>
@@ -2408,6 +2563,7 @@ Consignes :
         <div class="tool-item"><b>${htmlSafe(m.sender || "client")}</b><span>${htmlSafe(m.created_at ? new Date(m.created_at).toLocaleString("fr-FR") : "")}</span><span>${htmlSafe(m.message || "")}</span></div>
       `);
 
+      renderDocuments("clientDocumentsList", documents, "Aucun document reçu pour l’instant.");
       updateScore({foods, exercises, habits, goals});
       loadAdminData();
     }
