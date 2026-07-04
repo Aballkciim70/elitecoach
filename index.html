@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- KPSUL CORPS V1.6.1 DEBUG AUTH — fichier unique index.html -->
+<!-- KPSUL CORPS V1.6 CRM ADMIN — fichier unique index.html -->
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
@@ -1387,10 +1387,7 @@
   (function(){
     const SUPABASE_URL = "https://ipsewfhxgomishbjrkkc.supabase.co";
     const SUPABASE_KEY = "sb_publishable_WEm3fy7xB83P1S7h4CWWZg_4RlwlPP6";
-    if(!window.supabase){
-      console.error("Supabase JS non chargé. Vérifie la connexion internet ou le CDN Supabase.");
-      return;
-    }
+    if(!window.supabase) return;
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     const modal = document.getElementById("authModal");
@@ -1428,7 +1425,7 @@
       if(m.includes("invalid login")) return "Email ou mot de passe incorrect.";
       if(m.includes("already registered") || m.includes("already been registered")) return "Un compte existe déjà avec cet email — connecte-toi.";
       if(m.includes("email not confirmed")) return "Ton email n'est pas encore confirmé. Vérifie ta boîte mail.";
-      return "Erreur réelle : " + msg;
+      return "Erreur : " + msg;
     }
 
     async function submit(){
@@ -1445,23 +1442,16 @@
             email, password: pw,
             options: { data: { full_name: nameInput.value.trim() } }
           });
-          if(error){
-            console.error("Erreur inscription Supabase:", error);
-            say(traduire(error.message || JSON.stringify(error)));
-          }
+          if(error){ say(traduire(error.message)); }
           else if(data.session){ closeModal(); }
           else { say("Compte créé ! Vérifie ta boîte mail pour confirmer, puis connecte-toi.", true); setMode("login"); }
         } else {
           const { error } = await sb.auth.signInWithPassword({ email, password: pw });
-          if(error){
-            console.error("Erreur inscription Supabase:", error);
-            say(traduire(error.message || JSON.stringify(error)));
-          }
+          if(error){ say(traduire(error.message)); }
           else { closeModal(); }
         }
       } catch(e){
-        console.error("ERREUR SUPABASE :", e);
-        say("Erreur réelle : " + (e.message || JSON.stringify(e)));
+        say("Un souci est survenu. Réessaie dans un instant.");
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = prev;
