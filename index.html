@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- KPSUL CORPS V1.6.2 DEBUG AUTH — fichier unique index.html -->
+<!-- KPSUL CORPS V1.6.3 AUTH REST FIX — fichier unique index.html -->
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
@@ -1388,50 +1388,43 @@
     const SUPABASE_URL = "https://ipsewfhxgomishbjrkkc.supabase.co";
     const SUPABASE_KEY = "sb_publishable_WEm3fy7xB83P1S7h4CWWZg_4RlwlPP6";
     if(!window.supabase){
-      const authMsg = document.getElementById("authMsg");
-      if(authMsg){
-        authMsg.className = "auth-msg error";
-        authMsg.textContent = "Supabase JS non chargé. Vérifie le CDN Supabase ou la connexion.";
-      }
       console.error("Supabase JS non chargé.");
       return;
     }
     const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    function debugError(error){
-      try{
-        if(!error) return "Erreur inconnue";
-        if(typeof error === "string") return error;
-        if(error.message) return error.message;
-        if(error.error_description) return error.error_description;
-        if(error.error) return error.error;
-        const props = Object.getOwnPropertyNames(error);
-        if(props.length){
-          return props.map(k => k + ": " + String(error[k])).join(" | ");
-        }
-        return JSON.stringify(error);
-      }catch(_){
-        return "Erreur illisible côté navigateur";
+    async function supabaseRest(path, body){
+      const res = await fetch(SUPABASE_URL + path, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY
+        },
+        body: JSON.stringify(body)
+      });
+
+      const raw = await res.text();
+      let json = {};
+      try{ json = raw ? JSON.parse(raw) : {}; }catch(_){ json = { message: raw }; }
+
+      if(!res.ok){
+        const msg = json.msg || json.message || json.error_description || json.error || raw || ("HTTP " + res.status);
+        throw new Error(msg);
       }
+
+      return json;
     }
 
-    window.addEventListener("unhandledrejection", (event)=>{
-      const authMsg = document.getElementById("authMsg");
-      if(authMsg){
-        authMsg.className = "auth-msg error";
-        authMsg.textContent = "Erreur JS : " + debugError(event.reason);
-      }
-      console.error("PROMESSE NON GÉRÉE :", event.reason);
-    });
-
-    window.addEventListener("error", (event)=>{
-      const authMsg = document.getElementById("authMsg");
-      if(authMsg){
-        authMsg.className = "auth-msg error";
-        authMsg.textContent = "Erreur JS : " + (event.message || "erreur inconnue");
-      }
-      console.error("ERREUR JS :", event);
-    });
+    function authErrorText(e){
+      if(!e) return "Erreur inconnue.";
+      if(typeof e === "string") return e;
+      if(e.message) return e.message;
+      if(e.msg) return e.msg;
+      if(e.error_description) return e.error_description;
+      if(e.error) return e.error;
+      try{ return JSON.stringify(e); }catch(_){ return "Erreur illisible."; }
+    }
 
     const modal = document.getElementById("authModal");
     const authBtn = document.getElementById("authBtn");
@@ -1468,101 +1461,80 @@
       if(m.includes("invalid login")) return "Email ou mot de passe incorrect.";
       if(m.includes("already registered") || m.includes("already been registered")) return "Un compte existe déjà avec cet email — connecte-toi.";
       if(m.includes("email not confirmed")) return "Ton email n'est pas encore confirmé. Vérifie ta boîte mail.";
-      return "Erreur réelle : " + msg;
+      return "Erreur : " + (msg || "erreur inconnue");
     }
 
     async function submit(){
-      const email = emailInput.value.trim();
+      const email = emailInput.value.trim().toLowerCase();
       const pw = pwInput.value;
       const name = nameInput.value.trim();
 
-      if(!email || !pw){
-        say("Renseigne ton email et ton mot de passe.");
-        return;
-      }
-
-      if(mode === "signup" && !name){
-        say("Renseigne ton prénom.");
-        return;
-      }
-
-      if(pw.length < 6){
-        say("Le mot de passe doit faire au moins 6 caractères.");
-        return;
-      }
+      if(!email || !pw){ say("Renseigne ton email et ton mot de passe."); return; }
+      if(mode === "signup" && !name){ say("Renseigne ton prénom."); return; }
+      if(pw.length < 6){ say("Le mot de passe doit faire au moins 6 caractères."); return; }
 
       submitBtn.disabled = true;
       const prev = submitBtn.textContent;
-      submitBtn.textContent = "Connexion…";
+      submitBtn.textContent = mode === "signup" ? "Création…" : "Connexion…";
 
       try{
         if(mode === "signup"){
-          submitBtn.textContent = "Création…";
-
-          const result = await sb.auth.signUp({
+          const data = await supabaseRest("/auth/v1/signup", {
             email: email,
             password: pw,
-            options: {
-              data: {
-                full_name: name,
-                prenom: name
-              }
+            data: {
+              full_name: name,
+              prenom: name
             }
           });
 
-          console.log("Résultat inscription Supabase :", result);
+          console.log("Inscription Supabase REST:", data);
 
-          if(result.error){
-            const real = debugError(result.error);
-            console.error("Erreur inscription Supabase:", result.error);
-            say("Erreur inscription : " + real);
-            return;
-          }
+          if(data.access_token && data.refresh_token){
+            await sb.auth.setSession({
+              access_token: data.access_token,
+              refresh_token: data.refresh_token
+            });
 
-          if(result.data && result.data.user){
-            // Si Supabase connecte directement l'utilisateur, on crée aussi le profil.
-            if(result.data.session){
+            if(data.user && data.user.id){
               await sb.from("profiles").upsert({
-                id: result.data.user.id,
+                id: data.user.id,
                 prenom: name,
                 role: "client"
               }, { onConflict: "id" });
-              closeModal();
-              say("", true);
-              return;
             }
 
-            say("Compte créé. Vérifie ta boîte mail si Supabase demande une confirmation, puis connecte-toi.", true);
-            setMode("login");
+            closeModal();
             return;
           }
 
-          say("Inscription envoyée, mais Supabase n'a retourné aucun utilisateur. Vérifie Authentication > Users.");
+          say("Compte créé. Vérifie ta boîte mail si une confirmation est demandée, puis connecte-toi.", true);
+          setMode("login");
           return;
 
         } else {
-          submitBtn.textContent = "Connexion…";
-
-          const result = await sb.auth.signInWithPassword({
+          const data = await supabaseRest("/auth/v1/token?grant_type=password", {
             email: email,
             password: pw
           });
 
-          console.log("Résultat connexion Supabase :", result);
+          console.log("Connexion Supabase REST:", data);
 
-          if(result.error){
-            const real = debugError(result.error);
-            console.error("Erreur connexion Supabase:", result.error);
-            say("Erreur connexion : " + real);
-            return;
+          if(!data.access_token || !data.refresh_token){
+            throw new Error("Connexion refusée : aucun token reçu.");
           }
+
+          await sb.auth.setSession({
+            access_token: data.access_token,
+            refresh_token: data.refresh_token
+          });
 
           closeModal();
           return;
         }
       } catch(e){
-        console.error("ERREUR SUPABASE / JS :", e);
-        say("Erreur réelle : " + debugError(e));
+        console.error("ERREUR AUTH KPSUL:", e);
+        say((mode === "signup" ? "Erreur inscription : " : "Erreur connexion : ") + authErrorText(e));
       } finally {
         submitBtn.disabled = false;
         submitBtn.textContent = prev;
