@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- KPSUL CORPS V1.6.4 RESET PASSWORD — fichier unique index.html -->
+<!-- KPSUL CORPS V1.7 PROGRAMME MOBILE ADMIN — fichier unique index.html -->
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
@@ -551,6 +551,23 @@
   .forgot-row{display:flex;justify-content:flex-end;margin:-4px 0 14px}
   .forgot-btn{background:none;border:none;color:var(--core);font-family:var(--body);font-size:13.5px;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
 
+
+  /* ---------- KPSUL V1.7 Programme Mobile Admin ---------- */
+  .program-mobile-box{border:1px solid rgba(52,224,200,.34);border-radius:18px;padding:18px;background:linear-gradient(160deg,rgba(52,224,200,.07),rgba(255,255,255,.02));margin:18px 0}
+  .program-mobile-box h3{font-family:var(--disp);font-size:22px;margin-bottom:6px}
+  .program-mobile-box p{color:#8A9A93;font-size:14px;margin-bottom:14px}
+  .program-builder-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .exercise-builder{border:1px solid var(--line);border-radius:15px;padding:14px;background:rgba(4,10,9,.36);margin-top:12px}
+  .exercise-builder h4{font-family:var(--disp);margin-bottom:10px;font-size:17px}
+  .exercise-list-preview{display:grid;gap:8px;margin-top:12px}
+  .exercise-preview-item{border:1px solid var(--line);border-radius:12px;padding:12px;background:rgba(255,255,255,.025)}
+  .exercise-preview-item b{display:block;font-family:var(--disp)}
+  .exercise-preview-item span{display:block;color:#8A9A93;font-size:13px;margin-top:3px}
+  .quick-template-row{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+  .quick-template{border:1px solid var(--line);background:var(--ink-900);color:#B9C6C0;border-radius:999px;padding:8px 10px;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;cursor:pointer}
+  .quick-template:hover{border-color:var(--core);color:var(--core)}
+  @media(max-width:700px){.program-builder-grid{grid-template-columns:1fr}}
+
 </style>
 </head>
 <body>
@@ -755,6 +772,43 @@
       <div class="admin-crm-kpi"><b id="crmMeals">0</b><span>Repas saisis</span></div>
       <div class="admin-crm-kpi"><b id="crmExercises">0</b><span>Exercices saisis</span></div>
       <div class="admin-crm-kpi"><b id="crmMessages">0</b><span>Messages</span></div>
+    </div>
+
+
+    <div class="program-mobile-box">
+      <h3>📲 Créer un programme depuis ton téléphone</h3>
+      <p>Sélectionne un client, ajoute les exercices rapidement, puis envoie le programme directement dans son espace membre.</p>
+      <div class="program-builder-grid">
+        <select id="mobileProgramClient"><option value="">Choisir un client</option></select>
+        <input id="mobileProgramTitle" placeholder="Titre : Push hypertrophie">
+        <input id="mobileProgramGoal" placeholder="Objectif : prise de masse">
+        <input id="mobileProgramDuration" placeholder="Durée : 6 semaines">
+      </div>
+      <div class="quick-template-row">
+        <button class="quick-template" type="button" data-template="push">Template Push</button>
+        <button class="quick-template" type="button" data-template="pull">Template Pull</button>
+        <button class="quick-template" type="button" data-template="legs">Template Legs</button>
+        <button class="quick-template" type="button" data-template="full">Full Body</button>
+      </div>
+      <div class="exercise-builder">
+        <h4>Ajouter un exercice</h4>
+        <div class="program-builder-grid">
+          <input id="exName" placeholder="Exercice">
+          <input id="exSets" type="number" placeholder="Séries">
+          <input id="exReps" placeholder="Répétitions">
+          <input id="exRest" placeholder="Repos : 2 min">
+          <input id="exTempo" placeholder="Tempo : 3010">
+          <input id="exLoad" placeholder="Charge conseillée">
+        </div>
+        <textarea id="exNotes" placeholder="Notes coach : consigne, RPE, amplitude, technique..." style="margin-top:10px"></textarea>
+        <button class="btn btn-ghost" id="addExerciseBtn" type="button" style="margin-top:10px">Ajouter l’exercice</button>
+      </div>
+      <div class="exercise-list-preview" id="mobileExercisePreview">
+        <div class="exercise-preview-item"><b>Aucun exercice ajouté</b><span>Ajoute les exercices un par un ou utilise un template.</span></div>
+      </div>
+      <textarea id="mobileProgramExtra" placeholder="Notes générales du programme : échauffement, progression, consignes nutrition, récupération..." style="margin-top:12px"></textarea>
+      <button class="btn btn-primary" id="sendMobileProgramBtn" type="button" style="margin-top:12px">Envoyer le programme au client</button>
+      <div class="tool-status" id="mobileProgramStatus"></div>
     </div>
 
     <div class="admin-layout">
@@ -1685,6 +1739,140 @@
       el.innerHTML = rows && rows.length ? rows.map(render).join("") : `<div class="admin-data-item"><b>Aucune donnée</b><span>${htmlSafe(empty)}</span></div>`;
     }
 
+
+    // ---------- Programme mobile admin ----------
+    let mobileProgramExercises = [];
+
+    function renderMobileExercisePreview(){
+      const box = document.getElementById("mobileExercisePreview");
+      if(!box) return;
+      if(!mobileProgramExercises.length){
+        box.innerHTML = `<div class="exercise-preview-item"><b>Aucun exercice ajouté</b><span>Ajoute les exercices un par un ou utilise un template.</span></div>`;
+        return;
+      }
+      box.innerHTML = mobileProgramExercises.map((e, i)=>`
+        <div class="exercise-preview-item">
+          <b>${i+1}. ${htmlSafe(e.name)}</b>
+          <span>${htmlSafe(e.sets)} séries · ${htmlSafe(e.reps)} reps · repos ${htmlSafe(e.rest || "—")} · tempo ${htmlSafe(e.tempo || "—")}</span>
+          <span>Charge : ${htmlSafe(e.load || "à adapter")} ${e.notes ? "· " + htmlSafe(e.notes) : ""}</span>
+        </div>
+      `).join("");
+    }
+
+    function fillMobileClientSelect(){
+      const select = document.getElementById("mobileProgramClient");
+      if(!select || !crmData || !crmData.profiles) return;
+      const current = select.value;
+      const clients = crmData.profiles.filter(p => (p.role || "client") === "client");
+      select.innerHTML = `<option value="">Choisir un client</option>` + clients.map(p => `
+        <option value="${htmlSafe(p.id)}">${htmlSafe(p.prenom || p.full_name || p.email || p.id)}</option>
+      `).join("");
+      if(current) select.value = current;
+      if(!select.value && selectedClientId) select.value = selectedClientId;
+    }
+
+    function addExerciseToMobileProgram(ex){
+      if(!ex.name || !ex.sets || !ex.reps) return;
+      mobileProgramExercises.push(ex);
+      renderMobileExercisePreview();
+    }
+
+    function addExerciseFromInputs(){
+      const ex = {
+        name: document.getElementById("exName")?.value.trim(),
+        sets: document.getElementById("exSets")?.value.trim(),
+        reps: document.getElementById("exReps")?.value.trim(),
+        rest: document.getElementById("exRest")?.value.trim(),
+        tempo: document.getElementById("exTempo")?.value.trim(),
+        load: document.getElementById("exLoad")?.value.trim(),
+        notes: document.getElementById("exNotes")?.value.trim()
+      };
+      const status = document.getElementById("mobileProgramStatus");
+      if(!ex.name || !ex.sets || !ex.reps){
+        if(status) status.textContent = "Renseigne au minimum exercice, séries et reps.";
+        return;
+      }
+      addExerciseToMobileProgram(ex);
+      ["exName","exSets","exReps","exRest","exTempo","exLoad","exNotes"].forEach(id=>{ const el = document.getElementById(id); if(el) el.value = ""; });
+      if(status) status.textContent = "Exercice ajouté.";
+    }
+
+    function applyProgramTemplate(type){
+      const templates = {
+        push: [
+          {name:"Développé couché", sets:"4", reps:"6-8", rest:"2-3 min", tempo:"3010", load:"RPE 8", notes:"Garder les omoplates serrées."},
+          {name:"Développé incliné haltères", sets:"3", reps:"8-10", rest:"2 min", tempo:"3010", load:"RPE 8", notes:"Contrôle en descente."},
+          {name:"Développé épaules", sets:"3", reps:"8-10", rest:"2 min", tempo:"2010", load:"RPE 7-8", notes:"Ne pas cambrer."},
+          {name:"Écarté poulie", sets:"3", reps:"12-15", rest:"1 min", tempo:"2111", load:"léger/modéré", notes:"Contraction maximale."},
+          {name:"Extension triceps corde", sets:"4", reps:"10-15", rest:"1 min", tempo:"2011", load:"RPE 8", notes:"Coudes fixes."}
+        ],
+        pull: [
+          {name:"Tractions ou tirage vertical", sets:"4", reps:"6-10", rest:"2 min", tempo:"3011", load:"RPE 8", notes:"Tirer avec les coudes."},
+          {name:"Rowing machine", sets:"4", reps:"8-10", rest:"2 min", tempo:"3011", load:"RPE 8", notes:"Buste stable."},
+          {name:"Tirage horizontal", sets:"3", reps:"10-12", rest:"90 sec", tempo:"2111", load:"RPE 8", notes:"Contrôle."},
+          {name:"Oiseau haltères", sets:"3", reps:"15-20", rest:"1 min", tempo:"2011", load:"léger", notes:"Arrière épaule."},
+          {name:"Curl incliné", sets:"3", reps:"10-12", rest:"1 min", tempo:"3011", load:"RPE 8", notes:"Étirement complet."}
+        ],
+        legs: [
+          {name:"Squat ou presse", sets:"4", reps:"6-10", rest:"2-3 min", tempo:"3010", load:"RPE 8", notes:"Amplitude propre."},
+          {name:"Soulevé de terre roumain", sets:"4", reps:"8-10", rest:"2 min", tempo:"3010", load:"RPE 8", notes:"Ischios étirés."},
+          {name:"Fentes marchées", sets:"3", reps:"10/jambe", rest:"90 sec", tempo:"2010", load:"modéré", notes:"Stabilité."},
+          {name:"Leg curl", sets:"3", reps:"12-15", rest:"1 min", tempo:"2111", load:"RPE 8", notes:"Contraction."},
+          {name:"Mollets debout", sets:"4", reps:"12-20", rest:"1 min", tempo:"2111", load:"RPE 8", notes:"Pause en haut."}
+        ],
+        full: [
+          {name:"Développé couché", sets:"3", reps:"6-8", rest:"2 min", tempo:"3010", load:"RPE 8", notes:"Base force."},
+          {name:"Tirage vertical", sets:"3", reps:"8-10", rest:"2 min", tempo:"3011", load:"RPE 8", notes:"Dos."},
+          {name:"Presse à cuisses", sets:"3", reps:"10-12", rest:"2 min", tempo:"3010", load:"RPE 8", notes:"Jambes."},
+          {name:"Développé épaules", sets:"3", reps:"8-10", rest:"90 sec", tempo:"2010", load:"RPE 7", notes:"Épaules."},
+          {name:"Curl + triceps", sets:"3", reps:"12-15", rest:"1 min", tempo:"2011", load:"modéré", notes:"Superset bras."}
+        ]
+      };
+      mobileProgramExercises = templates[type] ? [...templates[type]] : [];
+      renderMobileExercisePreview();
+      const status = document.getElementById("mobileProgramStatus");
+      if(status) status.textContent = "Template ajouté. Tu peux modifier ou envoyer.";
+    }
+
+    function buildProgramText(){
+      const title = document.getElementById("mobileProgramTitle")?.value.trim() || "Programme Kpsul";
+      const goal = document.getElementById("mobileProgramGoal")?.value.trim() || "";
+      const duration = document.getElementById("mobileProgramDuration")?.value.trim() || "";
+      const extra = document.getElementById("mobileProgramExtra")?.value.trim() || "";
+      const exercisesText = mobileProgramExercises.map((e, i)=>`${i+1}. ${e.name}\n   Séries : ${e.sets}\n   Reps : ${e.reps}\n   Repos : ${e.rest || "à adapter"}\n   Tempo : ${e.tempo || "libre"}\n   Charge : ${e.load || "à renseigner"}\n   Notes : ${e.notes || "—"}`).join("\n\n");
+      return `${title}\n\nObjectif : ${goal || "—"}\nDurée : ${duration || "—"}\n\nEXERCICES\n${exercisesText}\n\nNOTES COACH\n${extra || "—"}`;
+    }
+
+    async function sendMobileProgram(){
+      const status = document.getElementById("mobileProgramStatus");
+      const clientId = document.getElementById("mobileProgramClient")?.value || selectedClientId;
+      const title = document.getElementById("mobileProgramTitle")?.value.trim();
+      const goal = document.getElementById("mobileProgramGoal")?.value.trim();
+
+      if(!clientId){ if(status) status.textContent = "Choisis un client."; return; }
+      if(!title){ if(status) status.textContent = "Ajoute un titre de programme."; return; }
+      if(!mobileProgramExercises.length){ if(status) status.textContent = "Ajoute au moins un exercice."; return; }
+
+      const { error } = await sb.from("programs").insert({
+        user_id: clientId,
+        titre: title,
+        objectif: goal,
+        contenu: buildProgramText()
+      });
+
+      if(error){ if(status) status.textContent = "Erreur envoi programme : " + (error.message || JSON.stringify(error)); return; }
+
+      if(status) status.textContent = "Programme envoyé au client.";
+      mobileProgramExercises = [];
+      renderMobileExercisePreview();
+      ["mobileProgramTitle","mobileProgramGoal","mobileProgramDuration","mobileProgramExtra"].forEach(id=>{ const el = document.getElementById(id); if(el) el.value = ""; });
+      if(typeof loadCrmAdmin === "function") loadCrmAdmin();
+    }
+
+    document.getElementById("addExerciseBtn")?.addEventListener("click", addExerciseFromInputs);
+    document.getElementById("sendMobileProgramBtn")?.addEventListener("click", sendMobileProgram);
+    document.querySelectorAll(".quick-template").forEach(btn=>btn.addEventListener("click", ()=>applyProgramTemplate(btn.dataset.template)));
+
     async function loadCrmAdmin(){
       if(!["admin","coach"].includes(currentProfileRole)) return;
       const [profilesRes, foodRes, exerciseRes, habitRes, goalRes, msgRes, progRes] = await Promise.all([
@@ -1713,6 +1901,7 @@
       setCrmText("crmExercises", crmData.exercises.length);
       setCrmText("crmMessages", crmData.messages.length);
       renderClientList();
+      fillMobileClientSelect();
 
       if(!selectedClientId && clients[0]) selectClient(clients[0].id);
       else if(selectedClientId) selectClient(selectedClientId);
@@ -1755,6 +1944,7 @@
       setCrmText("selectedClientMeta", "ID client : " + uid);
 
       renderClientList();
+      fillMobileClientSelect();
 
       renderItems("detailOverview", [
         {k:"Repas saisis", v:meals.length},
