@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- KPSUL CORPS V1.7 PROGRAMME MOBILE ADMIN — fichier unique index.html -->
+<!-- KPSUL CORPS V1.8 ADMIN CLIQUABLE — fichier unique index.html -->
 <html lang="fr">
 <head>
 <meta charset="UTF-8" />
@@ -568,6 +568,29 @@
   .quick-template:hover{border-color:var(--core);color:var(--core)}
   @media(max-width:700px){.program-builder-grid{grid-template-columns:1fr}}
 
+
+  /* ---------- KPSUL V1.8 Admin clickable CRM ---------- */
+  .admin-crm-kpi{cursor:pointer;transition:transform .15s ease,border-color .2s ease,box-shadow .2s ease}
+  .admin-crm-kpi:hover{transform:translateY(-2px);border-color:var(--core);box-shadow:0 0 0 3px var(--core-dim)}
+  .admin-crm-kpi.active{border-color:var(--core);box-shadow:0 0 0 3px var(--core-dim)}
+  .admin-client-summary{
+    border:1px solid rgba(52,224,200,.32);
+    border-radius:18px;
+    background:linear-gradient(160deg,rgba(52,224,200,.06),rgba(255,255,255,.02));
+    padding:16px;
+    margin:12px 0 16px;
+  }
+  .admin-client-summary h4{font-family:var(--disp);font-size:20px;margin-bottom:8px}
+  .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:12px}
+  .summary-pill{border:1px solid var(--line);border-radius:14px;padding:10px;background:rgba(4,10,9,.32)}
+  .summary-pill b{display:block;color:var(--core);font-family:var(--disp);font-size:20px}
+  .summary-pill span{display:block;color:#8A9A93;font-size:12px;margin-top:2px}
+  .admin-actions{display:flex;gap:8px;flex-wrap:wrap;margin:12px 0}
+  .admin-action-btn{border:1px solid var(--line);background:var(--ink-900);color:#B9C6C0;border-radius:999px;padding:9px 11px;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;cursor:pointer}
+  .admin-action-btn:hover{border-color:var(--core);color:var(--core)}
+  .empty-help{border:1px dashed var(--line);border-radius:14px;padding:14px;color:#8A9A93;background:rgba(255,255,255,.02)}
+  @media(max-width:700px){.summary-grid{grid-template-columns:1fr 1fr}}
+
 </style>
 </head>
 <body>
@@ -768,10 +791,10 @@
     </div>
 
     <div class="admin-crm-grid">
-      <div class="admin-crm-kpi"><b id="crmClients">0</b><span>Clients réels</span></div>
-      <div class="admin-crm-kpi"><b id="crmMeals">0</b><span>Repas saisis</span></div>
-      <div class="admin-crm-kpi"><b id="crmExercises">0</b><span>Exercices saisis</span></div>
-      <div class="admin-crm-kpi"><b id="crmMessages">0</b><span>Messages</span></div>
+      <div class="admin-crm-kpi" data-open-admin="clients"><b id="crmClients">0</b><span>Clients réels</span></div>
+      <div class="admin-crm-kpi" data-open-admin="dMeals"><b id="crmMeals">0</b><span>Repas saisis</span></div>
+      <div class="admin-crm-kpi" data-open-admin="dExercises"><b id="crmExercises">0</b><span>Exercices saisis</span></div>
+      <div class="admin-crm-kpi" data-open-admin="dMessages"><b id="crmMessages">0</b><span>Messages</span></div>
     </div>
 
 
@@ -823,6 +846,23 @@
       <div class="client-detail">
         <h3 id="selectedClientName" style="font-family:var(--disp);margin-bottom:4px">Sélectionne un client</h3>
         <p class="private-note" id="selectedClientMeta">Ses données apparaîtront ici.</p>
+        <div class="admin-client-summary" id="adminClientSummary">
+          <h4>Résumé client</h4>
+          <div class="summary-grid">
+            <div class="summary-pill"><b id="sumMeals">0</b><span>Repas</span></div>
+            <div class="summary-pill"><b id="sumExercises">0</b><span>Exercices</span></div>
+            <div class="summary-pill"><b id="sumMessages">0</b><span>Messages</span></div>
+            <div class="summary-pill"><b id="sumPrograms">0</b><span>Programmes</span></div>
+            <div class="summary-pill"><b id="sumHabits">0</b><span>Habitudes</span></div>
+            <div class="summary-pill"><b id="sumGoals">0</b><span>Objectifs</span></div>
+          </div>
+          <div class="admin-actions">
+            <button class="admin-action-btn" type="button" data-jump-detail="dMeals">Voir repas</button>
+            <button class="admin-action-btn" type="button" data-jump-detail="dExercises">Voir progression</button>
+            <button class="admin-action-btn" type="button" data-jump-detail="dProgram">Créer programme</button>
+            <button class="admin-action-btn" type="button" data-jump-detail="dMessages">Voir messages</button>
+          </div>
+        </div>
 
         <div class="detail-tabs">
           <button class="detail-tab active" data-detail="dOverview" type="button">Résumé</button>
@@ -1736,7 +1776,7 @@
     function renderItems(targetId, rows, empty, render){
       const el = document.getElementById(targetId);
       if(!el) return;
-      el.innerHTML = rows && rows.length ? rows.map(render).join("") : `<div class="admin-data-item"><b>Aucune donnée</b><span>${htmlSafe(empty)}</span></div>`;
+      el.innerHTML = rows && rows.length ? rows.map(render).join("") : `<div class="empty-help"><b>Aucune donnée</b><span>${htmlSafe(empty)}</span></div>`;
     }
 
 
@@ -1873,6 +1913,47 @@
     document.getElementById("sendMobileProgramBtn")?.addEventListener("click", sendMobileProgram);
     document.querySelectorAll(".quick-template").forEach(btn=>btn.addEventListener("click", ()=>applyProgramTemplate(btn.dataset.template)));
 
+
+    // ---------- Admin clics et fiche client détaillée ----------
+    function adminScrollTo(selector){
+      const el = document.querySelector(selector);
+      if(el) el.scrollIntoView({ behavior:"smooth", block:"start" });
+    }
+
+    function openDetailPanel(panelId){
+      if(!panelId) return;
+      document.querySelectorAll(".detail-tab").forEach(b=>b.classList.toggle("active", b.dataset.detail === panelId));
+      document.querySelectorAll(".detail-panel").forEach(p=>p.classList.toggle("active", p.id === panelId));
+      adminScrollTo(".client-detail");
+    }
+
+    function setSummaryCount(id, value){
+      const el = document.getElementById(id);
+      if(el) el.textContent = value;
+    }
+
+    function setupAdminClicksOnce(){
+      if(window.__kpsulAdminClicksReady) return;
+      window.__kpsulAdminClicksReady = true;
+
+      document.querySelectorAll("[data-open-admin]").forEach(card=>{
+        card.addEventListener("click", ()=>{
+          document.querySelectorAll(".admin-crm-kpi").forEach(c=>c.classList.remove("active"));
+          card.classList.add("active");
+          const target = card.dataset.openAdmin;
+          if(target === "clients"){
+            adminScrollTo(".client-list");
+            return;
+          }
+          openDetailPanel(target);
+        });
+      });
+
+      document.querySelectorAll("[data-jump-detail]").forEach(btn=>{
+        btn.addEventListener("click", ()=>openDetailPanel(btn.dataset.jumpDetail));
+      });
+    }
+
     async function loadCrmAdmin(){
       if(!["admin","coach"].includes(currentProfileRole)) return;
       const [profilesRes, foodRes, exerciseRes, habitRes, goalRes, msgRes, progRes] = await Promise.all([
@@ -1900,6 +1981,7 @@
       setCrmText("crmMeals", crmData.foods.length);
       setCrmText("crmExercises", crmData.exercises.length);
       setCrmText("crmMessages", crmData.messages.length);
+      setupAdminClicksOnce();
       renderClientList();
       fillMobileClientSelect();
 
@@ -1922,7 +2004,7 @@
         return `<button class="client-row ${p.id===selectedClientId?'active':''}" type="button" data-client="${htmlSafe(p.id)}">
           <b>${htmlSafe(p.prenom || "Client sans prénom")}</b>
           <span>${htmlSafe(p.id)}</span>
-          <span>Dernier message : ${htmlSafe(lastMsg?.message || "—")}</span>
+          <span>Dernier message : ${htmlSafe(lastMsg?.message || "—")}</span><span>Toucher pour ouvrir la fiche complète</span>
         </button>`;
       }).join("");
       list.querySelectorAll("[data-client]").forEach(btn=>{
@@ -1940,8 +2022,15 @@
       const messages = crmData.messages.filter(x => x.user_id === uid);
       const programs = crmData.programs.filter(x => x.user_id === uid);
 
-      setCrmText("selectedClientName", p?.prenom || "Client");
+      setCrmText("selectedClientName", p?.prenom || p?.full_name || p?.email || "Client");
       setCrmText("selectedClientMeta", "ID client : " + uid);
+
+      setSummaryCount("sumMeals", meals.length);
+      setSummaryCount("sumExercises", exercises.length);
+      setSummaryCount("sumMessages", messages.length);
+      setSummaryCount("sumPrograms", programs.length);
+      setSummaryCount("sumHabits", habits.length);
+      setSummaryCount("sumGoals", goals.length);
 
       renderClientList();
       fillMobileClientSelect();
