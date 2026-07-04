@@ -1,0 +1,1953 @@
+<!DOCTYPE html>
+<!-- KPSUL CORPS V1.6.1 DEBUG AUTH — fichier unique index.html -->
+<html lang="fr">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Kpsul Corps — La Capsule de transformation physique</title>
+<meta name="description" content="Kpsul Corps transforme ton profil, ta morphologie, ton rythme de vie et tes objectifs en une expérience de coaching physique sur-mesure. Entre dans la Capsule." />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink-900:#0B1413;
+    --ink-800:#10201D;
+    --ink-700:#172924;
+    --line:#22403A;
+    --paper:#ECEFE9;
+    --muted:#8A9A93;
+    --shell:#E7D9C4;
+    --core:#34E0C8;
+    --core-dim:rgba(52,224,200,.14);
+    --err:#E8735B;
+    --disp:"Space Grotesk",system-ui,sans-serif;
+    --body:"Hanken Grotesk",system-ui,sans-serif;
+    --mono:"Space Mono",ui-monospace,monospace;
+    --maxw:1120px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{
+    background:var(--ink-900);
+    color:var(--paper);
+    font-family:var(--body);
+    font-size:17px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  a{color:inherit;text-decoration:none}
+  ::selection{background:var(--core);color:var(--ink-900)}
+  :focus-visible{outline:2px solid var(--core);outline-offset:3px;border-radius:4px}
+
+  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 22px}
+  .section{padding:96px 0}
+  .eyebrow{
+    font-family:var(--mono);font-size:12px;letter-spacing:.22em;
+    text-transform:uppercase;color:var(--core);display:inline-flex;
+    align-items:center;gap:9px;
+  }
+  .eyebrow::before{content:"";width:22px;height:1px;background:var(--core);opacity:.7}
+
+  /* ---------- capsule mark ---------- */
+  .cap{display:inline-flex;width:34px;height:16px;border-radius:99px;overflow:hidden;flex:0 0 auto;transform:rotate(-20deg)}
+  .cap span{display:block;width:50%;height:100%}
+  .cap .a{background:var(--shell)}
+  .cap .b{background:var(--core)}
+  .cap.lg{width:60px;height:28px}
+
+  /* ---------- nav ---------- */
+  nav{
+    position:sticky;top:0;z-index:50;
+    backdrop-filter:blur(10px);
+    background:rgba(11,20,19,.72);
+    border-bottom:1px solid var(--line);
+  }
+  .nav-in{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:12px;font-family:var(--disp);font-weight:700;letter-spacing:-.01em}
+  .brand b{font-weight:700}
+  .brand i{font-style:normal;color:var(--muted)}
+  .nav-cta{
+    font-family:var(--mono);font-size:13px;letter-spacing:.04em;
+    border:1px solid var(--line);padding:9px 15px;border-radius:99px;
+    transition:.2s border-color,.2s color;
+  }
+  .nav-cta:hover{border-color:var(--core);color:var(--core)}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;padding:88px 0 76px}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:56px;align-items:center}
+  h1{
+    font-family:var(--disp);font-weight:700;
+    font-size:clamp(40px,6.6vw,68px);line-height:1.02;letter-spacing:-.03em;
+    margin:22px 0 20px;
+  }
+  h1 em{font-style:normal;color:var(--core)}
+  .lede{font-size:clamp(17px,2vw,19px);color:#C6D0CB;max-width:34ch}
+  .cta-row{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+  .btn{
+    font-family:var(--disp);font-weight:500;font-size:16px;
+    padding:15px 26px;border-radius:99px;cursor:pointer;border:1px solid transparent;
+    transition:transform .15s ease,background .2s,color .2s,border-color .2s;
+    display:inline-flex;align-items:center;gap:10px;
+  }
+  .btn-primary{background:var(--core);color:#04110E}
+  .btn-primary:hover{transform:translateY(-2px)}
+  .btn-ghost{border-color:var(--line);color:var(--paper)}
+  .btn-ghost:hover{border-color:var(--core);color:var(--core)}
+  .btn.hidden{display:none}
+
+  .visual{
+    position:relative;border:1px solid var(--line);border-radius:20px;
+    background:linear-gradient(160deg,var(--ink-800),var(--ink-900));
+    padding:26px;min-height:340px;display:flex;flex-direction:column;justify-content:space-between;
+    overflow:hidden;
+  }
+  .visual::after{
+    content:"";position:absolute;inset:-40% -30% auto auto;width:60%;height:70%;
+    background:radial-gradient(closest-side,var(--core-dim),transparent);pointer-events:none;
+  }
+  .chips{display:flex;flex-wrap:wrap;gap:8px;position:relative;z-index:2}
+  .chip{
+    font-family:var(--mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;
+    color:#B9C6C0;border:1px solid var(--line);padding:6px 11px;border-radius:99px;
+    background:rgba(255,255,255,.02);
+  }
+  .converge{display:flex;align-items:center;gap:14px;position:relative;z-index:2;margin-top:8px}
+  .converge .arrow{flex:1;height:1px;background:linear-gradient(90deg,var(--line),var(--core));position:relative}
+  .converge .arrow::after{content:"";position:absolute;right:0;top:-3px;width:7px;height:7px;border-top:1px solid var(--core);border-right:1px solid var(--core);transform:rotate(45deg)}
+  .out{
+    font-family:var(--disp);font-weight:700;font-size:15px;color:var(--ink-900);
+    background:var(--core);padding:10px 16px;border-radius:99px;white-space:nowrap;
+  }
+
+  /* ---------- approche ---------- */
+  .kicker-row{display:flex;align-items:baseline;justify-content:space-between;gap:20px;flex-wrap:wrap;margin-bottom:44px}
+  h2{font-family:var(--disp);font-weight:700;font-size:clamp(28px,4vw,40px);letter-spacing:-.02em;line-height:1.08;max-width:20ch}
+  .sub{color:var(--muted);max-width:42ch}
+
+  .flow{display:grid;grid-template-columns:1fr auto 1fr;gap:30px;align-items:center}
+  .inputs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .inp{border:1px solid var(--line);border-radius:12px;padding:14px 15px;background:var(--ink-800)}
+  .inp .n{font-family:var(--mono);font-size:11px;color:var(--core);letter-spacing:.12em}
+  .inp .t{font-size:14.5px;color:#D5DDD8;margin-top:3px}
+  .pipe{display:flex;flex-direction:column;align-items:center;gap:16px;text-align:center}
+  .pipe .capbox{width:118px;height:118px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;background:radial-gradient(closest-side,var(--core-dim),transparent)}
+  .pipe .lbl{font-family:var(--mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .result{border:1px solid var(--core);border-radius:16px;padding:26px;background:linear-gradient(160deg,rgba(52,224,200,.06),transparent)}
+  .result h3{font-family:var(--disp);font-weight:700;font-size:21px;margin-bottom:10px}
+  .result p{color:#C6D0CB;font-size:15.5px}
+  .result ul{list-style:none;margin-top:16px;display:grid;gap:9px}
+  .result li{display:flex;gap:10px;font-size:14.5px;color:#D5DDD8}
+  .result li::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--core);margin-top:8px;flex:0 0 auto}
+
+  /* ---------- parcours (colonnes) ---------- */
+  .steps4{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--ink-800)}
+  .stepcol{padding:26px 16px;border-left:1px solid var(--line)}
+  .stepcol:first-child{border-left:none}
+  .stepcol .num{font-family:var(--mono);font-size:13px;color:var(--core);letter-spacing:.12em}
+  .stepcol h4{font-family:var(--disp);font-weight:700;font-size:clamp(16px,4.4vw,22px);letter-spacing:-.01em;margin:16px 0 8px}
+  .stepcol p{font-size:clamp(11px,2.9vw,14px);color:#B9C6C0;line-height:1.4}
+
+  /* ---------- form / wizard ---------- */
+  .form-shell{border:1px solid var(--line);border-radius:22px;background:var(--ink-800);padding:clamp(22px,4vw,40px);max-width:820px;margin:0 auto;scroll-margin-top:82px}
+
+  .stepper{display:flex;margin-bottom:22px}
+  .node{position:relative;flex:1;display:flex;flex-direction:column;align-items:center;gap:9px;text-align:center}
+  .node:not(:first-child)::before{content:"";position:absolute;top:15px;right:50%;width:100%;height:2px;background:var(--line);transition:background .35s}
+  .node.done::before,.node.active::before{background:var(--core)}
+  .node .dot{position:relative;z-index:1;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;background:var(--ink-800);border:2px solid var(--line);font-family:var(--mono);font-size:13px;color:var(--muted);transition:.3s}
+  .node .nlabel{font-family:var(--mono);font-size:10px;letter-spacing:.04em;text-transform:uppercase;color:var(--muted);transition:.3s;line-height:1.2}
+  .node.active .dot{border-color:var(--core);color:var(--core);box-shadow:0 0 0 4px var(--core-dim)}
+  .node.active .nlabel{color:var(--paper)}
+  .node.done .dot{border-color:var(--core);background:var(--core);color:#04110E}
+  .node.done .nlabel{color:#B9C6C0}
+  .step-count{font-family:var(--mono);font-size:12px;letter-spacing:.06em;color:var(--muted);text-align:center;margin:-2px 0 26px}
+
+  .step{display:none}
+  .step.active{display:block;animation:stepIn .35s ease}
+  @keyframes stepIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+  .step:focus{outline:none}
+  .step-head{font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--core);padding-bottom:16px;display:flex;align-items:center;gap:10px}
+  .step-head span{flex:1;height:1px;background:var(--line)}
+
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  .field{display:flex;flex-direction:column;gap:7px;margin-bottom:2px}
+  .field.full{grid-column:1/-1}
+  label.lb{font-size:14px;color:#C6D0CB;font-weight:500}
+  label.lb .opt{color:var(--muted);font-weight:400;font-size:12.5px}
+  input,select,textarea{
+    font-family:var(--body);font-size:16px;color:var(--paper);
+    background:var(--ink-900);border:1px solid var(--line);border-radius:11px;
+    padding:13px 14px;width:100%;transition:border-color .18s,background .18s;
+  }
+  textarea{resize:vertical;min-height:96px}
+  input::placeholder,textarea::placeholder{color:#5E6E68}
+  input:focus,select:focus,textarea:focus{border-color:var(--core);background:#0d1a18;outline:none}
+  select{appearance:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%238A9A93' stroke-width='2'><path d='M6 9l6 6 6-6'/></svg>");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+  .invalid{border-color:var(--err)!important}
+
+  .note{display:flex;gap:12px;border:1px dashed var(--line);border-radius:12px;padding:14px 16px;background:rgba(231,217,196,.04);margin-top:16px}
+  .note .cap{margin-top:3px}
+  .note p{font-size:13.5px;color:#B9C6C0}
+  .note b{color:var(--shell);font-weight:600}
+
+  .consent{display:flex;gap:12px;align-items:flex-start;margin-top:18px}
+  .consent input{width:20px;height:20px;flex:0 0 auto;accent-color:var(--core);margin-top:2px}
+  .consent label{font-size:13.5px;color:#B9C6C0}
+  .consent a{color:var(--core);text-decoration:underline;text-underline-offset:2px}
+
+  .form-msg{font-size:14px;min-height:20px;margin-top:16px}
+  .form-msg.error{color:var(--err)}
+  .nav-btns{display:flex;gap:12px;margin-top:14px}
+  .nav-btns .btn{flex:1;justify-content:center}
+
+  .success{display:none;text-align:center;padding:44px 20px}
+  .success.show{display:block}
+  .success .cap{margin:0 auto 20px;transform:rotate(-20deg) scale(1.4)}
+  .success h3{font-family:var(--disp);font-weight:700;font-size:26px;margin-bottom:10px}
+  .success p{color:#C6D0CB;max-width:40ch;margin:0 auto 22px}
+
+  /* ---------- séances / calendrier ---------- */
+  .cal-legend{display:flex;flex-wrap:wrap;gap:18px;margin:0 0 20px}
+  .leg{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#B9C6C0}
+  .leg .d{width:9px;height:9px;border-radius:50%;flex:0 0 auto}
+  .leg .d.solo{background:var(--core)}
+  .leg .d.groupe{background:var(--shell)}
+  .cal{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--ink-800)}
+  .calrow{display:flex;gap:16px;align-items:center;padding:16px 18px;border-top:1px solid var(--line)}
+  .calrow:first-child{border-top:none}
+  .calday{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);width:104px;flex:0 0 auto}
+  .slots{display:flex;flex-wrap:wrap;gap:9px}
+  .slot{font-family:var(--body);font-size:14px;color:var(--paper);background:var(--ink-900);border:1px solid var(--line);border-radius:99px;padding:8px 9px 8px 15px;cursor:pointer;display:inline-flex;align-items:center;gap:9px;transition:border-color .18s,transform .12s}
+  .slot:hover{border-color:var(--core);transform:translateY(-1px)}
+  .slot .stype{font-family:var(--mono);font-size:10px;letter-spacing:.05em;text-transform:uppercase;padding:3px 8px;border-radius:99px}
+  .slot .stype.solo{color:#04110E;background:var(--core)}
+  .slot .stype.groupe{color:#1A140A;background:var(--shell)}
+  .repos{font-size:13.5px;color:#5E6E68;font-style:italic}
+  @media(max-width:560px){
+    .calrow{flex-direction:column;align-items:flex-start;gap:10px}
+    .calday{width:auto}
+  }
+
+  /* ---------- suite / roadmap ---------- */
+  .road{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+  .card{border:1px solid var(--line);border-radius:16px;padding:24px;background:var(--ink-800)}
+  .card .tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .card h4{font-family:var(--disp);font-weight:700;font-size:18px;margin:12px 0 8px}
+  .card p{font-size:14.5px;color:#B9C6C0}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--line);padding:40px 0;color:var(--muted);font-size:13.5px}
+  .foot-in{display:flex;justify-content:space-between;gap:20px;flex-wrap:wrap;align-items:center}
+  .foot-in .brand{color:var(--paper)}
+
+  /* ---------- reveal ---------- */
+  .rise{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+  .rise.in{opacity:1;transform:none}
+
+  /* ---------- espace membre / auth ---------- */
+  .nav-auth{
+    font-family:var(--mono);font-size:13px;letter-spacing:.04em;
+    border:1px solid var(--core);color:var(--core);background:transparent;
+    padding:9px 15px;border-radius:99px;cursor:pointer;white-space:nowrap;
+    transition:background .2s,color .2s;
+  }
+  .nav-auth:hover{background:var(--core);color:#04110E}
+
+  .modal{position:fixed;inset:0;z-index:200;display:none;background:rgba(4,10,9,.74);backdrop-filter:blur(5px);padding:22px;overflow-y:auto}
+  .modal.show{display:flex;align-items:center;justify-content:center}
+  .modal-card{width:100%;max-width:420px;background:var(--ink-800);border:1px solid var(--line);border-radius:20px;padding:30px 24px;position:relative}
+  .modal-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--muted);font-size:26px;line-height:1;cursor:pointer}
+  .modal-card .cap{margin-bottom:16px}
+  .modal-card h3{font-family:var(--disp);font-weight:700;font-size:22px;margin-bottom:5px}
+  .modal-card .msub{color:var(--muted);font-size:14px;margin-bottom:22px}
+  .tabs{display:flex;gap:5px;background:var(--ink-900);border:1px solid var(--line);border-radius:99px;padding:4px;margin-bottom:20px}
+  .tab{flex:1;text-align:center;padding:9px;border-radius:99px;font-size:14px;font-weight:600;color:var(--muted);cursor:pointer;border:none;background:none;transition:background .2s,color .2s}
+  .tab.active{background:var(--core);color:#04110E}
+  .auth-field{margin-bottom:14px}
+  .auth-field label{display:block;font-size:13px;color:#C6D0CB;margin-bottom:6px}
+  .auth-msg{font-size:13.5px;margin:4px 0 14px;min-height:18px}
+  .auth-msg.error{color:var(--err)}
+  .auth-msg.ok{color:var(--core)}
+
+  #member{display:none;padding:96px 0 80px}
+  body.authed #member{display:block}
+  body.authed main{display:none}
+  .member-card{max-width:640px;margin:0 auto;border:1px solid var(--line);border-radius:20px;background:var(--ink-800);padding:clamp(24px,4vw,40px)}
+  .member-card .cap{margin-bottom:18px}
+  .member-card h2{font-family:var(--disp);font-weight:700;font-size:clamp(26px,4vw,34px);margin-bottom:10px}
+  .member-card>p{color:#C6D0CB;margin-bottom:8px}
+  .member-tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin:24px 0}
+  .mtile{border:1px solid var(--line);border-radius:14px;padding:18px;background:var(--ink-900)}
+  .mtile .tag{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+  .mtile h4{font-family:var(--disp);font-weight:700;font-size:17px;margin:10px 0 4px}
+  .mtile p{font-size:13.5px;color:#8A9A93;margin:0}
+  @media(max-width:560px){ .member-tiles{grid-template-columns:1fr} }
+
+  /* ---------- responsive ---------- */
+  @media(max-width:880px){
+    .section{padding:66px 0}
+    .hero{padding:52px 0 44px}
+    .hero-grid{grid-template-columns:1fr;gap:34px}
+    .visual{min-height:280px}
+    .flow{grid-template-columns:1fr;gap:22px}
+    .pipe{flex-direction:row;justify-content:center;gap:18px}
+    .road{grid-template-columns:1fr}
+  }
+  @media(max-width:560px){
+    body{font-size:16px}
+    .grid2{grid-template-columns:1fr}
+    .inputs{grid-template-columns:1fr}
+    .nav-cta{display:none}
+    .cta-row .btn{flex:1;justify-content:center}
+    .node .nlabel{font-size:9px}
+    .stepcol{padding:18px 9px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .rise{opacity:1;transform:none}
+    html{scroll-behavior:auto}
+  }
+
+  /* ---------- KPSUL V1.1 premium layer ---------- */
+  :root{
+    --glow:0 0 42px rgba(52,224,200,.22);
+    --glass:rgba(255,255,255,.045);
+    --glass-2:rgba(255,255,255,.075);
+  }
+
+  .kpsul-intro{
+    position:fixed;inset:0;z-index:500;
+    background:radial-gradient(circle at 50% 45%, rgba(52,224,200,.13), transparent 30%), #030807;
+    display:grid;place-items:center;
+    transition:opacity .75s ease,visibility .75s ease;
+  }
+  .kpsul-intro.hide{opacity:0;visibility:hidden;pointer-events:none}
+  .intro-inner{text-align:center;padding:30px;max-width:720px}
+  .intro-capsule{
+    width:112px;height:52px;border-radius:999px;overflow:hidden;margin:0 auto 30px;
+    display:flex;transform:rotate(-18deg);
+    box-shadow:0 0 0 1px rgba(52,224,200,.35), var(--glow);
+    animation:introFloat 2.8s ease-in-out infinite;
+  }
+  .intro-capsule span{width:50%;height:100%;display:block}
+  .intro-capsule .left{background:var(--shell)}
+  .intro-capsule .right{background:var(--core)}
+  .intro-line{
+    font-family:var(--disp);font-weight:700;font-size:clamp(30px,6vw,64px);
+    line-height:1.04;letter-spacing:-.04em;color:var(--paper);
+    opacity:0;transform:translateY(14px);
+    animation:introText 4.3s ease forwards;
+  }
+  .intro-line strong{color:var(--core);font-weight:700}
+  .intro-skip{
+    margin-top:28px;background:transparent;color:var(--muted);
+    border:1px solid var(--line);border-radius:999px;padding:10px 16px;
+    font-family:var(--mono);font-size:12px;letter-spacing:.08em;cursor:pointer;
+  }
+  @keyframes introFloat{0%,100%{transform:rotate(-18deg) translateY(0)}50%{transform:rotate(-18deg) translateY(-10px)}}
+  @keyframes introText{
+    0%{opacity:0;transform:translateY(14px)}
+    18%,72%{opacity:1;transform:none}
+    100%{opacity:1;transform:none}
+  }
+
+  .hero::before{
+    content:"";position:absolute;inset:0;
+    background:
+      radial-gradient(circle at 15% 22%, rgba(52,224,200,.10), transparent 28%),
+      radial-gradient(circle at 85% 18%, rgba(231,217,196,.08), transparent 22%);
+    pointer-events:none;
+  }
+  .hero-grid{position:relative;z-index:2}
+  .hero-badges{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+  .hero-badge{
+    font-family:var(--mono);font-size:11px;letter-spacing:.08em;text-transform:uppercase;
+    color:#B9C6C0;border:1px solid var(--line);background:var(--glass);
+    padding:7px 11px;border-radius:999px;
+  }
+  .signature{
+    margin-top:28px;padding:18px 20px;border-left:2px solid var(--core);
+    background:linear-gradient(90deg,rgba(52,224,200,.08),transparent);
+    color:#D5DDD8;border-radius:0 14px 14px 0;max-width:560px;
+  }
+  .signature b{color:var(--core)}
+
+  .capsule-orbit{
+    position:absolute;inset:0;display:grid;place-items:center;pointer-events:none;z-index:1;
+  }
+  .orbit-word{
+    position:absolute;font-family:var(--mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;
+    color:rgba(236,239,233,.62);border:1px solid rgba(52,224,200,.24);
+    padding:6px 9px;border-radius:999px;background:rgba(11,20,19,.56);
+    animation:orbitPulse 4s ease-in-out infinite;
+  }
+  .orbit-word:nth-child(1){transform:translate(-120px,-105px)}
+  .orbit-word:nth-child(2){transform:translate(112px,-92px)}
+  .orbit-word:nth-child(3){transform:translate(-150px,12px)}
+  .orbit-word:nth-child(4){transform:translate(142px,28px)}
+  .orbit-word:nth-child(5){transform:translate(-72px,116px)}
+  .orbit-word:nth-child(6){transform:translate(82px,118px)}
+  @keyframes orbitPulse{0%,100%{opacity:.46}50%{opacity:1;box-shadow:0 0 24px rgba(52,224,200,.16)}}
+
+  .capsule-meter{
+    margin-top:24px;border:1px solid var(--line);border-radius:14px;background:var(--ink-900);padding:14px;
+    position:relative;z-index:3;
+  }
+  .meter-top{display:flex;justify-content:space-between;gap:14px;font-family:var(--mono);font-size:11px;color:var(--muted);letter-spacing:.09em;text-transform:uppercase;margin-bottom:10px}
+  .meter-bar{height:9px;border-radius:999px;background:#07110f;overflow:hidden;border:1px solid var(--line)}
+  .meter-fill{height:100%;width:17%;background:linear-gradient(90deg,var(--core),#E7D9C4);border-radius:inherit;transition:width .55s ease;box-shadow:0 0 22px rgba(52,224,200,.25)}
+
+  .manifesto{
+    border:1px solid var(--line);border-radius:22px;padding:clamp(26px,4vw,46px);
+    background:
+      linear-gradient(160deg,rgba(52,224,200,.075),transparent 48%),
+      var(--ink-800);
+    position:relative;overflow:hidden;
+  }
+  .manifesto::after{
+    content:"KPSUL";position:absolute;right:-16px;bottom:-42px;
+    font-family:var(--disp);font-weight:700;font-size:120px;letter-spacing:-.08em;
+    color:rgba(255,255,255,.025);pointer-events:none;
+  }
+  .manifesto h2{max-width:18ch}
+  .manifesto p{max-width:62ch;color:#C6D0CB;margin-top:18px}
+  .manifesto-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+  .mitem{border:1px solid var(--line);border-radius:15px;padding:18px;background:rgba(4,10,9,.28)}
+  .mitem .tag{font-family:var(--mono);font-size:11px;color:var(--core);letter-spacing:.12em;text-transform:uppercase}
+  .mitem h4{font-family:var(--disp);font-size:18px;margin:9px 0 5px}
+  .mitem p{font-size:14px;margin:0;color:#B9C6C0}
+
+  .lab-preview{
+    display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:28px;
+  }
+  .lab-card{
+    border:1px solid var(--line);border-radius:18px;background:var(--ink-800);
+    padding:22px;position:relative;overflow:hidden;
+  }
+  .lab-card::before{
+    content:"";position:absolute;inset:auto -20% -40% auto;width:70%;height:80%;
+    background:radial-gradient(closest-side,rgba(52,224,200,.11),transparent);
+  }
+  .lab-card .tag{font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+  .lab-card h3{font-family:var(--disp);font-size:24px;letter-spacing:-.02em;margin:12px 0 8px}
+  .lab-stat{display:flex;justify-content:space-between;border-top:1px solid var(--line);padding-top:12px;margin-top:12px;color:#C6D0CB}
+  .lab-stat b{color:var(--core)}
+
+  .coach-panel{
+    border:1px solid var(--line);border-radius:22px;background:var(--ink-800);padding:26px;
+  }
+  .coach-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:22px}
+  .coach-kpi{border:1px solid var(--line);border-radius:16px;background:var(--ink-900);padding:18px}
+  .coach-kpi b{display:block;font-family:var(--disp);font-size:30px;color:var(--core);line-height:1}
+  .coach-kpi span{display:block;margin-top:8px;font-size:13px;color:#B9C6C0}
+
+  .question-pill{
+    display:inline-flex;gap:8px;align-items:center;font-family:var(--mono);font-size:11px;
+    color:var(--core);letter-spacing:.1em;text-transform:uppercase;margin-bottom:14px;
+  }
+  .question-pill::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--core);box-shadow:0 0 16px var(--core)}
+
+  .step.active .step-head::before{
+    content:"Capsule active";font-family:var(--mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--core);border:1px solid var(--line);border-radius:999px;padding:4px 8px;margin-right:4px;
+  }
+
+  .ai-note{
+    margin-top:16px;border:1px solid rgba(52,224,200,.32);border-radius:16px;padding:18px;
+    background:rgba(52,224,200,.055);color:#C6D0CB;font-size:14px;
+  }
+  .ai-note b{color:var(--core)}
+
+  @media(max-width:880px){
+    .manifesto-grid,.lab-preview,.coach-grid{grid-template-columns:1fr}
+    .orbit-word{display:none}
+  }
+
+
+  /* ---------- KPSUL V1.2 member tools ---------- */
+  .member-tools{display:grid;gap:16px;margin:22px 0}
+  .tool-panel{border:1px solid var(--line);border-radius:18px;background:var(--ink-900);padding:20px}
+  .tool-panel h3{font-family:var(--disp);font-size:20px;margin-bottom:8px}
+  .tool-panel p{color:#8A9A93;font-size:14px;margin-bottom:14px}
+  .mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .mini-grid.full2{grid-template-columns:1fr 1fr}
+  .tool-panel input,.tool-panel textarea,.tool-panel select{font-size:15px}
+  .tool-list{display:grid;gap:10px;margin-top:14px}
+  .tool-item{border:1px solid var(--line);border-radius:14px;padding:14px;background:rgba(255,255,255,.025)}
+  .tool-item b{display:block;color:var(--paper);font-family:var(--disp);font-size:16px}
+  .tool-item span{display:block;color:#8A9A93;font-size:13px;margin-top:3px}
+  .tool-status{font-size:13px;color:var(--core);min-height:18px;margin-top:10px}
+  @media(max-width:640px){.mini-grid,.mini-grid.full2{grid-template-columns:1fr}}
+
+
+  /* ---------- KPSUL V1.4 modules ---------- */
+  .kpsul-lab-title{display:flex;justify-content:space-between;gap:14px;align-items:flex-start;margin:18px 0 8px;flex-wrap:wrap}
+  .kpsul-lab-title .badge{font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:#04110E;background:var(--core);border-radius:99px;padding:6px 10px}
+  .lab-score{border:1px solid var(--line);border-radius:18px;background:linear-gradient(160deg,rgba(52,224,200,.08),rgba(255,255,255,.02));padding:20px;margin:20px 0}
+  .lab-score strong{font-family:var(--disp);font-size:34px;color:var(--core);line-height:1}
+  .lab-score span{display:block;color:#8A9A93;font-size:13px;margin-top:5px}
+  .module-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:18px 0}
+  .module-tab{border:1px solid var(--line);background:var(--ink-900);color:#B9C6C0;border-radius:999px;padding:9px 12px;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+  .module-tab.active{background:var(--core);color:#04110E;border-color:var(--core)}
+  .module-panel{display:none}
+  .module-panel.active{display:block}
+  .metric-row{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:12px}
+  .metric-box{border:1px solid var(--line);border-radius:14px;padding:14px;background:rgba(4,10,9,.32)}
+  .metric-box b{font-family:var(--disp);font-size:20px;color:var(--paper)}
+  .metric-box span{display:block;color:#8A9A93;font-size:12px;margin-top:3px}
+  .admin-zone{display:none;border:1px solid rgba(52,224,200,.32);border-radius:18px;padding:20px;background:rgba(52,224,200,.045);margin-top:16px}
+  body.admin .admin-zone{display:block}
+  .private-note{font-size:12.5px;color:#8A9A93;margin-top:10px}
+  @media(max-width:700px){.metric-row{grid-template-columns:1fr 1fr}}
+
+
+  /* ---------- KPSUL V1.5 admin réel ---------- */
+  .real-kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:14px 0}
+  .real-kpi{border:1px solid var(--line);border-radius:14px;background:rgba(4,10,9,.36);padding:14px}
+  .real-kpi b{display:block;font-family:var(--disp);font-size:26px;color:var(--core);line-height:1}
+  .real-kpi span{display:block;font-size:12px;color:#8A9A93;margin-top:6px}
+  .admin-client{border:1px solid var(--line);border-radius:14px;padding:14px;background:rgba(255,255,255,.025);margin-top:10px}
+  .admin-client b{font-family:var(--disp);font-size:16px;color:var(--paper)}
+  .admin-client small{display:block;color:#8A9A93;margin-top:2px}
+  .admin-client .client-data{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:10px}
+  .client-data span{font-size:12px;color:#B9C6C0;border:1px solid var(--line);border-radius:999px;padding:6px 9px}
+  @media(max-width:700px){.real-kpi-grid{grid-template-columns:1fr 1fr}.admin-client .client-data{grid-template-columns:1fr}}
+
+
+  /* ---------- KPSUL V1.6 CRM Admin ---------- */
+  #adminDashboard{display:none;padding:86px 0 70px}
+  body.admin-mode #adminDashboard{display:block}
+  body.admin-mode main, body.admin-mode header, body.admin-mode #concept, body.admin-mode footer{display:none}
+  .admin-head{display:flex;justify-content:space-between;gap:18px;align-items:flex-start;flex-wrap:wrap;margin-bottom:24px}
+  .admin-head h1{margin:0;font-size:clamp(30px,5vw,48px)}
+  .admin-switch{display:flex;gap:10px;flex-wrap:wrap}
+  .admin-crm-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:20px 0 26px}
+  .admin-crm-kpi{border:1px solid var(--line);border-radius:18px;background:var(--ink-800);padding:20px}
+  .admin-crm-kpi b{display:block;font-family:var(--disp);font-size:34px;color:var(--core);line-height:1}
+  .admin-crm-kpi span{display:block;color:#8A9A93;font-size:13px;margin-top:8px}
+  .admin-layout{display:grid;grid-template-columns:360px 1fr;gap:18px}
+  .client-list,.client-detail{border:1px solid var(--line);border-radius:20px;background:var(--ink-800);padding:18px}
+  .client-search{margin-bottom:14px}
+  .client-row{width:100%;text-align:left;border:1px solid var(--line);border-radius:14px;background:var(--ink-900);padding:14px;margin-bottom:10px;color:var(--paper);cursor:pointer}
+  .client-row.active{border-color:var(--core);box-shadow:0 0 0 3px var(--core-dim)}
+  .client-row b{display:block;font-family:var(--disp);font-size:16px}
+  .client-row span{display:block;color:#8A9A93;font-size:12px;margin-top:3px}
+  .detail-tabs{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+  .detail-tab{border:1px solid var(--line);background:var(--ink-900);color:#B9C6C0;border-radius:999px;padding:8px 11px;font-family:var(--mono);font-size:10.5px;text-transform:uppercase;cursor:pointer}
+  .detail-tab.active{background:var(--core);border-color:var(--core);color:#04110E}
+  .detail-panel{display:none}
+  .detail-panel.active{display:block}
+  .admin-data-list{display:grid;gap:10px}
+  .admin-data-item{border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.025);padding:14px}
+  .admin-data-item b{display:block;font-family:var(--disp)}
+  .admin-data-item span{display:block;color:#8A9A93;font-size:13px;margin-top:4px}
+  .program-form{border:1px solid rgba(52,224,200,.3);border-radius:16px;padding:16px;background:rgba(52,224,200,.045);margin-bottom:14px}
+  @media(max-width:900px){.admin-crm-grid{grid-template-columns:1fr 1fr}.admin-layout{grid-template-columns:1fr}}
+
+</style>
+</head>
+<body>
+
+<div class="kpsul-intro" id="kpsulIntro" aria-label="Introduction Kpsul Corps">
+  <div class="intro-inner">
+    <div class="intro-capsule" aria-hidden="true"><span class="left"></span><span class="right"></span></div>
+    <div class="intro-line">Chaque corps possède une histoire.<br><strong>La tienne commence dans la Capsule.</strong></div>
+    <button class="intro-skip" id="introSkip" type="button">Entrer dans Kpsul</button>
+  </div>
+</div>
+
+
+<nav>
+  <div class="wrap nav-in">
+    <a class="brand" href="#top" aria-label="kpsul_corps, accueil">
+      <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
+      <span><b>kpsul</b><i>_corps</i></span>
+    </a>
+    <div style="display:flex;gap:10px;align-items:center"><a class="nav-cta" href="#laboratoire">Laboratoire</a><button id="authBtn" class="nav-auth" type="button">Espace membre</button></div>
+  </div>
+</nav>
+
+<section id="member" aria-live="polite">
+  <div class="wrap">
+    <div class="member-card">
+      <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
+      <h2 id="memberHello">Ton espace</h2>
+      <p>Bienvenue dans ton espace kpsul_corps. C'est ici que tout ton suivi va vivre.</p>
+      <div class="member-tiles">
+        <div class="mtile"><div class="tag">Capsule</div><h4>Score Capsule</h4><p>Analyse globale de ton évolution.</p></div>
+        <div class="mtile"><div class="tag">Training</div><h4>Mes séances</h4><p>Reps, séries, repos, charge, exos.</p></div>
+        <div class="mtile"><div class="tag">Nutrition</div><h4>Ma diet</h4><p>Calories, macros, repas jour par jour.</p></div>
+        <div class="mtile"><div class="tag">Progression</div><h4>Mensurations</h4><p>Poids, taille, bras, cuisses, photos.</p></div>
+        <div class="mtile"><div class="tag">Coach</div><h4>Messages</h4><p>Échanges privés et ajustements.</p></div>
+        <div class="mtile"><div class="tag">Planning</div><h4>Réservations</h4><p>Séances solo, groupe et suivis.</p></div>
+      </div>
+
+      <div class="kpsul-lab-title">
+        <div>
+          <h2 style="margin:0" id="labTitle">Laboratoire Kpsul</h2>
+          <p class="private-note">Toutes les données sont privées : visibles uniquement par le client connecté et par l’administrateur/coach.</p>
+        </div>
+        <span class="badge" id="roleBadge">Client</span>
+      </div>
+
+      <div class="lab-score">
+        <strong id="capsuleScore">0%</strong>
+        <span>Score Capsule estimé selon les données renseignées : alimentation, habitudes, progression et objectifs.</span>
+      </div>
+
+      <div class="metric-row">
+        <div class="metric-box"><b id="lastWeight">—</b><span>Dernier poids</span></div>
+        <div class="metric-box"><b id="lastCalories">—</b><span>Calories dernier repas</span></div>
+        <div class="metric-box"><b id="lastSleep">—</b><span>Sommeil</span></div>
+        <div class="metric-box"><b id="lastWorkout">—</b><span>Dernier exercice</span></div>
+      </div>
+
+      <div class="module-tabs">
+        <button class="module-tab active" data-module="modNutrition" type="button">Alimentation</button>
+        <button class="module-tab" data-module="modProgram" type="button">Programme</button>
+        <button class="module-tab" data-module="modProgress" type="button">Progression</button>
+        <button class="module-tab" data-module="modHabits" type="button">Habitudes</button>
+        <button class="module-tab" data-module="modGoals" type="button">Objectif</button>
+        <button class="module-tab" data-module="modMessages" type="button">Messages</button>
+        <button class="module-tab admin-zone" data-module="modAdmin" type="button">Admin</button>
+      </div>
+
+      <div class="member-tools" id="memberTools">
+        <div class="module-panel active" id="modNutrition">
+          <div class="tool-panel">
+            <h3>🍽 Journal alimentaire</h3>
+            <p>Le client renseigne ses repas. L’admin peut suivre son sérieux et ajuster la diet.</p>
+            <div class="mini-grid">
+              <input id="foodDate" type="date">
+              <input id="foodMeal" placeholder="Repas : petit-déj, midi...">
+              <input id="foodCalories" type="number" placeholder="Calories">
+            </div>
+            <div class="mini-grid full2" style="margin-top:10px">
+              <input id="foodProtein" type="number" placeholder="Protéines g">
+              <input id="foodCarbs" type="number" placeholder="Glucides g">
+            </div>
+            <input id="foodFat" type="number" placeholder="Lipides g" style="margin-top:10px">
+            <textarea id="foodContent" placeholder="Ex : riz, poulet, huile d’olive, banane..."></textarea>
+            <button class="btn btn-primary" id="saveFoodBtn" type="button" style="margin-top:10px">Enregistrer mon repas</button>
+            <div class="tool-status" id="foodStatus"></div>
+            <div class="tool-list" id="foodList"></div>
+          </div>
+        </div>
+
+        <div class="module-panel" id="modProgram">
+          <div class="tool-panel">
+            <h3>💪 Programme</h3>
+            <p>Le client retrouve ici le programme attribué par le coach depuis Supabase.</p>
+            <div class="tool-list" id="programList">
+              <div class="tool-item"><b>Aucun programme chargé</b><span>Ajoute un programme au client dans Supabase.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="module-panel" id="modProgress">
+          <div class="tool-panel">
+            <h3>📈 Progression exercices</h3>
+            <p>Le client saisit les séries, reps et charges réalisées. Tu verras ensuite sa progression.</p>
+            <div class="mini-grid">
+              <input id="workoutDate" type="date">
+              <input id="exerciseName" placeholder="Exercice">
+              <input id="exerciseLoad" type="number" placeholder="Charge kg">
+            </div>
+            <div class="mini-grid full2" style="margin-top:10px">
+              <input id="exerciseSets" type="number" placeholder="Séries">
+              <input id="exerciseReps" type="number" placeholder="Reps">
+            </div>
+            <textarea id="exerciseNote" placeholder="Note : facile, dur, douleur, progression..."></textarea>
+            <button class="btn btn-primary" id="saveExerciseBtn" type="button" style="margin-top:10px">Enregistrer ma progression</button>
+            <div class="tool-status" id="exerciseStatus"></div>
+            <div class="tool-list" id="exerciseList"></div>
+          </div>
+        </div>
+
+        <div class="module-panel" id="modHabits">
+          <div class="tool-panel">
+            <h3>😴 Habitudes du jour</h3>
+            <p>Sommeil, eau, pas, énergie, digestion et stress.</p>
+            <div class="mini-grid">
+              <input id="habitDate" type="date">
+              <input id="sleepHours" type="number" step="0.1" placeholder="Sommeil h">
+              <input id="waterLiters" type="number" step="0.1" placeholder="Eau L">
+            </div>
+            <div class="mini-grid" style="margin-top:10px">
+              <input id="stepsCount" type="number" placeholder="Pas">
+              <select id="stressLevel"><option value="">Stress</option><option>Faible</option><option>Moyen</option><option>Élevé</option><option>Très élevé</option></select>
+              <select id="energyLevel"><option value="">Énergie</option><option>Basse</option><option>Moyenne</option><option>Bonne</option><option>Excellente</option></select>
+            </div>
+            <input id="digestion" placeholder="Digestion : bonne, lourde, ballonnements..." style="margin-top:10px">
+            <button class="btn btn-primary" id="saveHabitBtn" type="button" style="margin-top:10px">Enregistrer mes habitudes</button>
+            <div class="tool-status" id="habitStatus"></div>
+            <div class="tool-list" id="habitList"></div>
+          </div>
+        </div>
+
+        <div class="module-panel" id="modGoals">
+          <div class="tool-panel">
+            <h3>🎯 Objectif principal</h3>
+            <p>Le client indique son objectif. L’admin peut le consulter et l’ajuster.</p>
+            <div class="mini-grid">
+              <input id="mainGoal" placeholder="Objectif : prise de masse...">
+              <input id="targetWeight" type="number" step="0.1" placeholder="Poids cible kg">
+              <input id="goalDeadline" type="date">
+            </div>
+            <textarea id="goalNotes" placeholder="Notes sur l’objectif, délai, contraintes..."></textarea>
+            <button class="btn btn-primary" id="saveGoalBtn" type="button" style="margin-top:10px">Enregistrer mon objectif</button>
+            <div class="tool-status" id="goalStatus"></div>
+            <div class="tool-list" id="goalList"></div>
+          </div>
+        </div>
+
+        <div class="module-panel" id="modMessages">
+          <div class="tool-panel">
+            <h3>💬 Message au coach</h3>
+            <p>Messagerie simple privée entre le client et l’admin.</p>
+            <textarea id="clientMessage" placeholder="Écris ton message au coach..."></textarea>
+            <button class="btn btn-primary" id="saveMessageBtn" type="button" style="margin-top:10px">Envoyer le message</button>
+            <div class="tool-status" id="messageStatus"></div>
+            <div class="tool-list" id="messageList"></div>
+          </div>
+        </div>
+
+        <div class="module-panel admin-zone" id="modAdmin">
+          <div class="tool-panel">
+            <h3>🛡 Zone admin</h3>
+            <p>Visible seulement si ton profil Supabase a le rôle admin ou coach.</p>
+            <div class="tool-list" id="adminList">
+              <div class="tool-item"><b>Admin actif</b><span>Tu pourras bientôt choisir un client, lui créer un programme et suivre ses données.</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <button id="logoutBtn" class="btn btn-ghost" type="button">Se déconnecter</button>
+    </div>
+  </div>
+</section>
+
+
+<section id="adminDashboard" aria-live="polite">
+  <div class="wrap">
+    <div class="admin-head">
+      <div>
+        <span class="eyebrow">Admin Kpsul</span>
+        <h1>Tableau de bord réel</h1>
+        <p class="sub">Aucune donnée fictive. Tout vient de Supabase.</p>
+      </div>
+      <div class="admin-switch">
+        <button class="btn btn-ghost" id="viewClientSiteBtn" type="button">Voir le site client</button>
+        <button class="btn btn-primary" id="refreshAdminBtn" type="button">Rafraîchir</button>
+      </div>
+    </div>
+
+    <div class="admin-crm-grid">
+      <div class="admin-crm-kpi"><b id="crmClients">0</b><span>Clients réels</span></div>
+      <div class="admin-crm-kpi"><b id="crmMeals">0</b><span>Repas saisis</span></div>
+      <div class="admin-crm-kpi"><b id="crmExercises">0</b><span>Exercices saisis</span></div>
+      <div class="admin-crm-kpi"><b id="crmMessages">0</b><span>Messages</span></div>
+    </div>
+
+    <div class="admin-layout">
+      <div class="client-list">
+        <h3 style="font-family:var(--disp);margin-bottom:10px">Clients</h3>
+        <input class="client-search" id="clientSearch" placeholder="Rechercher un client">
+        <div id="crmClientList">
+          <div class="admin-data-item"><b>Aucun client</b><span>Les clients inscrits apparaîtront ici.</span></div>
+        </div>
+      </div>
+
+      <div class="client-detail">
+        <h3 id="selectedClientName" style="font-family:var(--disp);margin-bottom:4px">Sélectionne un client</h3>
+        <p class="private-note" id="selectedClientMeta">Ses données apparaîtront ici.</p>
+
+        <div class="detail-tabs">
+          <button class="detail-tab active" data-detail="dOverview" type="button">Résumé</button>
+          <button class="detail-tab" data-detail="dMeals" type="button">Alimentation</button>
+          <button class="detail-tab" data-detail="dExercises" type="button">Progression</button>
+          <button class="detail-tab" data-detail="dHabits" type="button">Habitudes</button>
+          <button class="detail-tab" data-detail="dGoals" type="button">Objectifs</button>
+          <button class="detail-tab" data-detail="dMessages" type="button">Messages</button>
+          <button class="detail-tab" data-detail="dProgram" type="button">Programme</button>
+        </div>
+
+        <div class="detail-panel active" id="dOverview"><div class="admin-data-list" id="detailOverview"></div></div>
+        <div class="detail-panel" id="dMeals"><div class="admin-data-list" id="detailMeals"></div></div>
+        <div class="detail-panel" id="dExercises"><div class="admin-data-list" id="detailExercises"></div></div>
+        <div class="detail-panel" id="dHabits"><div class="admin-data-list" id="detailHabits"></div></div>
+        <div class="detail-panel" id="dGoals"><div class="admin-data-list" id="detailGoals"></div></div>
+        <div class="detail-panel" id="dMessages"><div class="admin-data-list" id="detailMessages"></div></div>
+        <div class="detail-panel" id="dProgram">
+          <div class="program-form">
+            <h4 style="font-family:var(--disp);margin-bottom:10px">Attribuer un programme</h4>
+            <input id="adminProgramTitle" placeholder="Titre du programme">
+            <input id="adminProgramGoal" placeholder="Objectif" style="margin-top:10px">
+            <textarea id="adminProgramContent" placeholder="Programme : exercices, séries, reps, consignes..." style="margin-top:10px"></textarea>
+            <button class="btn btn-primary" id="saveAdminProgramBtn" type="button" style="margin-top:10px">Envoyer au client</button>
+            <div class="tool-status" id="adminProgramStatus"></div>
+          </div>
+          <div class="admin-data-list" id="detailPrograms"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<header class="hero" id="top">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Plateforme de transformation physique</span>
+      <h1>Entre dans la Capsule. <em>Ressors avec ton plan.</em></h1>
+      <p class="lede">Kpsul Corps analyse ton corps, ton rythme de vie, ton objectif, tes contraintes et ta progression pour construire une transformation vraiment personnelle.</p>
+      <div class="hero-badges">
+        <span class="hero-badge">Analyse morphologique</span>
+        <span class="hero-badge">Coaching premium</span>
+        <span class="hero-badge">Laboratoire membre</span>
+      </div>
+      <div class="signature"><b>Signature Kpsul :</b> tout ce que tu es entre dans la Capsule. Tout ce que tu peux devenir en ressort.</div>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="#bilan">Entrer dans la Capsule</a>
+        <a class="btn btn-ghost" href="#laboratoire">Voir le Laboratoire</a>
+      </div>
+    </div>
+
+    <div class="visual" aria-hidden="true">
+      <div class="chips" id="chips">
+        <span class="chip">Poids</span>
+        <span class="chip">Taille</span>
+        <span class="chip">Objectif</span>
+        <span class="chip">Alimentation</span>
+        <span class="chip">Morphologie</span>
+        <span class="chip">Métabolisme</span>
+        <span class="chip">Fréquence</span>
+        <span class="chip">Sommeil</span>
+        <span class="chip">Mode de vie</span>
+        <span class="chip">Limitations</span>
+      </div>
+      <div class="converge">
+        <span class="cap lg"><span class="a"></span><span class="b"></span></span>
+        <span class="arrow"></span>
+        <span class="out">Ton programme</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+
+<section class="section" id="concept">
+  <div class="wrap">
+    <div class="manifesto rise">
+      <span class="eyebrow">Le concept</span>
+      <h2 style="margin-top:16px">Pas un programme. Un système de transformation.</h2>
+      <p>Kpsul Corps ne se limite pas à vendre des séances ou un PDF. La plateforme apprend à connaître la personne : son corps, son quotidien, son énergie, ses blocages, son alimentation et sa façon de progresser. Le but est simple : créer un plan qui ne ressemble à aucun autre.</p>
+      <div class="manifesto-grid">
+        <div class="mitem"><div class="tag">01</div><h4>Analyse</h4><p>On collecte les données utiles sans rendre l’expérience lourde.</p></div>
+        <div class="mitem"><div class="tag">02</div><h4>Construction</h4><p>Le plan est adapté à la morphologie, aux horaires et au niveau réel.</p></div>
+        <div class="mitem"><div class="tag">03</div><h4>Évolution</h4><p>Le suivi transforme les résultats en ajustements concrets.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<main>
+  <section class="section" id="approche">
+    <div class="wrap">
+      <div class="kicker-row rise">
+        <div>
+          <span class="eyebrow">Ton parcours</span>
+          <h2 style="margin-top:16px">Quatre étapes, un plan qui te ressemble.</h2>
+        </div>
+        <p class="sub">D'un coup d'œil, voilà comment on avance ensemble — du premier bilan à ton suivi.</p>
+      </div>
+
+      <div class="steps4 rise">
+        <div class="stepcol">
+          <div class="num">01</div>
+          <h4>Bilan</h4>
+          <p>Tu remplis ton profil.</p>
+        </div>
+        <div class="stepcol">
+          <div class="num">02</div>
+          <h4>Analyse</h4>
+          <p>J'étudie tes paramètres.</p>
+        </div>
+        <div class="stepcol">
+          <div class="num">03</div>
+          <h4>Plan</h4>
+          <p>Ton programme sur-mesure.</p>
+        </div>
+        <div class="stepcol">
+          <div class="num">04</div>
+          <h4>Suivi</h4>
+          <p>On ajuste chaque semaine.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="bilan" style="padding-top:20px">
+    <div class="wrap">
+      <div class="kicker-row rise" style="margin-bottom:30px">
+        <div>
+          <span class="eyebrow">Le bilan</span>
+          <h2 style="margin-top:16px">Parle-moi de toi.</h2>
+        </div>
+        <p class="sub">Cinq étapes, une à la fois. Plus c'est précis, plus ton programme le sera. Je reviens vers toi avec les premières pistes.</p>
+      </div>
+
+      <div class="form-shell rise">
+        <form id="bilanForm" novalidate>
+
+          <div class="stepper" id="stepper" aria-hidden="true">
+            <div class="node"><span class="dot">1</span><span class="nlabel">Toi</span></div>
+            <div class="node"><span class="dot">2</span><span class="nlabel">Corps</span></div>
+            <div class="node"><span class="dot">3</span><span class="nlabel">Objectif</span></div>
+            <div class="node"><span class="dot">4</span><span class="nlabel">Séances</span></div>
+            <div class="node"><span class="dot">5</span><span class="nlabel">Vie</span></div>
+          </div>
+          <p class="step-count" id="stepCount"></p>
+
+          <!-- Étape 1 -->
+          <div class="step" data-step="1" tabindex="-1">
+            <div class="step-head">Toi <span></span></div>
+            <div class="grid2">
+              <div class="field"><label class="lb" for="prenom">Prénom</label><input id="prenom" name="Prénom" required placeholder="Alex"></div>
+              <div class="field"><label class="lb" for="email">Email</label><input id="email" name="Email" type="email" required placeholder="alex@email.com"></div>
+              <div class="field"><label class="lb" for="age">Âge</label><input id="age" name="Âge" type="number" min="14" max="99" required placeholder="28"></div>
+              <div class="field">
+                <label class="lb" for="sexe">Sexe</label>
+                <select id="sexe" name="Sexe" required>
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Homme</option><option>Femme</option><option>Préfère ne pas préciser</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Étape 2 -->
+          <div class="step" data-step="2" tabindex="-1">
+            <div class="step-head">Ton corps <span></span></div>
+            <div class="grid2">
+              <div class="field"><label class="lb" for="taille">Taille (cm)</label><input id="taille" name="Taille (cm)" type="number" min="120" max="230" required placeholder="178"></div>
+              <div class="field"><label class="lb" for="poids">Poids (kg)</label><input id="poids" name="Poids (kg)" type="number" min="35" max="250" required placeholder="74"></div>
+              <div class="field"><label class="lb" for="tourtaille">Tour de taille (cm) <span class="opt">— optionnel</span></label><input id="tourtaille" name="Tour de taille (cm)" type="number" min="40" max="200" placeholder="82"></div>
+              <div class="field"><label class="lb" for="tourbras">Tour de bras (cm) <span class="opt">— optionnel</span></label><input id="tourbras" name="Tour de bras (cm)" type="number" min="15" max="80" placeholder="38"></div>
+              <div class="field"><label class="lb" for="activite">Métier / activité <span class="opt">— important</span></label><input id="activite" name="Métier / activité" placeholder="Travail physique, bureau, horaires tôt..."></div>
+              <div class="field"><label class="lb" for="pas">Pas moyens / jour <span class="opt">— optionnel</span></label><input id="pas" name="Pas moyens / jour" type="number" min="0" max="50000" placeholder="8000"></div>
+              <div class="field full">
+                <label class="lb" for="morpho">Morphologie ressentie <span class="opt">— si tu sais</span></label>
+                <select id="morpho" name="Morphologie">
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Plutôt fin, prend le muscle difficilement (ectomorphe)</option>
+                  <option>Équilibré, réagit vite (mésomorphe)</option>
+                  <option>Prend le gras facilement (endomorphe)</option>
+                  <option>Je ne sais pas</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <!-- Étape 3 -->
+          <div class="step" data-step="3" tabindex="-1">
+            <div class="step-head">Ton objectif <span></span></div>
+            <div class="grid2">
+              <div class="field">
+                <label class="lb" for="objectif">Objectif principal</label>
+                <select id="objectif" name="Objectif" required>
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Prise de muscle</option><option>Perte de gras</option>
+                  <option>Recomposition (les deux)</option><option>Force / performance</option>
+                  <option>Remise en forme</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="lb" for="niveau">Niveau</label>
+                <select id="niveau" name="Niveau" required>
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Débutant</option><option>Intermédiaire</option><option>Avancé</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label class="lb" for="pourquoi">Pourquoi maintenant ? <span class="opt">— optionnel</span></label>
+                <textarea id="pourquoi" name="Motivation" placeholder="Ce qui te motive, une échéance, un déclic..."></textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Étape 4 -->
+          <div class="step" data-step="4" tabindex="-1">
+            <div class="step-head">Ton entraînement <span></span></div>
+            <div class="grid2">
+              <div class="field">
+                <label class="lb" for="freq">Séances possibles / semaine</label>
+                <select id="freq" name="Fréquence" required>
+                  <option value="" disabled selected>Choisir</option>
+                  <option>2</option><option>3</option><option>4</option><option>5</option><option>6 et +</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="lb" for="lieu">Où t'entraînes-tu ?</label>
+                <select id="lieu" name="Lieu" required>
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Salle de sport</option><option>À la maison</option><option>Les deux</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label class="lb" for="materiel">Matériel dispo <span class="opt">— optionnel</span></label>
+                <input id="materiel" name="Matériel" placeholder="Haltères, barre, machines, élastiques, rien...">
+              </div>
+            </div>
+          </div>
+
+          <!-- Étape 5 -->
+          <div class="step" data-step="5" tabindex="-1">
+            <div class="step-head">Alimentation &amp; mode de vie <span></span></div>
+            <div class="grid2">
+              <div class="field">
+                <label class="lb" for="repas">Repas par jour</label>
+                <select id="repas" name="Repas/jour">
+                  <option value="" disabled selected>Choisir</option>
+                  <option>1 à 2</option><option>3</option><option>4 et +</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="lb" for="sommeil">Sommeil moyen / nuit</label>
+                <select id="sommeil" name="Sommeil">
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Moins de 6h</option><option>6 à 7h</option><option>7 à 8h</option><option>Plus de 8h</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label class="lb" for="regime">Régime ou préférences alimentaires <span class="opt">— optionnel</span></label>
+                <input id="regime" name="Régime" placeholder="Végétarien, sans lactose, allergies, aliments que tu détestes...">
+              </div>
+              <div class="field">
+                <label class="lb" for="stress">Niveau de stress</label>
+                <select id="stress" name="Stress">
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Faible</option><option>Moyen</option><option>Élevé</option><option>Très élevé</option>
+                </select>
+              </div>
+              <div class="field">
+                <label class="lb" for="budget">Budget alimentation / semaine</label>
+                <select id="budget" name="Budget alimentation">
+                  <option value="" disabled selected>Choisir</option>
+                  <option>Moins de 50 €</option><option>50 à 80 €</option><option>80 à 120 €</option><option>120 € et +</option>
+                </select>
+              </div>
+              <div class="field full">
+                <label class="lb" for="limites">Blessures ou limitations physiques <span class="opt">— optionnel</span></label>
+                <textarea id="limites" name="Limitations" placeholder="Une gêne au genou, au dos, une épaule fragile... ce qui pourrait limiter certains exercices."></textarea>
+              </div>
+              <div class="field full">
+                <label class="lb" for="photos">Photos d’évolution <span class="opt">— bientôt via Supabase Storage</span></label>
+                <input id="photos" name="Photos prévues" placeholder="Face, profil, dos — fonctionnalité préparée pour la prochaine version">
+              </div>
+              <div class="ai-note"><b>Préparation IA :</b> ces données sont pensées pour générer plus tard un programme, une nutrition et des ajustements beaucoup plus précis.</div>
+            </div>
+
+            <div class="note">
+              <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
+              <p><b>Ta santé reste confidentielle.</b> Le questionnaire médical détaillé (antécédents, pathologies) se fera plus tard, dans ton espace membre sécurisé — pas ici. Ici, on reste sur l'essentiel pour te recontacter.</p>
+            </div>
+
+            <div class="consent">
+              <input id="rgpd" type="checkbox" required>
+              <label for="rgpd">J'accepte que kpsul_corps utilise ces informations pour me recontacter et préparer mon accompagnement. Je peux demander leur suppression à tout moment. <a href="#confidentialite">Confidentialité</a></label>
+            </div>
+          </div>
+
+          <p class="form-msg" id="formMsg" role="status"></p>
+          <div class="nav-btns">
+            <button type="button" class="btn btn-ghost" id="backBtn">Retour</button>
+            <button type="button" class="btn btn-primary" id="nextBtn">Suivant</button>
+          </div>
+        </form>
+
+        <div class="success" id="success" role="status" aria-live="polite">
+          <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
+          <h3>Bilan reçu.</h3>
+          <p>Merci. Je reviens vers toi rapidement avec les premières pistes de ton programme.</p>
+          <button class="btn btn-ghost" id="resetBtn" type="button">Renvoyer un bilan</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="seances">
+    <div class="wrap">
+      <div class="kicker-row rise">
+        <div>
+          <span class="eyebrow">S'entraîner ensemble</span>
+          <h2 style="margin-top:16px">On se dépasse, ensemble.</h2>
+        </div>
+        <p class="sub">Coaching en solo ou séance de groupe, même énergie : on se pousse, on progresse, on kiffe l'effort. Repère un créneau, réserve — je confirme.</p>
+      </div>
+
+      <div class="cal-legend rise">
+        <span class="leg"><span class="d solo"></span> Solo — coaching individuel</span>
+        <span class="leg"><span class="d groupe"></span> Groupe — on s'entraîne à plusieurs</span>
+      </div>
+
+      <div class="cal rise" id="cal"></div>
+    </div>
+  </section>
+
+
+  <section class="section" id="laboratoire">
+    <div class="wrap">
+      <div class="kicker-row rise">
+        <div>
+          <span class="eyebrow">Le Laboratoire</span>
+          <h2 style="margin-top:16px">L'espace membre devient une salle de contrôle.</h2>
+        </div>
+        <p class="sub">Le client ne consulte pas seulement un programme. Il suit son évolution, ses données, ses séances, son alimentation et ses prochaines actions.</p>
+      </div>
+      <div class="lab-preview rise">
+        <div class="lab-card">
+          <div class="tag">Capsule client</div>
+          <h3>Analyse synchronisée</h3>
+          <p class="sub">Score global, progression, séance du jour, nutrition, récupération et objectifs.</p>
+          <div class="lab-stat"><span>Analyse</span><b>—</b></div>
+          <div class="lab-stat"><span>Force</span><b>—</b></div>
+          <div class="lab-stat"><span>Tour de taille</span><b>—</b></div>
+        </div>
+        <div class="lab-card">
+          <div class="tag">Interface coach</div>
+          <h3>Priorités immédiates</h3>
+          <p class="sub">Les clients à relancer, blessures signalées, check-ins manquants et programmes à valider.</p>
+          <div class="lab-stat"><span>Nouveaux bilans</span><b>—</b></div>
+          <div class="lab-stat"><span>À relancer</span><b>—</b></div>
+          <div class="lab-stat"><span>Programmes</span><b>—</b></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="coach">
+    <div class="wrap">
+      <div class="coach-panel rise">
+        <span class="eyebrow">Côté coach</span>
+        <h2 style="margin-top:16px">Tout gérer sans se noyer.</h2>
+        <p class="sub" style="margin-top:12px">Cette zone ne doit afficher que des statistiques réelles issues de Supabase. Aucun chiffre inventé.</p>
+        <div class="coach-grid">
+          <div class="coach-kpi"><b>—</b><span>Clients réels</span></div>
+          <div class="coach-kpi"><b>—</b><span>Bilans réels</span></div>
+          <div class="coach-kpi"><b>—</b><span>À relancer</span></div>
+          <div class="coach-kpi"><b>—</b><span>Blessures</span></div>
+          <div class="coach-kpi"><b>—</b><span>Programmes réels</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="suite">
+    <div class="wrap">
+      <div class="kicker-row rise">
+        <div>
+          <span class="eyebrow">La suite</span>
+          <h2 style="margin-top:16px">Ce qui arrive dans ton espace.</h2>
+        </div>
+        <p class="sub">Le bilan est le point de départ. L'accompagnement complet se construit ensuite, étape par étape.</p>
+      </div>
+      <div class="road rise">
+        <div class="card">
+          <div class="tag">Bientôt</div>
+          <h4>Espace membre</h4>
+          <p>Ton dossier, tes mesures, tes photos de suivi et ton programme, réunis à un seul endroit.</p>
+        </div>
+        <div class="card">
+          <div class="tag">Bientôt</div>
+          <h4>Messagerie privée</h4>
+          <p>Un échange direct entre toi et moi, rien qu'à nous, pour ajuster au fil des semaines.</p>
+        </div>
+        <div class="card">
+          <div class="tag">En option</div>
+          <h4>Assistant IA</h4>
+          <p>Des réponses fiables à tes questions du quotidien, en complément — jamais à ma place.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer id="confidentialite">
+  <div class="wrap foot-in">
+    <a class="brand" href="#top">
+      <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
+      <span><b>kpsul</b><i>_corps</i></span>
+    </a>
+    <p>Tes données servent uniquement à ton accompagnement. Aucune revente, suppression sur simple demande. · © <span id="year"></span> kpsul_corps</p>
+  </div>
+</footer>
+
+<!-- Fenêtre inscription / connexion -->
+<div class="modal" id="authModal" role="dialog" aria-modal="true" aria-label="Espace membre">
+  <div class="modal-card">
+    <button class="modal-close" id="authClose" type="button" aria-label="Fermer">&times;</button>
+    <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
+    <h3>Ton espace membre</h3>
+    <p class="msub">Connecte-toi ou crée ton compte pour accéder à ton suivi.</p>
+
+    <div class="tabs">
+      <button class="tab active" id="tabLogin" type="button">Connexion</button>
+      <button class="tab" id="tabSignup" type="button">Inscription</button>
+    </div>
+
+    <div class="auth-field" id="nameField" style="display:none">
+      <label for="authName">Prénom</label>
+      <input id="authName" type="text" placeholder="Alex" autocomplete="given-name">
+    </div>
+    <div class="auth-field">
+      <label for="authEmail">Email</label>
+      <input id="authEmail" type="email" placeholder="alex@email.com" autocomplete="email">
+    </div>
+    <div class="auth-field">
+      <label for="authPassword">Mot de passe</label>
+      <input id="authPassword" type="password" placeholder="Au moins 6 caractères" autocomplete="current-password">
+    </div>
+
+    <p class="auth-msg" id="authMsg" role="status"></p>
+    <button class="btn btn-primary" id="authSubmit" type="button" style="width:100%;justify-content:center">Se connecter</button>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  // 📧 Ton adresse email qui reçoit les bilans et les réservations :
+  const CONTACT_EMAIL = "aballkciim70g@gmail.com";
+
+  // 📅 Tes disponibilités — modifie librement (type "Solo" ou "Groupe") :
+  const DISPOS = {
+    "Lundi":    [{h:"18:00", type:"Solo"}, {h:"19:30", type:"Groupe"}],
+    "Mardi":    [{h:"18:00", type:"Solo"}],
+    "Mercredi": [{h:"12:15", type:"Groupe"}, {h:"18:00", type:"Solo"}],
+    "Jeudi":    [{h:"19:00", type:"Solo"}],
+    "Vendredi": [{h:"18:00", type:"Groupe"}],
+    "Samedi":   [{h:"10:00", type:"Groupe"}, {h:"11:30", type:"Solo"}],
+    "Dimanche": []
+  };
+
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  // apparition des chips au chargement
+  if(!reduce){
+    document.querySelectorAll("#chips .chip").forEach((c,i)=>{
+      c.style.opacity=0; c.style.transform="translateY(10px)";
+      c.style.transition="opacity .5s ease, transform .5s ease";
+      setTimeout(()=>{c.style.opacity=1;c.style.transform="none";}, 180 + i*70);
+    });
+  }
+
+  // reveals au scroll
+  const io = new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add("in"); io.unobserve(e.target);} });
+  },{threshold:.14});
+  document.querySelectorAll(".rise").forEach(el=>io.observe(el));
+
+  document.getElementById("year").textContent = new Date().getFullYear();
+
+  // ---- calendrier des disponibilités ----
+  (function(){
+    const cal = document.getElementById("cal");
+    if(!cal) return;
+    const ordre = ["Lundi","Mardi","Mercredi","Jeudi","Vendredi","Samedi","Dimanche"];
+    ordre.forEach(jour=>{
+      const row = document.createElement("div");
+      row.className = "calrow";
+      const label = document.createElement("div");
+      label.className = "calday";
+      label.textContent = jour;
+      row.appendChild(label);
+      const slots = document.createElement("div");
+      slots.className = "slots";
+      const list = DISPOS[jour] || [];
+      if(list.length === 0){
+        const repos = document.createElement("span");
+        repos.className = "repos";
+        repos.textContent = "Repos";
+        slots.appendChild(repos);
+      } else {
+        list.forEach(s=>{
+          const t = s.type === "Groupe" ? "groupe" : "solo";
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "slot";
+          btn.innerHTML = `${s.h} <span class="stype ${t}">${s.type}</span>`;
+          btn.addEventListener("click", ()=>{
+            const subject = `Réservation créneau — ${jour} ${s.h} (${s.type})`;
+            const body = `Salut ! Je veux réserver le créneau ${jour} à ${s.h} (${s.type}).\n\nMon prénom : \nMon objectif : \n\nÀ très vite pour se dépasser !`;
+            window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+          });
+          slots.appendChild(btn);
+        });
+      }
+      row.appendChild(slots);
+      cal.appendChild(row);
+    });
+  })();
+
+  // ---- questionnaire en étapes ----
+  const form = document.getElementById("bilanForm");
+  const steps = Array.from(form.querySelectorAll(".step"));
+  const nodes = Array.from(document.querySelectorAll("#stepper .node"));
+  const titles = ["Toi","Ton corps","Ton objectif","Ton entraînement","Alimentation & mode de vie"];
+  const backBtn = document.getElementById("backBtn");
+  const nextBtn = document.getElementById("nextBtn");
+  const stepCount = document.getElementById("stepCount");
+  const msg = document.getElementById("formMsg");
+  const success = document.getElementById("success");
+  let current = 0;
+  const last = steps.length - 1;
+
+  function render(){
+    steps.forEach((s,i)=>s.classList.toggle("active", i===current));
+    nodes.forEach((n,i)=>{
+      n.classList.toggle("done", i<current);
+      n.classList.toggle("active", i===current);
+      n.querySelector(".dot").textContent = i<current ? "✓" : (i+1);
+    });
+    stepCount.textContent = `Étape ${current+1} sur ${steps.length} · ${titles[current]}`;
+    backBtn.classList.toggle("hidden", current===0);
+    nextBtn.textContent = current===last ? "Envoyer mon bilan" : "Suivant";
+    msg.className = "form-msg"; msg.textContent = "";
+  }
+
+  function validateStep(stepEl){
+    stepEl.querySelectorAll(".invalid").forEach(el=>el.classList.remove("invalid"));
+    let firstBad = null;
+    stepEl.querySelectorAll("[required]").forEach(el=>{
+      const ok = el.type==="checkbox" ? el.checked : el.value.trim()!=="";
+      if(!ok){ el.classList.add("invalid"); if(!firstBad) firstBad = el; }
+    });
+    const email = stepEl.querySelector('input[type="email"]');
+    if(email && email.value && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email.value)){
+      email.classList.add("invalid"); if(!firstBad) firstBad = email;
+    }
+    if(firstBad){
+      msg.className = "form-msg error";
+      msg.textContent = current===last
+        ? "Il manque ton accord (ou un champ) — vérifie ce qui est surligné."
+        : "Il manque quelques infos — vérifie les champs surlignés.";
+      firstBad.focus();
+      return false;
+    }
+    return true;
+  }
+
+  function scrollToForm(){
+    document.querySelector(".form-shell").scrollIntoView({behavior: reduce ? "auto":"smooth", block:"start"});
+  }
+
+  function goNext(){
+    if(!validateStep(steps[current])) return;
+    if(current===last){ sendForm(); return; }
+    current++; render(); scrollToForm();
+    steps[current].focus({preventScroll:true});
+  }
+  function goBack(){
+    if(current===0) return;
+    current--; render(); scrollToForm();
+    steps[current].focus({preventScroll:true});
+  }
+
+  function sendForm(){
+    const data = new FormData(form);
+    let body = "Nouveau bilan kpsul_corps\n\n";
+    for(const [k,v] of data.entries()){
+      if(k==="rgpd") continue;
+      if(String(v).trim()!=="") body += `${k} : ${v}\n`;
+    }
+    const prenom = data.get("Prénom") || "";
+    const subject = `Bilan kpsul_corps — ${prenom}`;
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    form.style.display = "none";
+    success.classList.add("show");
+    success.scrollIntoView({behavior: reduce ? "auto":"smooth", block:"center"});
+  }
+
+  nextBtn.addEventListener("click", goNext);
+  backBtn.addEventListener("click", goBack);
+  form.addEventListener("submit", (e)=>{ e.preventDefault(); goNext(); });
+  document.getElementById("resetBtn").addEventListener("click", ()=>{
+    form.reset(); current = 0; render();
+    form.style.display = ""; success.classList.remove("show");
+    scrollToForm();
+  });
+
+  render();
+
+  // ---- espace membre (comptes Supabase) ----
+  (function(){
+    const SUPABASE_URL = "https://ipsewfhxgomishbjrkkc.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_WEm3fy7xB83P1S7h4CWWZg_4RlwlPP6";
+    if(!window.supabase){
+      console.error("Supabase JS non chargé. Vérifie la connexion internet ou le CDN Supabase.");
+      return;
+    }
+    const sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const modal = document.getElementById("authModal");
+    const authBtn = document.getElementById("authBtn");
+    const closeBtn = document.getElementById("authClose");
+    const tabLogin = document.getElementById("tabLogin");
+    const tabSignup = document.getElementById("tabSignup");
+    const nameField = document.getElementById("nameField");
+    const nameInput = document.getElementById("authName");
+    const emailInput = document.getElementById("authEmail");
+    const pwInput = document.getElementById("authPassword");
+    const submitBtn = document.getElementById("authSubmit");
+    const authMsg = document.getElementById("authMsg");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const memberHello = document.getElementById("memberHello");
+
+    let mode = "login";
+
+    function setMode(m){
+      mode = m;
+      const signup = m === "signup";
+      tabSignup.classList.toggle("active", signup);
+      tabLogin.classList.toggle("active", !signup);
+      nameField.style.display = signup ? "" : "none";
+      submitBtn.textContent = signup ? "Créer mon compte" : "Se connecter";
+      pwInput.setAttribute("autocomplete", signup ? "new-password" : "current-password");
+      authMsg.className = "auth-msg"; authMsg.textContent = "";
+    }
+    function openModal(){ modal.classList.add("show"); setMode("login"); setTimeout(()=>emailInput.focus(), 50); }
+    function closeModal(){ modal.classList.remove("show"); }
+    function say(txt, ok){ authMsg.className = "auth-msg " + (ok ? "ok" : "error"); authMsg.textContent = txt; }
+
+    function traduire(msg){
+      const m = (msg || "").toLowerCase();
+      if(m.includes("invalid login")) return "Email ou mot de passe incorrect.";
+      if(m.includes("already registered") || m.includes("already been registered")) return "Un compte existe déjà avec cet email — connecte-toi.";
+      if(m.includes("email not confirmed")) return "Ton email n'est pas encore confirmé. Vérifie ta boîte mail.";
+      return "Erreur réelle : " + msg;
+    }
+
+    async function submit(){
+      const email = emailInput.value.trim();
+      const pw = pwInput.value;
+      if(!email || !pw){ say("Renseigne ton email et ton mot de passe."); return; }
+      if(pw.length < 6){ say("Le mot de passe doit faire au moins 6 caractères."); return; }
+      submitBtn.disabled = true;
+      const prev = submitBtn.textContent;
+      submitBtn.textContent = "…";
+      try{
+        if(mode === "signup"){
+          const { data, error } = await sb.auth.signUp({
+            email, password: pw,
+            options: { data: { full_name: nameInput.value.trim() } }
+          });
+          if(error){
+            console.error("Erreur inscription Supabase:", error);
+            say(traduire(error.message || JSON.stringify(error)));
+          }
+          else if(data.session){ closeModal(); }
+          else { say("Compte créé ! Vérifie ta boîte mail pour confirmer, puis connecte-toi.", true); setMode("login"); }
+        } else {
+          const { error } = await sb.auth.signInWithPassword({ email, password: pw });
+          if(error){
+            console.error("Erreur inscription Supabase:", error);
+            say(traduire(error.message || JSON.stringify(error)));
+          }
+          else { closeModal(); }
+        }
+      } catch(e){
+        console.error("ERREUR SUPABASE :", e);
+        say("Erreur réelle : " + (e.message || JSON.stringify(e)));
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = prev;
+      }
+    }
+
+    function setAuthUI(session){
+      const authed = !!session;
+      document.body.classList.toggle("authed", authed);
+      if(authed){
+        const name = (session.user.user_metadata && session.user.user_metadata.full_name) || "";
+        memberHello.textContent = name ? ("Salut " + name + " !") : "Ton espace";
+        authBtn.textContent = "Se déconnecter";
+        ensureProfile(session).then(async (profile)=>{
+          await loadMemberData(session);
+          const role = profile?.role || currentProfileRole;
+          if(["admin","coach"].includes(role)){
+            document.body.classList.add("admin-mode");
+            loadCrmAdmin();
+          }
+        });
+      } else {
+        authBtn.textContent = "Espace membre";
+      }
+    }
+
+
+
+    let currentProfileRole = "client";
+
+    async function getProfile(session){
+      if(!session || !session.user) return null;
+      const { data } = await sb.from("profiles").select("*").eq("id", session.user.id).maybeSingle();
+      return data;
+    }
+
+    async function ensureProfile(session){
+      if(!session || !session.user) return;
+      const name = (session.user.user_metadata && session.user.user_metadata.full_name) || "";
+      const existing = await getProfile(session);
+      if(existing) return existing;
+      const { data } = await sb.from("profiles").upsert({
+        id: session.user.id,
+        prenom: name,
+        role: "client"
+      }, { onConflict: "id" }).select().maybeSingle();
+      return data;
+    }
+
+    function htmlSafe(v){
+      return String(v ?? "").replace(/[&<>"']/g, s => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]));
+    }
+
+    function setList(el, rows, emptyText, render){
+      if(!el) return;
+      el.innerHTML = rows && rows.length ? rows.map(render).join("") : `<div class="tool-item"><b>Aucune donnée</b><span>${htmlSafe(emptyText)}</span></div>`;
+    }
+
+    function updateScore({foods=[], exercises=[], habits=[], goals=[]}){
+      let score = 0;
+      if(foods.length) score += 25;
+      if(exercises.length) score += 30;
+      if(habits.length) score += 25;
+      if(goals.length) score += 20;
+      const el = document.getElementById("capsuleScore");
+      if(el) el.textContent = score + "%";
+      const lastCalories = document.getElementById("lastCalories");
+      const lastSleep = document.getElementById("lastSleep");
+      const lastWorkout = document.getElementById("lastWorkout");
+      if(lastCalories) lastCalories.textContent = foods[0]?.calories ? foods[0].calories + " kcal" : "—";
+      if(lastSleep) lastSleep.textContent = habits[0]?.sleep_hours ? habits[0].sleep_hours + " h" : "—";
+      if(lastWorkout) lastWorkout.textContent = exercises[0]?.exercise_name || "—";
+    }
+
+
+
+    // ---------- CRM Admin réel ----------
+    let crmData = {profiles:[], foods:[], exercises:[], habits:[], goals:[], messages:[], programs:[]};
+    let selectedClientId = null;
+
+    function setCrmText(id, value){
+      const el = document.getElementById(id);
+      if(el) el.textContent = value;
+    }
+
+    function renderItems(targetId, rows, empty, render){
+      const el = document.getElementById(targetId);
+      if(!el) return;
+      el.innerHTML = rows && rows.length ? rows.map(render).join("") : `<div class="admin-data-item"><b>Aucune donnée</b><span>${htmlSafe(empty)}</span></div>`;
+    }
+
+    async function loadCrmAdmin(){
+      if(!["admin","coach"].includes(currentProfileRole)) return;
+      const [profilesRes, foodRes, exerciseRes, habitRes, goalRes, msgRes, progRes] = await Promise.all([
+        sb.from("profiles").select("*").order("created_at", { ascending:false }),
+        sb.from("nutrition_logs").select("*").order("created_at", { ascending:false }),
+        sb.from("workout_exercise_logs").select("*").order("created_at", { ascending:false }),
+        sb.from("habit_logs").select("*").order("created_at", { ascending:false }),
+        sb.from("client_goals").select("*").order("created_at", { ascending:false }),
+        sb.from("messages").select("*").order("created_at", { ascending:false }),
+        sb.from("programs").select("*").order("created_at", { ascending:false })
+      ]);
+
+      crmData = {
+        profiles: profilesRes.data || [],
+        foods: foodRes.data || [],
+        exercises: exerciseRes.data || [],
+        habits: habitRes.data || [],
+        goals: goalRes.data || [],
+        messages: msgRes.data || [],
+        programs: progRes.data || []
+      };
+
+      const clients = crmData.profiles.filter(p => (p.role || "client") === "client");
+      setCrmText("crmClients", clients.length);
+      setCrmText("crmMeals", crmData.foods.length);
+      setCrmText("crmExercises", crmData.exercises.length);
+      setCrmText("crmMessages", crmData.messages.length);
+      renderClientList();
+
+      if(!selectedClientId && clients[0]) selectClient(clients[0].id);
+      else if(selectedClientId) selectClient(selectedClientId);
+    }
+
+    function renderClientList(){
+      const list = document.getElementById("crmClientList");
+      if(!list) return;
+      const q = (document.getElementById("clientSearch")?.value || "").toLowerCase();
+      const clients = crmData.profiles.filter(p => (p.role || "client") === "client")
+        .filter(p => String(p.prenom || p.id).toLowerCase().includes(q));
+      if(!clients.length){
+        list.innerHTML = `<div class="admin-data-item"><b>0 client</b><span>Aucun client réel trouvé.</span></div>`;
+        return;
+      }
+      list.innerHTML = clients.map(p => {
+        const lastMsg = crmData.messages.find(m => m.user_id === p.id);
+        return `<button class="client-row ${p.id===selectedClientId?'active':''}" type="button" data-client="${htmlSafe(p.id)}">
+          <b>${htmlSafe(p.prenom || "Client sans prénom")}</b>
+          <span>${htmlSafe(p.id)}</span>
+          <span>Dernier message : ${htmlSafe(lastMsg?.message || "—")}</span>
+        </button>`;
+      }).join("");
+      list.querySelectorAll("[data-client]").forEach(btn=>{
+        btn.addEventListener("click", ()=>selectClient(btn.dataset.client));
+      });
+    }
+
+    function selectClient(uid){
+      selectedClientId = uid;
+      const p = crmData.profiles.find(x => x.id === uid);
+      const meals = crmData.foods.filter(x => x.user_id === uid);
+      const exercises = crmData.exercises.filter(x => x.user_id === uid);
+      const habits = crmData.habits.filter(x => x.user_id === uid);
+      const goals = crmData.goals.filter(x => x.user_id === uid);
+      const messages = crmData.messages.filter(x => x.user_id === uid);
+      const programs = crmData.programs.filter(x => x.user_id === uid);
+
+      setCrmText("selectedClientName", p?.prenom || "Client");
+      setCrmText("selectedClientMeta", "ID client : " + uid);
+
+      renderClientList();
+
+      renderItems("detailOverview", [
+        {k:"Repas saisis", v:meals.length},
+        {k:"Exercices saisis", v:exercises.length},
+        {k:"Habitudes saisies", v:habits.length},
+        {k:"Messages", v:messages.length},
+        {k:"Programmes", v:programs.length}
+      ], "Sélectionne un client.", r => `<div class="admin-data-item"><b>${htmlSafe(r.v)}</b><span>${htmlSafe(r.k)}</span></div>`);
+
+      renderItems("detailMeals", meals, "Aucun repas saisi.", f => `<div class="admin-data-item"><b>${htmlSafe(f.meal_name)} · ${htmlSafe(f.calories || 0)} kcal</b><span>${htmlSafe(f.log_date)} · P ${htmlSafe(f.protein_g||0)} / G ${htmlSafe(f.carbs_g||0)} / L ${htmlSafe(f.fat_g||0)}</span><span>${htmlSafe(f.content || "")}</span></div>`);
+      renderItems("detailExercises", exercises, "Aucun exercice saisi.", e => `<div class="admin-data-item"><b>${htmlSafe(e.exercise_name)}</b><span>${htmlSafe(e.sets)} séries · ${htmlSafe(e.reps)} reps · ${htmlSafe(e.load_kg || 0)} kg</span><span>${htmlSafe(e.log_date)} · ${htmlSafe(e.note || "")}</span></div>`);
+      renderItems("detailHabits", habits, "Aucune habitude saisie.", h => `<div class="admin-data-item"><b>${htmlSafe(h.log_date)}</b><span>Sommeil ${htmlSafe(h.sleep_hours || "—")}h · Eau ${htmlSafe(h.water_liters || "—")}L · Pas ${htmlSafe(h.steps || "—")}</span><span>Stress ${htmlSafe(h.stress_level || "—")} · Énergie ${htmlSafe(h.energy_level || "—")}</span></div>`);
+      renderItems("detailGoals", goals, "Aucun objectif saisi.", g => `<div class="admin-data-item"><b>${htmlSafe(g.main_goal || "Objectif")}</b><span>Poids cible ${htmlSafe(g.target_weight_kg || "—")} kg · Deadline ${htmlSafe(g.deadline || "—")}</span><span>${htmlSafe(g.notes || "")}</span></div>`);
+      renderItems("detailMessages", messages, "Aucun message.", m => `<div class="admin-data-item"><b>${htmlSafe(m.sender || "client")}</b><span>${htmlSafe(m.created_at ? new Date(m.created_at).toLocaleString("fr-FR") : "")}</span><span>${htmlSafe(m.message || "")}</span></div>`);
+      renderItems("detailPrograms", programs, "Aucun programme attribué.", pr => `<div class="admin-data-item"><b>${htmlSafe(pr.titre || "Programme")}</b><span>${htmlSafe(pr.objectif || "")}</span><span>${htmlSafe(pr.contenu || "")}</span></div>`);
+    }
+
+    async function saveAdminProgram(){
+      if(!selectedClientId) return;
+      const status = document.getElementById("adminProgramStatus");
+      const payload = {
+        user_id: selectedClientId,
+        titre: document.getElementById("adminProgramTitle").value.trim(),
+        objectif: document.getElementById("adminProgramGoal").value.trim(),
+        contenu: document.getElementById("adminProgramContent").value.trim()
+      };
+      if(!payload.titre || !payload.contenu){
+        if(status) status.textContent = "Titre et contenu obligatoires.";
+        return;
+      }
+      const { error } = await sb.from("programs").insert(payload);
+      if(status) status.textContent = error ? "Erreur : " + error.message : "Programme envoyé au client.";
+      if(!error) loadCrmAdmin();
+    }
+
+    document.querySelectorAll(".detail-tab").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        document.querySelectorAll(".detail-tab").forEach(b=>b.classList.remove("active"));
+        document.querySelectorAll(".detail-panel").forEach(p=>p.classList.remove("active"));
+        btn.classList.add("active");
+        document.getElementById(btn.dataset.detail)?.classList.add("active");
+      });
+    });
+
+    document.getElementById("clientSearch")?.addEventListener("input", renderClientList);
+    document.getElementById("refreshAdminBtn")?.addEventListener("click", loadCrmAdmin);
+    document.getElementById("saveAdminProgramBtn")?.addEventListener("click", saveAdminProgram);
+    document.getElementById("viewClientSiteBtn")?.addEventListener("click", ()=>document.body.classList.remove("admin-mode"));
+
+    async function loadAdminData(){
+      if(!["admin","coach"].includes(currentProfileRole)) return;
+
+      const status = document.getElementById("adminStatus");
+      if(status) status.textContent = "Chargement des vraies données Supabase...";
+
+      const [profilesRes, foodRes, exerciseRes, habitRes, goalRes, msgRes] = await Promise.all([
+        sb.from("profiles").select("*").order("created_at", { ascending:false }),
+        sb.from("nutrition_logs").select("*").order("created_at", { ascending:false }),
+        sb.from("workout_exercise_logs").select("*").order("created_at", { ascending:false }),
+        sb.from("habit_logs").select("*").order("created_at", { ascending:false }),
+        sb.from("client_goals").select("*").order("created_at", { ascending:false }),
+        sb.from("messages").select("*").order("created_at", { ascending:false })
+      ]);
+
+      const profiles = profilesRes.data || [];
+      const foods = foodRes.data || [];
+      const exercises = exerciseRes.data || [];
+      const habits = habitRes.data || [];
+      const goals = goalRes.data || [];
+      const messages = msgRes.data || [];
+
+      const setText = (id, val)=>{ const el = document.getElementById(id); if(el) el.textContent = val; };
+      setText("adminClientsCount", profiles.filter(p => (p.role || "client") === "client").length);
+      setText("adminFoodCount", foods.length);
+      setText("adminExerciseCount", exercises.length);
+      setText("adminMessageCount", messages.length);
+
+      const list = document.getElementById("adminClientsList");
+      if(list){
+        if(!profiles.length){
+          list.innerHTML = `<div class="tool-item"><b>Aucun client</b><span>Aucun profil client trouvé dans Supabase.</span></div>`;
+        } else {
+          list.innerHTML = profiles.map(p => {
+            const uid = p.id;
+            const lastFood = foods.find(f => f.user_id === uid);
+            const lastExercise = exercises.find(e => e.user_id === uid);
+            const lastHabit = habits.find(h => h.user_id === uid);
+            const lastGoal = goals.find(g => g.user_id === uid);
+            const lastMsg = messages.find(m => m.user_id === uid);
+            return `
+              <div class="admin-client">
+                <b>${htmlSafe(p.prenom || p.id)}</b>
+                <small>Rôle : ${htmlSafe(p.role || "client")} · ID : ${htmlSafe(p.id)}</small>
+                <div class="client-data">
+                  <span>Objectif : ${htmlSafe(lastGoal?.main_goal || "—")}</span>
+                  <span>Dernier repas : ${htmlSafe(lastFood?.meal_name || "—")}</span>
+                  <span>Dernier exercice : ${htmlSafe(lastExercise?.exercise_name || "—")}</span>
+                  <span>Sommeil : ${htmlSafe(lastHabit?.sleep_hours || "—")} h</span>
+                  <span>Message : ${htmlSafe(lastMsg?.message || "—")}</span>
+                  <span>Mise à jour : ${htmlSafe(lastFood?.created_at || lastExercise?.created_at || lastHabit?.created_at || "—")}</span>
+                </div>
+              </div>
+            `;
+          }).join("");
+        }
+      }
+
+      if(status){
+        const errors = [profilesRes.error, foodRes.error, exerciseRes.error, habitRes.error, goalRes.error, msgRes.error].filter(Boolean);
+        status.textContent = errors.length ? "Certaines données ne sont pas accessibles : vérifie les policies admin." : "Données réelles chargées.";
+      }
+    }
+
+    async function loadMemberData(session){
+      if(!session || !session.user) return;
+      const uid = session.user.id;
+
+      const profile = await ensureProfile(session);
+      currentProfileRole = profile?.role || "client";
+      document.body.classList.toggle("admin", ["admin","coach"].includes(currentProfileRole));
+      const roleBadge = document.getElementById("roleBadge");
+      if(roleBadge) roleBadge.textContent = currentProfileRole;
+
+      const [programRes, foodRes, exerciseRes, habitRes, goalRes, msgRes] = await Promise.all([
+        sb.from("programs").select("*").eq("user_id", uid).order("created_at", { ascending:false }).limit(5),
+        sb.from("nutrition_logs").select("*").eq("user_id", uid).order("log_date", { ascending:false }).limit(6),
+        sb.from("workout_exercise_logs").select("*").eq("user_id", uid).order("log_date", { ascending:false }).limit(8),
+        sb.from("habit_logs").select("*").eq("user_id", uid).order("log_date", { ascending:false }).limit(5),
+        sb.from("client_goals").select("*").eq("user_id", uid).order("created_at", { ascending:false }).limit(3),
+        sb.from("messages").select("*").eq("user_id", uid).order("created_at", { ascending:false }).limit(8)
+      ]);
+
+      const programs = programRes.data || [];
+      const foods = foodRes.data || [];
+      const exercises = exerciseRes.data || [];
+      const habits = habitRes.data || [];
+      const goals = goalRes.data || [];
+      const messages = msgRes.data || [];
+
+      setList(document.getElementById("programList"), programs, "Quand tu ajouteras un programme dans Supabase, il apparaîtra ici.", p => `
+        <div class="tool-item"><b>${htmlSafe(p.titre || p.title || "Programme")}</b><span>${htmlSafe(p.objectif || p.goal || "")}</span><span>${htmlSafe(p.contenu || p.notes || "")}</span></div>
+      `);
+
+      setList(document.getElementById("foodList"), foods, "Ajoute ton premier repas ci-dessus.", f => `
+        <div class="tool-item"><b>${htmlSafe(f.meal_name || "Repas")} · ${htmlSafe(f.calories || 0)} kcal</b><span>${htmlSafe(f.log_date || "")}</span><span>P ${htmlSafe(f.protein_g || 0)}g · G ${htmlSafe(f.carbs_g || 0)}g · L ${htmlSafe(f.fat_g || 0)}g</span><span>${htmlSafe(f.content || "")}</span></div>
+      `);
+
+      setList(document.getElementById("exerciseList"), exercises, "Enregistre tes premières séries ci-dessus.", e => `
+        <div class="tool-item"><b>${htmlSafe(e.exercise_name)}</b><span>${htmlSafe(e.sets)} séries · ${htmlSafe(e.reps)} reps · ${htmlSafe(e.load_kg || 0)} kg</span><span>${htmlSafe(e.log_date || "")} ${e.note ? "· " + htmlSafe(e.note) : ""}</span></div>
+      `);
+
+      setList(document.getElementById("habitList"), habits, "Ajoute ton sommeil, ton eau et ton stress.", h => `
+        <div class="tool-item"><b>${htmlSafe(h.log_date)}</b><span>Sommeil ${htmlSafe(h.sleep_hours || "—")}h · Eau ${htmlSafe(h.water_liters || "—")}L · Pas ${htmlSafe(h.steps || "—")}</span><span>Stress : ${htmlSafe(h.stress_level || "—")} · Énergie : ${htmlSafe(h.energy_level || "—")}</span></div>
+      `);
+
+      setList(document.getElementById("goalList"), goals, "Ajoute ton objectif principal.", g => `
+        <div class="tool-item"><b>${htmlSafe(g.main_goal || "Objectif")}</b><span>Poids cible : ${htmlSafe(g.target_weight_kg || "—")} kg · Deadline : ${htmlSafe(g.deadline || "—")}</span><span>${htmlSafe(g.notes || "")}</span></div>
+      `);
+
+      setList(document.getElementById("messageList"), messages, "Aucun message pour l’instant.", m => `
+        <div class="tool-item"><b>${htmlSafe(m.sender || "client")}</b><span>${htmlSafe(m.created_at ? new Date(m.created_at).toLocaleString("fr-FR") : "")}</span><span>${htmlSafe(m.message || "")}</span></div>
+      `);
+
+      updateScore({foods, exercises, habits, goals});
+      loadAdminData();
+    }
+
+    async function getSessionOrOpen(){
+      const { data:{ session } } = await sb.auth.getSession();
+      if(!session){ openModal(); return null; }
+      return session;
+    }
+
+    async function insertRow(table, payload, statusId, okText){
+      const session = await getSessionOrOpen();
+      if(!session) return;
+      payload.user_id = session.user.id;
+      const status = document.getElementById(statusId);
+      const { error } = await sb.from(table).insert(payload);
+      if(status) status.textContent = error ? "Erreur Supabase : " + error.message : okText;
+      if(!error) loadMemberData(session);
+    }
+
+    async function saveFood(){
+      await insertRow("nutrition_logs", {
+        log_date: document.getElementById("foodDate").value || new Date().toISOString().slice(0,10),
+        meal_name: document.getElementById("foodMeal").value.trim(),
+        calories: Number(document.getElementById("foodCalories").value || 0),
+        protein_g: Number(document.getElementById("foodProtein").value || 0),
+        carbs_g: Number(document.getElementById("foodCarbs").value || 0),
+        fat_g: Number(document.getElementById("foodFat").value || 0),
+        content: document.getElementById("foodContent").value.trim()
+      }, "foodStatus", "Repas enregistré dans la Capsule.");
+    }
+
+    async function saveExercise(){
+      await insertRow("workout_exercise_logs", {
+        log_date: document.getElementById("workoutDate").value || new Date().toISOString().slice(0,10),
+        exercise_name: document.getElementById("exerciseName").value.trim(),
+        load_kg: Number(document.getElementById("exerciseLoad").value || 0),
+        sets: Number(document.getElementById("exerciseSets").value || 0),
+        reps: Number(document.getElementById("exerciseReps").value || 0),
+        note: document.getElementById("exerciseNote").value.trim()
+      }, "exerciseStatus", "Progression enregistrée dans la Capsule.");
+    }
+
+    async function saveHabit(){
+      await insertRow("habit_logs", {
+        log_date: document.getElementById("habitDate").value || new Date().toISOString().slice(0,10),
+        sleep_hours: Number(document.getElementById("sleepHours").value || 0),
+        water_liters: Number(document.getElementById("waterLiters").value || 0),
+        steps: Number(document.getElementById("stepsCount").value || 0),
+        stress_level: document.getElementById("stressLevel").value,
+        energy_level: document.getElementById("energyLevel").value,
+        digestion: document.getElementById("digestion").value.trim()
+      }, "habitStatus", "Habitudes enregistrées.");
+    }
+
+    async function saveGoal(){
+      await insertRow("client_goals", {
+        main_goal: document.getElementById("mainGoal").value.trim(),
+        target_weight_kg: Number(document.getElementById("targetWeight").value || 0),
+        deadline: document.getElementById("goalDeadline").value || null,
+        notes: document.getElementById("goalNotes").value.trim()
+      }, "goalStatus", "Objectif enregistré.");
+    }
+
+    async function saveMessage(){
+      await insertRow("messages", {
+        sender: currentProfileRole === "client" ? "client" : "coach",
+        message: document.getElementById("clientMessage").value.trim()
+      }, "messageStatus", "Message envoyé.");
+    }
+
+    document.querySelectorAll(".module-tab").forEach(btn=>{
+      btn.addEventListener("click", ()=>{
+        document.querySelectorAll(".module-tab").forEach(b=>b.classList.remove("active"));
+        document.querySelectorAll(".module-panel").forEach(p=>p.classList.remove("active"));
+        btn.classList.add("active");
+        const panel = document.getElementById(btn.dataset.module);
+        if(panel) panel.classList.add("active");
+      });
+    });
+
+    const saveFoodBtn = document.getElementById("saveFoodBtn");
+    const saveExerciseBtn = document.getElementById("saveExerciseBtn");
+    const saveHabitBtn = document.getElementById("saveHabitBtn");
+    const saveGoalBtn = document.getElementById("saveGoalBtn");
+    const saveMessageBtn = document.getElementById("saveMessageBtn");
+    if(saveFoodBtn) saveFoodBtn.addEventListener("click", saveFood);
+    if(saveExerciseBtn) saveExerciseBtn.addEventListener("click", saveExercise);
+    if(saveHabitBtn) saveHabitBtn.addEventListener("click", saveHabit);
+    if(saveGoalBtn) saveGoalBtn.addEventListener("click", saveGoal);
+    if(saveMessageBtn) saveMessageBtn.addEventListener("click", saveMessage);
+
+    authBtn.addEventListener("click", ()=>{
+      if(document.body.classList.contains("authed")){ sb.auth.signOut(); }
+      else { openModal(); }
+    });
+    closeBtn.addEventListener("click", closeModal);
+    modal.addEventListener("click", (e)=>{ if(e.target === modal) closeModal(); });
+    tabLogin.addEventListener("click", ()=>setMode("login"));
+    tabSignup.addEventListener("click", ()=>setMode("signup"));
+    submitBtn.addEventListener("click", submit);
+    pwInput.addEventListener("keydown", (e)=>{ if(e.key === "Enter") submit(); });
+    if(logoutBtn) logoutBtn.addEventListener("click", ()=>sb.auth.signOut());
+
+    sb.auth.getSession().then(({ data })=> setAuthUI(data.session));
+    sb.auth.onAuthStateChange((_e, session)=> setAuthUI(session));
+  })();
+
+  // ---- KPSUL V1.4 premium interactions ----
+  (function(){
+    const intro = document.getElementById("kpsulIntro");
+    const skip = document.getElementById("introSkip");
+    const hideIntro = ()=>{
+      if(!intro) return;
+      intro.classList.add("hide");
+      try{ sessionStorage.setItem("kpsulIntroSeen","1"); }catch(e){}
+    };
+    if(intro){
+      let seen = false;
+      try{ seen = sessionStorage.getItem("kpsulIntroSeen")==="1"; }catch(e){}
+      if(seen){ intro.classList.add("hide"); }
+      else { setTimeout(hideIntro, 4300); }
+      if(skip) skip.addEventListener("click", hideIntro);
+    }
+
+    const meterFill = document.getElementById("meterFill");
+    const meterPct = document.getElementById("meterPct");
+    const stepNodes = document.querySelectorAll("#stepper .node");
+    const updateCapsuleMeter = ()=>{
+      const active = document.querySelector("#stepper .node.active");
+      let idx = 0;
+      stepNodes.forEach((n,i)=>{ if(n===active) idx = i; });
+      const pct = Math.round(((idx+1) / Math.max(stepNodes.length,1)) * 100);
+      if(meterFill) meterFill.style.width = pct + "%";
+      if(meterPct) meterPct.textContent = pct + "%";
+    };
+    document.addEventListener("click", (e)=>{
+      if(e.target && (e.target.id === "nextBtn" || e.target.id === "backBtn")){
+        setTimeout(updateCapsuleMeter, 60);
+      }
+    });
+    updateCapsuleMeter();
+
+
+    ["foodDate","workoutDate","habitDate"].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el && !el.value) el.value = new Date().toISOString().slice(0,10);
+    });
+
+    document.querySelectorAll("input,select,textarea").forEach(el=>{
+      el.addEventListener("change", ()=>{
+        if(meterFill){
+          meterFill.animate([
+            {filter:"brightness(1)", transform:"scaleX(1)"},
+            {filter:"brightness(1.8)", transform:"scaleX(1.015)"},
+            {filter:"brightness(1)", transform:"scaleX(1)"}
+          ],{duration:420,easing:"ease-out"});
+        }
+      });
+    });
+  })();
+
+</script>
+</body>
+</html>
