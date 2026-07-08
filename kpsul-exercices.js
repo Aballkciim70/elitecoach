@@ -1,0 +1,616 @@
+/* KPSUL -- BIBLIOTHÈQUE D’EXERCICES PRO */
+(() => {
+  "use strict";
+
+  const $ = id => document.getElementById(id);
+  const qs = (s, r = document) => r.querySelector(s);
+  const qsa = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const sb = () => window.sb || null;
+
+  const safe = v => String(v ?? "").replace(/[&<>"']/g, s => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#39;"
+  }[s]));
+
+  let exercises = [];
+  let selectedExercise = null;
+
+  const muscleOptions = [
+    "Pectoraux",
+    "Dos",
+    "Épaules",
+    "Biceps",
+    "Triceps",
+    "Quadriceps",
+    "Ischios",
+    "Fessiers",
+    "Mollets",
+    "Abdominaux",
+    "Lombaires",
+    "Avant-bras",
+    "Full body"
+  ];
+
+  const equipmentOptions = [
+    "Poids du corps",
+    "Haltères",
+    "Barre",
+    "Machine",
+    "Poulie",
+    "Élastique",
+    "Kettlebell",
+    "Banc",
+    "TRX",
+    "Autre"
+  ];
+
+  function injectStyle() {
+    if ($("kexStyle")) return;
+
+    const st = document.createElement("style");
+    st.id = "kexStyle";
+    st.textContent = `
+      .kex-layout{display:grid;grid-template-columns:1fr 1.1fr;gap:16px}
+      .kex-search-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:12px 0}
+      .kex-card{border:1px solid var(--line,#22403A);border-radius:16px;background:rgba(255,255,255,.025);padding:14px;margin-top:10px;cursor:pointer}
+      .kex-card:hover,.kex-card.active{border-color:var(--core,#34E0C8);box-shadow:0 0 0 3px rgba(52,224,200,.12)}
+      .kex-card b{display:block;font-family:var(--disp,system-ui);font-size:17px}
+      .kex-card span{display:block;color:#8A9A93;font-size:13px;margin-top:3px}
+      .kex-tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+      .kex-tag{border:1px solid var(--line,#22403A);border-radius:99px;padding:4px 8px;font-size:11px;color:#34E0C8;font-family:var(--mono,monospace)}
+      .kex-detail{border:1px solid rgba(52,224,200,.32);border-radius:18px;background:linear-gradient(160deg,rgba(52,224,200,.06),rgba(255,255,255,.02));padding:18px}
+      .kex-detail h3{font-family:var(--disp,system-ui);font-size:24px;margin-bottom:8px}
+      .kex-section{border-top:1px solid var(--line,#22403A);padding-top:12px;margin-top:12px}
+      .kex-section h4{font-family:var(--disp,system-ui);font-size:17px;margin-bottom:5px;color:#ECEFE9}
+      .kex-section p{color:#C6D0CB;font-size:14px;white-space:pre-wrap}
+      .kex-media{width:100%;border-radius:14px;border:1px solid var(--line,#22403A);margin:12px 0;background:#07110f;max-height:280px;object-fit:cover}
+      .kex-form{display:grid;gap:9px;margin-top:12px}
+      .kex-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+      .kex-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+      .kex-muted{color:#8A9A93;font-size:13px}
+      .kex-danger{border:1px solid #E8735B!important;color:#E8735B!important;background:transparent!important}
+      .kex-status{font-size:13px;color:#34E0C8;min-height:18px;margin-top:8px}
+      .kex-error{color:#E8735B!important}
+      @media(max-width:850px){.kex-layout{grid-template-columns:1fr}.kex-form-grid{grid-template-columns:1fr}}
+    `;
+    document.head.appendChild(st);
+  }
+
+  async function currentUser() {
+    const client = sb();
+    if (!client) return null;
+    const { data } = await client.auth.getSession();
+    return data?.session?.user || null;
+  }
+
+  async function isCoach() {
+    const client = sb();
+    const user = await currentUser();
+    if (!client || !user) return false;
+
+    const { data } = await client
+      .from("profiles")
+      .select("role")
+      .eq("id", user.id)
+      .single();
+
+    return ["coach", "admin"].includes(data?.role);
+  }
+
+  function injectModule() {
+    const anchor = qs(".module-panel");
+    if (!anchor) return;
+
+    const tabs = qs(".module-tabs");
+    if (tabs && !qs('[data-module="modKpsulExercisesPro"]')) {
+      tabs.insertAdjacentHTML("beforeend",
+        `<button class="module-tab" data-module="modKpsulExercisesPro" type="button">Exercices pro</button>`
+      );
+    }
+
+    if ($("modKpsulExercisesPro")) return;
+
+    anchor.insertAdjacentHTML("beforebegin", `
+      <div class="module-panel" id="modKpsulExercisesPro">
+        <div class="tool-panel">
+          <h3>📚 Bibliothèque exercices</h3>
+          <p>Comprendre les mouvements, les muscles travaillés, les erreurs fréquentes et la logique derrière les choix du coach.</p>
+
+          <div class="kex-search-row">
+            <input id="kexSearch" placeholder="Rechercher un exercice ou un muscle">
+            <select id="kexMuscleFilter">
+              <option value="">Tous les muscles</option>
+              ${muscleOptions.map(m => `<option value="${safe(m)}">${safe(m)}</option>`).join("")}
+            </select>
+            <select id="kexEquipmentFilter">
+              <option value="">Tout le matériel</option>
+              ${equipmentOptions.map(e => `<option value="${safe(e)}">${safe(e)}</option>`).join("")}
+            </select>
+            <select id="kexLevelFilter">
+              <option value="">Tous niveaux</option>
+              <option value="débutant">Débutant</option>
+              <option value="intermédiaire">Intermédiaire</option>
+              <option value="avancé">Avancé</option>
+            </select>
+          </div>
+
+          <div class="kex-layout">
+            <div>
+              <div class="kex-actions">
+                <button class="btn btn-ghost" id="kexReload" type="button">Rafraîchir</button>
+                <button class="btn btn-primary" id="kexNew" type="button" style="display:none">Ajouter un exercice</button>
+              </div>
+              <div class="kex-status" id="kexStatus"></div>
+              <div id="kexList"></div>
+            </div>
+
+            <div id="kexDetail" class="kex-detail">
+              <h3>Sélectionne un exercice</h3>
+              <p class="kex-muted">La fiche complète apparaîtra ici.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    `);
+  }
+
+  function injectAdminForm() {
+    if ($("kexFormBox")) return;
+
+    const detail = $("kexDetail");
+    if (!detail) return;
+
+    detail.insertAdjacentHTML("afterend", `
+      <div class="kex-detail" id="kexFormBox" style="display:none;margin-top:16px">
+        <h3 id="kexFormTitle">Ajouter un exercice</h3>
+
+        <div class="kex-form">
+          <input id="kexName" placeholder="Nom de l’exercice">
+
+          <div class="kex-form-grid">
+            <input id="kexCategory" placeholder="Catégorie : Push, Pull, Jambes...">
+            <input id="kexMainMuscle" placeholder="Muscle principal">
+          </div>
+
+          <input id="kexSecondary" placeholder="Muscles secondaires séparés par virgule">
+
+          <div class="kex-form-grid">
+            <input id="kexEquipment" placeholder="Matériel">
+            <select id="kexLevel">
+              <option value="">Niveau</option>
+              <option value="débutant">Débutant</option>
+              <option value="intermédiaire">Intermédiaire</option>
+              <option value="avancé">Avancé</option>
+            </select>
+          </div>
+
+          <div class="kex-form-grid">
+            <input id="kexMovementType" placeholder="Type : polyarticulaire, isolation...">
+            <input id="kexGoal" placeholder="Objectif : hypertrophie, force...">
+          </div>
+
+          <textarea id="kexShort" placeholder="Description courte"></textarea>
+          <textarea id="kexExecution" placeholder="Étapes d’exécution"></textarea>
+          <textarea id="kexMistakes" placeholder="Erreurs fréquentes"></textarea>
+          <textarea id="kexVariants" placeholder="Variantes"></textarea>
+          <textarea id="kexCoachCues" placeholder="Consignes coach"></textarea>
+          <textarea id="kexScience" placeholder="Notes scientifiques / biomécanique"></textarea>
+          <textarea id="kexSafety" placeholder="Notes sécurité"></textarea>
+
+          <div class="kex-form-grid">
+            <input id="kexMediaUrl" placeholder="URL vidéo / GIF / image">
+            <select id="kexMediaType">
+              <option value="video">Vidéo</option>
+              <option value="gif">GIF</option>
+              <option value="image">Image</option>
+            </select>
+          </div>
+
+          <select id="kexStatusSelect">
+            <option value="draft">Brouillon</option>
+            <option value="published">Publié</option>
+          </select>
+
+          <div class="kex-actions">
+            <button class="btn btn-primary" id="kexSave" type="button">Enregistrer</button>
+            <button class="btn btn-ghost" id="kexCancel" type="button">Annuler</button>
+            <button class="btn kex-danger" id="kexDelete" type="button" style="display:none">Archiver / supprimer</button>
+          </div>
+
+          <div class="kex-status" id="kexFormStatus"></div>
+        </div>
+      </div>
+    `);
+  }
+
+  function hookTabs() {
+    qsa("[data-module]").forEach(btn => {
+      if (btn.dataset.kexHooked) return;
+      btn.dataset.kexHooked = "1";
+
+      btn.addEventListener("click", () => {
+        const target = btn.dataset.module;
+
+        qsa(".module-tab").forEach(b => b.classList.toggle("active", b.dataset.module === target));
+        qsa(".module-panel").forEach(p => p.classList.toggle("active", p.id === target));
+
+        if (target === "modKpsulExercisesPro") loadExercises();
+      });
+    });
+  }
+
+  function getFilters() {
+    return {
+      search: $("kexSearch")?.value.toLowerCase().trim() || "",
+      muscle: $("kexMuscleFilter")?.value || "",
+      equipment: $("kexEquipmentFilter")?.value || "",
+      level: $("kexLevelFilter")?.value || ""
+    };
+  }
+
+  function filterExercises() {
+    const f = getFilters();
+
+    return exercises.filter(ex => {
+      const text = [
+        ex.name,
+        ex.category,
+        ex.main_muscle,
+        ex.equipment,
+        ex.level,
+        ex.goal,
+        ex.short_description
+      ].join(" ").toLowerCase();
+
+      const searchOk = !f.search || text.includes(f.search);
+      const muscleOk = !f.muscle || ex.main_muscle === f.muscle;
+      const equipmentOk = !f.equipment || ex.equipment === f.equipment;
+      const levelOk = !f.level || ex.level === f.level;
+
+      return searchOk && muscleOk && equipmentOk && levelOk;
+    });
+  }
+
+  function renderList() {
+    const box = $("kexList");
+    if (!box) return;
+
+    const rows = filterExercises();
+
+    if (!rows.length) {
+      box.innerHTML = `
+        <div class="kex-card">
+          <b>Aucun exercice trouvé</b>
+          <span>Ajoute un exercice côté coach ou modifie les filtres.</span>
+        </div>
+      `;
+      return;
+    }
+
+    box.innerHTML = rows.map(ex => `
+      <div class="kex-card ${selectedExercise?.id === ex.id ? "active" : ""}" data-kex-id="${safe(ex.id)}">
+        <b>${safe(ex.name)}</b>
+        <span>${safe(ex.short_description || "Fiche exercice")}</span>
+        <div class="kex-tags">
+          ${ex.main_muscle ? `<small class="kex-tag">${safe(ex.main_muscle)}</small>` : ""}
+          ${ex.equipment ? `<small class="kex-tag">${safe(ex.equipment)}</small>` : ""}
+          ${ex.level ? `<small class="kex-tag">${safe(ex.level)}</small>` : ""}
+          ${ex.status === "draft" ? `<small class="kex-tag">brouillon</small>` : ""}
+        </div>
+      </div>
+    `).join("");
+
+    qsa("[data-kex-id]").forEach(card => {
+      card.addEventListener("click", () => {
+        selectedExercise = exercises.find(e => e.id === card.dataset.kexId);
+        renderList();
+        renderDetail(selectedExercise);
+      });
+    });
+  }
+
+  function mediaHtml(ex) {
+    if (!ex?.media_url) return "";
+
+    if (ex.media_type === "image" || ex.media_type === "gif") {
+      return `<img class="kex-media" src="${safe(ex.media_url)}" alt="${safe(ex.name)}">`;
+    }
+
+    return `
+      <video class="kex-media" src="${safe(ex.media_url)}" controls playsinline></video>
+    `;
+  }
+
+  function renderDetail(ex) {
+    const box = $("kexDetail");
+    if (!box) return;
+
+    if (!ex) {
+      box.innerHTML = `<h3>Sélectionne un exercice</h3><p class="kex-muted">La fiche complète apparaîtra ici.</p>`;
+      return;
+    }
+
+    box.innerHTML = `
+      <h3>${safe(ex.name)}</h3>
+      <p class="kex-muted">${safe(ex.short_description || "")}</p>
+
+      <div class="kex-tags">
+        ${ex.category ? `<small class="kex-tag">${safe(ex.category)}</small>` : ""}
+        ${ex.main_muscle ? `<small class="kex-tag">${safe(ex.main_muscle)}</small>` : ""}
+        ${ex.equipment ? `<small class="kex-tag">${safe(ex.equipment)}</small>` : ""}
+        ${ex.level ? `<small class="kex-tag">${safe(ex.level)}</small>` : ""}
+        ${ex.movement_type ? `<small class="kex-tag">${safe(ex.movement_type)}</small>` : ""}
+        ${ex.goal ? `<small class="kex-tag">${safe(ex.goal)}</small>` : ""}
+      </div>
+
+      ${mediaHtml(ex)}
+
+      <div class="kex-section">
+        <h4>Muscles travaillés</h4>
+        <p>Principal : ${safe(ex.main_muscle || "--")}
+
+Secondaires : ${safe((ex.secondary_muscles || []).join(", ") || "--")}</p>
+      </div>
+
+      <div class="kex-section">
+        <h4>Exécution</h4>
+        <p>${safe(ex.execution_steps || "Non renseigné.")}</p>
+      </div>
+
+      <div class="kex-section">
+        <h4>Erreurs fréquentes</h4>
+        <p>${safe(ex.common_mistakes || "Non renseigné.")}</p>
+      </div>
+
+      <div class="kex-section">
+        <h4>Variantes</h4>
+        <p>${safe(ex.variants || "Non renseigné.")}</p>
+      </div>
+
+      <div class="kex-section">
+        <h4>Pourquoi mon coach peut m’avoir mis cet exercice ?</h4>
+        <p>${safe(whyExercise(ex))}</p>
+      </div>
+
+      <div class="kex-section">
+        <h4>Consignes coach</h4>
+        <p>${safe(ex.coach_cues || "Ton coach pourra ajouter ici des consignes spécifiques.")}</p>
+      </div>
+
+      <div class="kex-section">
+        <h4>Science / biomécanique</h4>
+        <p>${safe(ex.science_notes || "Cette zone expliquera la logique anatomique et biomécanique de l’exercice.")}</p>
+      </div>
+
+      <div class="kex-section">
+        <h4>Sécurité</h4>
+        <p>${safe(ex.safety_notes || "Respecte les consignes de ton coach. En cas de douleur inhabituelle, signale-la.")}</p>
+      </div>
+
+      <div class="kex-actions">
+        <button class="btn btn-ghost" id="kexAskWhy" type="button">Pourquoi cet exercice ?</button>
+        <button class="btn btn-primary" id="kexEdit" type="button" style="display:none">Modifier</button>
+      </div>
+
+      <div class="kex-section" id="kexAiAnswer" style="display:none"></div>
+    `;
+
+    $("kexAskWhy")?.addEventListener("click", () => {
+      const ans = $("kexAiAnswer");
+      if (!ans) return;
+      ans.style.display = "block";
+      ans.innerHTML = `
+        <h4>Réponse pédagogique</h4>
+        <p>${safe(whyExercise(ex))}</p>
+      `;
+    });
+
+    isCoach().then(ok => {
+      if (ok && $("kexEdit")) {
+        $("kexEdit").style.display = "inline-flex";
+        $("kexEdit").addEventListener("click", () => openForm(ex));
+      }
+    });
+  }
+
+  function whyExercise(ex) {
+    return `Cet exercice peut être utilisé par ton coach pour travailler ${ex.main_muscle || "un groupe musculaire précis"}.
+
+Il peut servir à un objectif de ${ex.goal || "progression physique"}, avec un intérêt sur la technique, la force, l’hypertrophie ou le contrôle du mouvement selon la manière dont ton coach l’a placé dans ton programme.
+
+L’application t’explique la logique générale, mais ne remplace jamais la décision du coach.`;
+  }
+
+  async function loadExercises() {
+    const client = sb();
+    const status = $("kexStatus");
+
+    if (!client) {
+      if (status) status.textContent = "Connexion Supabase indisponible.";
+      return;
+    }
+
+    if (status) status.textContent = "Chargement des exercices…";
+
+    const { data, error } = await client
+      .from("exercise_library")
+      .select("*")
+      .order("created_at", { ascending:false });
+
+    if (error) {
+      if (status) {
+        status.textContent = "Erreur : " + error.message;
+        status.classList.add("kex-error");
+      }
+      return;
+    }
+
+    exercises = data || [];
+
+    if (status) {
+      status.textContent = `${exercises.length} exercice(s) chargé(s).`;
+      status.classList.remove("kex-error");
+    }
+
+    renderList();
+  }
+
+  function openForm(ex = null) {
+    selectedExercise = ex;
+    const box = $("kexFormBox");
+    if (!box) return;
+
+    box.style.display = "block";
+    $("kexFormTitle").textContent = ex ? "Modifier l’exercice" : "Ajouter un exercice";
+
+    $("kexName").value = ex?.name || "";
+    $("kexCategory").value = ex?.category || "";
+    $("kexMainMuscle").value = ex?.main_muscle || "";
+    $("kexSecondary").value = (ex?.secondary_muscles || []).join(", ");
+    $("kexEquipment").value = ex?.equipment || "";
+    $("kexLevel").value = ex?.level || "";
+    $("kexMovementType").value = ex?.movement_type || "";
+    $("kexGoal").value = ex?.goal || "";
+    $("kexShort").value = ex?.short_description || "";
+    $("kexExecution").value = ex?.execution_steps || "";
+    $("kexMistakes").value = ex?.common_mistakes || "";
+    $("kexVariants").value = ex?.variants || "";
+    $("kexCoachCues").value = ex?.coach_cues || "";
+    $("kexScience").value = ex?.science_notes || "";
+    $("kexSafety").value = ex?.safety_notes || "";
+    $("kexMediaUrl").value = ex?.media_url || "";
+    $("kexMediaType").value = ex?.media_type || "video";
+    $("kexStatusSelect").value = ex?.status || "draft";
+
+    $("kexDelete").style.display = ex ? "inline-flex" : "none";
+    $("kexFormStatus").textContent = "";
+    box.scrollIntoView({ behavior:"smooth", block:"start" });
+  }
+
+  function formPayload() {
+    const secondary = $("kexSecondary").value
+      .split(",")
+      .map(s => s.trim())
+      .filter(Boolean);
+
+    return {
+      name: $("kexName").value.trim(),
+      category: $("kexCategory").value.trim() || null,
+      main_muscle: $("kexMainMuscle").value.trim() || null,
+      secondary_muscles: secondary,
+      equipment: $("kexEquipment").value.trim() || null,
+      level: $("kexLevel").value || null,
+      movement_type: $("kexMovementType").value.trim() || null,
+      goal: $("kexGoal").value.trim() || null,
+      short_description: $("kexShort").value.trim() || null,
+      execution_steps: $("kexExecution").value.trim() || null,
+      common_mistakes: $("kexMistakes").value.trim() || null,
+      variants: $("kexVariants").value.trim() || null,
+      coach_cues: $("kexCoachCues").value.trim() || null,
+      science_notes: $("kexScience").value.trim() || null,
+      safety_notes: $("kexSafety").value.trim() || null,
+      media_url: $("kexMediaUrl").value.trim() || null,
+      media_type: $("kexMediaType").value || "video",
+      status: $("kexStatusSelect").value || "draft"
+    };
+  }
+
+  async function saveExercise() {
+    const client = sb();
+    if (!client) return;
+
+    const payload = formPayload();
+
+    if (!payload.name) {
+      $("kexFormStatus").textContent = "Le nom est obligatoire.";
+      $("kexFormStatus").classList.add("kex-error");
+      return;
+    }
+
+    $("kexFormStatus").textContent = "Enregistrement…";
+    $("kexFormStatus").classList.remove("kex-error");
+
+    const user = await currentUser();
+    if (!selectedExercise) payload.created_by = user?.id || null;
+
+    const query = selectedExercise
+      ? client.from("exercise_library").update(payload).eq("id", selectedExercise.id)
+      : client.from("exercise_library").insert(payload);
+
+    const { error } = await query;
+
+    if (error) {
+      $("kexFormStatus").textContent = "Erreur : " + error.message;
+      $("kexFormStatus").classList.add("kex-error");
+      return;
+    }
+
+    $("kexFormStatus").textContent = "Exercice enregistré ✔";
+    await loadExercises();
+  }
+
+  async function deleteExercise() {
+    if (!selectedExercise) return;
+    if (!confirm("Supprimer cet exercice ?")) return;
+
+    const client = sb();
+    if (!client) return;
+
+    const { error } = await client
+      .from("exercise_library")
+      .delete()
+      .eq("id", selectedExercise.id);
+
+    if (error) {
+      $("kexFormStatus").textContent = "Erreur : " + error.message;
+      $("kexFormStatus").classList.add("kex-error");
+      return;
+    }
+
+    selectedExercise = null;
+    $("kexFormBox").style.display = "none";
+    renderDetail(null);
+    await loadExercises();
+  }
+
+  async function initCoachMode() {
+    const ok = await isCoach();
+
+    if (ok) {
+      $("kexNew")?.style && ($("kexNew").style.display = "inline-flex");
+      injectAdminForm();
+      $("kexNew")?.addEventListener("click", () => openForm(null));
+      $("kexSave")?.addEventListener("click", saveExercise);
+      $("kexCancel")?.addEventListener("click", () => $("kexFormBox").style.display = "none");
+      $("kexDelete")?.addEventListener("click", deleteExercise);
+    }
+  }
+
+  function hookSearch() {
+    ["kexSearch", "kexMuscleFilter", "kexEquipmentFilter", "kexLevelFilter"].forEach(id => {
+      $(id)?.addEventListener("input", renderList);
+      $(id)?.addEventListener("change", renderList);
+    });
+
+    $("kexReload")?.addEventListener("click", loadExercises);
+  }
+
+  function init() {
+    injectStyle();
+    injectModule();
+    hookTabs();
+    hookSearch();
+
+    setTimeout(() => {
+      initCoachMode();
+      loadExercises();
+    }, 700);
+  }
+
+  document.readyState === "loading"
+    ? document.addEventListener("DOMContentLoaded", init)
+    : init();
+})();
