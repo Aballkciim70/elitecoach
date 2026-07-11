@@ -993,10 +993,7 @@
         <span class="badge" id="roleBadge">Client</span>
       </div>
 
-      <div class="lab-score">
-        <strong id="capsuleScore">0%</strong>
-        <span>Score Capsule estimé selon les données renseignées : alimentation, habitudes, progression et objectifs.</span>
-      </div>
+
 
       <div class="metric-row">
         <div class="metric-box"><b id="lastWeight">—</b><span>Dernier poids</span></div>
@@ -2437,13 +2434,6 @@
     }
 
     function updateScore({foods=[], exercises=[], habits=[], goals=[]}){
-      let score = 0;
-      if(foods.length) score += 25;
-      if(exercises.length) score += 30;
-      if(habits.length) score += 25;
-      if(goals.length) score += 20;
-      const el = document.getElementById("capsuleScore");
-      if(el) el.textContent = score + "%";
       const lastCalories = document.getElementById("lastCalories");
       const lastSleep = document.getElementById("lastSleep");
       const lastWorkout = document.getElementById("lastWorkout");
@@ -4213,5 +4203,7 @@ ${context ? "Contexte coach : " + context : ""}`;
 <script src="kpsul-exercices.js"></script>
 <script src="kpsul-tracking.js"></script>
 <script src="kpsul-messages.js"></script>
+<script src="kpsul-charts.js"></script>
+<script src="kpsul-crm.js"></script>
 </body>
 </html>
