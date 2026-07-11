@@ -3139,14 +3139,33 @@ ${flags.length ? "Brouillon à modifier avec prudence avant envoi." : "Brouillon
       const status = document.getElementById("adminStatus");
       if(status) status.textContent = "Chargement des vraies données Supabase...";
 
-      const [profilesRes, foodRes, exerciseRes, habitRes, goalRes, msgRes] = await Promise.all([
+      const [profilesRes, foodRes, exerciseRes, habitRes, goalRes, msgRes, docRes] = await Promise.all([
         sb.from("profiles").select("*").order("created_at", { ascending:false }),
         sb.from("nutrition_logs").select("*").order("created_at", { ascending:false }),
         sb.from("workout_exercise_logs").select("*").order("created_at", { ascending:false }),
         sb.from("habit_logs").select("*").order("created_at", { ascending:false }),
         sb.from("client_goals").select("*").order("created_at", { ascending:false }),
-        sb.from("messages").select("*").order("created_at", { ascending:false })
+        sb.from("messages").select("*").order("created_at", { ascending:false }),
+        sb.from("client_documents").select("*").order("created_at", { ascending:false })
       ]);
+
+      const loadErrors = [
+        profilesRes.error,
+        foodRes.error,
+        exerciseRes.error,
+        habitRes.error,
+        goalRes.error,
+        msgRes.error,
+        docRes.error
+      ].filter(Boolean);
+
+      if(loadErrors.length){
+        console.error("Erreur chargement admin :", loadErrors);
+        if(status){
+          status.textContent = "Certaines données n'ont pas pu être chargées : " +
+            loadErrors.map(error => error.message).join(" | ");
+        }
+      }
 
       const profiles = profilesRes.data || [];
       const foods = foodRes.data || [];
@@ -3154,7 +3173,7 @@ ${flags.length ? "Brouillon à modifier avec prudence avant envoi." : "Brouillon
       const habits = habitRes.data || [];
       const goals = goalRes.data || [];
       const messages = msgRes.data || [];
-      const documents = docRes?.data || [];
+      const documents = docRes.data || [];
 
       const setText = (id, val)=>{ const el = document.getElementById(id); if(el) el.textContent = val; };
       setText("adminClientsCount", profiles.filter(p => (p.role || "client") === "client").length);
@@ -4194,6 +4213,7 @@ ${context ? "Contexte coach : " + context : ""}`;
     });
   })();
 </script>
+<script src="kpsul-2fa.js"></script>
 <script src="kpsul-router.js"></script>
 <script src="kpsul-forum.js"></script>
 <script src="kpsul-mesures.js"></script>
