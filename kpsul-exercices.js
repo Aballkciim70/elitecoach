@@ -234,7 +234,7 @@
     const tabs = qs(".module-tabs");
     if (tabs && !qs('[data-module="modKpsulExercisesPro"]')) {
       tabs.insertAdjacentHTML("beforeend",
-        `<button class="module-tab" data-module="modKpsulExercisesPro" type="button">Exercices pro</button>`
+        `<button class="module-tab" data-module="modKpsulExercisesPro" type="button">Exercices</button>`
       );
     }
 
