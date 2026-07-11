@@ -383,7 +383,26 @@
       ...(ex.secondary_muscles || [])
     ].join(" ").toLowerCase();
 
-    if (f.search && !searchable.includes(f.search)) return false;
+    if (f.search) {
+      const terms = f.search.toLowerCase().split(/\s+/).filter(Boolean);
+      const matched = terms.every(term => {
+        // correspondance exacte
+        if (searchable.includes(term)) return true;
+        // correspondance partielle (préfixe, infixe)
+        if (searchable.split(/\s+/).some(w => w.startsWith(term) || term.startsWith(w.slice(0,3)))) return true;
+        // tolérance 1 caractère (distance de Levenshtein simplifiée)
+        return searchable.split(/\s+/).some(w => {
+          if (Math.abs(w.length - term.length) > 2) return false;
+          let diff = 0;
+          const shorter = w.length < term.length ? w : term;
+          const longer  = w.length < term.length ? term : w;
+          for (let i = 0; i < shorter.length; i++) { if (shorter[i] !== longer[i]) diff++; }
+          diff += longer.length - shorter.length;
+          return diff <= 1;
+        });
+      });
+      if (!matched) return false;
+    }
     if (f.muscle && ex.main_muscle !== f.muscle && !(ex.secondary_muscles || []).includes(f.muscle)) return false;
     if (f.equipment && ex.equipment !== f.equipment) return false;
     if (f.level && ex.level !== f.level) return false;
@@ -411,7 +430,7 @@
 
     KEX.state.exercises = data || [];
 
-    notify("kexStatus", `${KEX.state.exercises.length} exercice(s) chargé(s).`);
+    if(KEX.state.isCoach) notify("kexStatus", `${KEX.state.exercises.length} exercice(s) chargé(s).`); else notify("kexStatus", "");
     renderExerciseList();
   }
 
@@ -464,7 +483,7 @@
         <b>${safe(ex.name)}</b>
         <span>${safe(ex.short_description || "Fiche exercice Kpsul")}</span>
         <div class="kex-tags">
-          ${ex.main_muscle ? `<small class="kex-tag">${safe(ex.main_muscle)}</small>` : ""}
+          ${(ex.muscle_group||ex.main_muscle) ? `<small class="kex-tag">${safe(ex.muscle_group||ex.main_muscle)}</small>` : ""}
           ${ex.equipment ? `<small class="kex-tag">${safe(ex.equipment)}</small>` : ""}
           ${ex.level ? `<small class="kex-tag">${safe(ex.level)}</small>` : ""}
           ${ex.goal ? `<small class="kex-tag">${safe(ex.goal)}</small>` : ""}
@@ -581,17 +600,27 @@ L’application explique. Le coach décide.`;
 
     const linked = KEX.state.linked;
 
+    // Adapter aux colonnes réelles de notre SQL
+    const muscle    = ex.muscle_group  || ex.main_muscle  || "";
+    const desc      = ex.description   || ex.short_description || "Fiche exercice Kpsul.";
+    const execution = ex.description   || ex.execution_steps   || "";
+    const breathing = ex.breathing     || "";
+    const tempo     = ex.tempo         || "";
+    const coachTip  = ex.coach_tip     || ex.coach_cues   || "";
+
     box.innerHTML = `
+      <div style="margin-bottom:10px">
+        <button id="kexBackToList" class="kex-back" type="button">← Retour à la liste</button>
+      </div>
       <h3>${safe(ex.name)}</h3>
-      <p class="kex-muted">${safe(ex.short_description || "Fiche exercice Kpsul.")}</p>
+      <p class="kex-muted">${safe(desc)}</p>
 
       <div class="kex-tags">
-        ${ex.category ? `<small class="kex-tag">${safe(ex.category)}</small>` : ""}
-        ${ex.main_muscle ? `<small class="kex-tag">${safe(ex.main_muscle)}</small>` : ""}
-        ${ex.equipment ? `<small class="kex-tag">${safe(ex.equipment)}</small>` : ""}
-        ${ex.level ? `<small class="kex-tag">${safe(ex.level)}</small>` : ""}
+        ${muscle        ? `<small class="kex-tag">${safe(muscle)}</small>` : ""}
+        ${ex.equipment  ? `<small class="kex-tag">${safe(ex.equipment)}</small>` : ""}
+        ${ex.level      ? `<small class="kex-tag">${safe(ex.level)}</small>` : ""}
         ${ex.movement_type ? `<small class="kex-tag">${safe(ex.movement_type)}</small>` : ""}
-        ${ex.goal ? `<small class="kex-tag">${safe(ex.goal)}</small>` : ""}
+        ${ex.goal       ? `<small class="kex-tag">${safe(ex.goal)}</small>` : ""}
       </div>
 
       ${renderMedia(ex)}
@@ -605,13 +634,12 @@ Secondaires : ${safe((ex.secondary_muscles || []).join(", ") || "—")}</p>
 
       <div class="kex-section">
         <h4>Exécution</h4>
-        <p>${safe(ex.execution_steps || "Non renseigné.")}</p>
+        <p>${safe(execution || "Voir la description ci-dessus.")}</p>
       </div>
+      ${breathing ? `<div class="kex-section"><h4>Respiration</h4><p>${safe(breathing)}</p></div>` : ""}
+      ${tempo     ? `<div class="kex-section"><h4>Tempo</h4><p>${safe(tempo)} <span style="color:#8A9A93;font-size:12px">(Excentrique–Pause bas–Concentrique–Pause haute)</span></p></div>` : ""}
 
-      <div class="kex-section">
-        <h4>Erreurs fréquentes</h4>
-        <p>${safe(ex.common_mistakes || "Non renseigné.")}</p>
-      </div>
+      ${linked.mistakes && linked.mistakes.length ? "" : `<div class="kex-section"><h4>Erreurs fréquentes</h4><p>Aucune erreur détaillée pour l'instant.</p></div>`}
 
       ${renderMiniList(
         "Erreurs détaillées",
@@ -626,10 +654,7 @@ Secondaires : ${safe((ex.secondary_muscles || []).join(", ") || "—")}</p>
         `
       )}
 
-      <div class="kex-section">
-        <h4>Variantes</h4>
-        <p>${safe(ex.variants || "Non renseigné.")}</p>
-      </div>
+      ${linked.variants && linked.variants.length ? "" : `<div class="kex-section"><h4>Variantes</h4><p>Aucune variante enregistrée pour l'instant.</p></div>`}
 
       ${renderMiniList(
         "Variantes détaillées",
@@ -649,10 +674,7 @@ Secondaires : ${safe((ex.secondary_muscles || []).join(", ") || "—")}</p>
         <p>${safe(explainWhyExercise(ex))}</p>
       </div>
 
-      <div class="kex-section">
-        <h4>Consignes coach</h4>
-        <p>${safe(ex.coach_cues || "Ton coach pourra ajouter ici ses consignes.")}</p>
-      </div>
+      ${coachTip ? `<div class="kex-section"><h4>💡 Conseil coach</h4><p>${safe(coachTip)}</p></div>` : ""}
 
       ${renderMiniList(
         "Notes coach personnalisées",
