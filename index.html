@@ -286,16 +286,27 @@
   .mtile p{font-size:13.5px;color:#8A9A93;margin:0}
   @media(max-width:560px){ .member-tiles{grid-template-columns:1fr} }
 
-  .module-tabs{display:none}
-  body:not(.kpsul-panel-open) #member .module-panel{display:none!important}
+  /* ── Navigation : pilules toujours cachées ── */
+  .module-tabs,.module-tab{display:none!important}
+  /* Menu de cartes : visible par défaut, disparaît quand un module est ouvert */
   body.kpsul-panel-open .member-tiles,
   body.kpsul-panel-open .member-welcome,
   body.kpsul-panel-open .kpsul-lab-title,
   body.kpsul-panel-open .lab-score,
-  body.kpsul-panel-open .metric-row{display:none}
-  #memberBackBtn{display:none;margin:4px 0 14px;border:1px solid var(--line);background:none;color:var(--core);border-radius:99px;padding:9px 16px;font-family:var(--mono);font-size:12px;letter-spacing:.06em;cursor:pointer}
-  #memberBackBtn:hover{border-color:var(--core)}
-  body.kpsul-panel-open #memberBackBtn{display:inline-flex}
+  body.kpsul-panel-open .metric-row{display:none!important}
+  /* Modules : cachés par défaut, le panel actif s'affiche plein écran */
+  #member .module-panel{display:none!important}
+  body.kpsul-panel-open #member .module-panel.active{display:block!important}
+  /* Bouton retour : visible seulement quand un module est ouvert */
+  #memberBackBtn{
+    display:none;width:100%;margin:0 0 16px;
+    border:1px solid var(--line);background:var(--ink-800);
+    color:var(--core);border-radius:12px;padding:13px 16px;
+    font-family:var(--mono);font-size:12px;letter-spacing:.06em;
+    cursor:pointer;text-align:left;
+  }
+  #memberBackBtn:hover{border-color:var(--core);background:var(--ink-700)}
+  body.kpsul-panel-open #memberBackBtn{display:block}
   .mtile[data-goto]{cursor:pointer;position:relative;transition:border-color .18s,transform .12s}
   .mtile[data-goto]:hover,.mtile[data-goto]:focus-visible{border-color:var(--core);transform:translateY(-2px)}
   .mtile[data-goto]:active{transform:translateY(0)}
@@ -3365,24 +3376,35 @@ ${flags.length ? "Brouillon à modifier avec prudence avant envoi." : "Brouillon
       if(b) return b;
       b = document.createElement("button");
       b.id = "memberBackBtn"; b.type = "button";
-      b.textContent = "← Tous les modules";
-      const tabs = document.querySelector("#member .module-tabs");
-      if(tabs) tabs.parentNode.insertBefore(b, tabs);
+      b.innerHTML = "← Menu";
+      const memberEl = document.getElementById("member");
+      const wrap = memberEl ? memberEl.querySelector(".wrap") : null;
+      if(wrap) wrap.insertBefore(b, wrap.firstChild);
       b.addEventListener("click", ()=>{
+        document.querySelectorAll("#member .module-panel").forEach(p=>p.classList.remove("active"));
         document.body.classList.remove("kpsul-panel-open");
-        const grid = document.querySelector(".member-tiles");
-        if(grid) grid.scrollIntoView({behavior:"smooth", block:"start"});
+        document.getElementById("member").scrollIntoView({behavior:"smooth",block:"start"});
       });
       return b;
     }
     function gotoModule(target){
-      const btn = document.querySelector(`.module-tab[data-module="${target}"]`) || document.querySelector(`[data-module="${target}"]`);
-      if(!btn) return;
-      btn.click();
-      ensureBackBtn();
+      const aliases = {modKpsulIndex:"modKpsulScore",modKpsulProgram:"modKpsulProgramsTable"};
+      const id = aliases[target] || target;
+      const panel = document.getElementById(id);
+      if(!panel){
+        console.warn("Module absent:", id);
+        return;
+      }
+      // Activer le bon panel
+      document.querySelectorAll("#member .module-panel").forEach(p=>p.classList.toggle("active", p.id===id));
       document.body.classList.add("kpsul-panel-open");
-      const back = document.getElementById("memberBackBtn");
-      if(back) back.scrollIntoView({behavior:"smooth", block:"start"});
+      // Déclencher le chargement du module si besoin
+      const btn = document.querySelector(`.module-tab[data-module="${id}"]`);
+      if(btn){ const ev=new MouseEvent("click",{bubbles:false}); btn.dispatchEvent(ev); }
+      // Remonter en haut de la zone membre immédiatement
+      ensureBackBtn();
+      const memberEl = document.getElementById("member");
+      if(memberEl) memberEl.scrollIntoView({behavior:"smooth",block:"start"});
     }
     document.querySelectorAll(".mtile[data-goto]").forEach(tile=>{
       const go = ()=>gotoModule(tile.dataset.goto);
