@@ -948,6 +948,7 @@
 
 <section id="member" aria-live="polite">
   <div class="wrap">
+    <button id="memberBackBtn" type="button">← Menu</button>
     <div class="member-card">
       <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
       <h2 id="memberHello">Ton espace</h2>
@@ -3371,46 +3372,15 @@ ${flags.length ? "Brouillon à modifier avec prudence avant envoi." : "Brouillon
     sb.auth.onAuthStateChange((_e, session)=> setAuthUI(session));
 
     // ---- Cartes = menu : ouverture directe du module ----
-    function ensureBackBtn(){
-      let b = document.getElementById("memberBackBtn");
-      if(b) return b;
-      b = document.createElement("button");
-      b.id = "memberBackBtn"; b.type = "button";
-      b.innerHTML = "← Menu";
-      const memberEl = document.getElementById("member");
-      const wrap = memberEl ? memberEl.querySelector(".wrap") : null;
-      if(wrap) wrap.insertBefore(b, wrap.firstChild);
-      b.addEventListener("click", ()=>{
+    // Bouton retour : dans le HTML, brancher le clic ici
+    const backBtnEl = document.getElementById("memberBackBtn");
+    if(backBtnEl){
+      backBtnEl.addEventListener("click", ()=>{
         document.querySelectorAll("#member .module-panel").forEach(p=>p.classList.remove("active"));
         document.body.classList.remove("kpsul-panel-open");
         document.getElementById("member").scrollIntoView({behavior:"smooth",block:"start"});
       });
-      return b;
     }
-    function gotoModule(target){
-      const aliases = {modKpsulIndex:"modKpsulScore",modKpsulProgram:"modKpsulProgramsTable"};
-      const id = aliases[target] || target;
-      const panel = document.getElementById(id);
-      if(!panel){
-        console.warn("Module absent:", id);
-        return;
-      }
-      // Activer le bon panel
-      document.querySelectorAll("#member .module-panel").forEach(p=>p.classList.toggle("active", p.id===id));
-      document.body.classList.add("kpsul-panel-open");
-      // Déclencher le chargement du module si besoin
-      const btn = document.querySelector(`.module-tab[data-module="${id}"]`);
-      if(btn){ const ev=new MouseEvent("click",{bubbles:false}); btn.dispatchEvent(ev); }
-      // Remonter en haut de la zone membre immédiatement
-      ensureBackBtn();
-      const memberEl = document.getElementById("member");
-      if(memberEl) memberEl.scrollIntoView({behavior:"smooth",block:"start"});
-    }
-    document.querySelectorAll(".mtile[data-goto]").forEach(tile=>{
-      const go = ()=>gotoModule(tile.dataset.goto);
-      tile.addEventListener("click", go);
-      tile.addEventListener("keydown", (e)=>{ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); go(); } });
-    });
 
     // ---- Pont pour les extensions externes (kpsul.js) ----
     window.sb = sb;

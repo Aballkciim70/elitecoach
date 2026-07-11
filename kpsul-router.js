@@ -17,7 +17,7 @@
     document.body.classList.add("kpsul-panel-open");
     qsa(".module-panel").forEach(p => p.classList.toggle("active", p.id === id));
     qsa(".module-tab").forEach(t => t.classList.toggle("active", resolve(t.dataset.module) === id));
-    panel.scrollIntoView({ behavior: "smooth", block: "start" });
+    const memberEl = document.getElementById("member"); if(memberEl) memberEl.scrollIntoView({ behavior: "smooth", block: "start" });
     if (id === "modKpsulScore" && typeof window.loadClientScore === "function") window.loadClientScore();
     return true;
   }
