@@ -255,6 +255,8 @@
     transition:background .2s,color .2s;
   }
   .nav-auth:hover{background:var(--core);color:#04110E}
+  #coachSwitchBtn{display:none}
+  body.admin:not(.admin-mode) #coachSwitchBtn{display:inline-flex}
 
   .modal{position:fixed;inset:0;z-index:200;display:none;background:rgba(4,10,9,.74);backdrop-filter:blur(5px);padding:22px;overflow-y:auto}
   .modal.show{display:flex;align-items:center;justify-content:center}
@@ -943,7 +945,7 @@
       <span class="cap" aria-hidden="true"><span class="a"></span><span class="b"></span></span>
       <span><b>kpsul</b><i>_corps</i></span>
     </a>
-    <div style="display:flex;gap:10px;align-items:center"><a class="nav-cta" href="#laboratoire">Laboratoire</a><button id="authBtn" class="nav-auth" type="button">Espace membre</button></div>
+    <div style="display:flex;gap:10px;align-items:center"><a class="nav-cta" href="#laboratoire">Laboratoire</a><button id="coachSwitchBtn" class="nav-auth" type="button">Espace admin</button><button id="authBtn" class="nav-auth" type="button">Espace membre</button></div>
   </div>
 </nav>
 
@@ -3144,6 +3146,16 @@ ${flags.length ? "Brouillon à modifier avec prudence avant envoi." : "Brouillon
     });
 
     document.getElementById("openRealAdminBtn")?.addEventListener("click", ()=>{
+      if(!["admin","coach"].includes(currentProfileRole)) return;
+
+      document.body.classList.add("admin-mode");
+      document.body.classList.remove("kpsul-panel-open");
+
+      loadCrmAdmin();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    document.getElementById("coachSwitchBtn")?.addEventListener("click", ()=>{
       if(!["admin","coach"].includes(currentProfileRole)) return;
 
       document.body.classList.add("admin-mode");
