@@ -1198,10 +1198,16 @@
         <div class="module-panel admin-zone" id="modAdmin">
           <div class="tool-panel">
             <h3>🛡 Zone admin</h3>
-            <p>Visible seulement si ton profil Supabase a le rôle admin ou coach.</p>
-            <div class="tool-list" id="adminList">
-              <div class="tool-item"><b>Admin actif</b><span>Tu pourras bientôt choisir un client, lui créer un programme et suivre ses données.</span></div>
-            </div>
+            <p>Accède au tableau de bord complet de gestion des clients.</p>
+
+            <button
+              class="btn btn-primary"
+              id="openRealAdminBtn"
+              type="button"
+              style="width:100%;margin-top:14px"
+            >
+              Ouvrir le tableau de bord admin
+            </button>
           </div>
         </div>
       </div>
@@ -3131,7 +3137,20 @@ ${flags.length ? "Brouillon à modifier avec prudence avant envoi." : "Brouillon
     document.getElementById("clientSearch")?.addEventListener("input", renderClientList);
     document.getElementById("refreshAdminBtn")?.addEventListener("click", loadCrmAdmin);
     document.getElementById("saveAdminProgramBtn")?.addEventListener("click", saveAdminProgram);
-    document.getElementById("viewClientSiteBtn")?.addEventListener("click", ()=>document.body.classList.remove("admin-mode"));
+    document.getElementById("viewClientSiteBtn")?.addEventListener("click", ()=>{
+      document.body.classList.remove("admin-mode");
+      document.body.classList.remove("kpsul-panel-open");
+    });
+
+    document.getElementById("openRealAdminBtn")?.addEventListener("click", ()=>{
+      if(!["admin","coach"].includes(currentProfileRole)) return;
+
+      document.body.classList.add("admin-mode");
+      document.body.classList.remove("kpsul-panel-open");
+
+      loadCrmAdmin();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
 
     async function loadAdminData(){
       if(!["admin","coach"].includes(currentProfileRole)) return;
