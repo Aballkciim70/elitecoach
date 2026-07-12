@@ -3413,6 +3413,32 @@ ${flags.length ? "Brouillon à modifier avec prudence avant envoi." : "Brouillon
     sb.auth.onAuthStateChange((_e, session)=> setAuthUI(session));
 
     // ---- Cartes = menu : ouverture directe du module ----
+    document.addEventListener("click", (event)=>{
+      const scoreCard = event.target.closest?.('[data-goto="modKpsulIndex"]');
+      if(!scoreCard) return;
+
+      const scorePanel = document.getElementById("modKpsulIndex");
+      if(!scorePanel) return;
+
+      document.querySelectorAll("#member .module-panel").forEach(panel=>{
+        panel.classList.remove("active");
+      });
+
+      scorePanel.classList.add("active");
+      document.body.classList.add("kpsul-panel-open");
+
+      setTimeout(()=>{
+        if(window.KpsulScoreV2?.refresh){
+          window.KpsulScoreV2.refresh();
+        }
+
+        scorePanel.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+      }, 60);
+    });
+
     // Bouton retour : dans le HTML, brancher le clic ici
     const backBtnEl = document.getElementById("memberBackBtn");
     if(backBtnEl){
