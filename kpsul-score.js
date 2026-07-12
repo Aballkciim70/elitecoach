@@ -534,16 +534,64 @@
     }
   }
 
+  function openScoreModule(){
+    ensurePanel();
+
+    document.querySelectorAll("#member .module-panel").forEach(panel => {
+      panel.classList.remove("active");
+    });
+
+    const scorePanel = document.getElementById("modKpsulIndex");
+    if(!scorePanel) return;
+
+    scorePanel.classList.add("active");
+    document.body.classList.add("kpsul-panel-open");
+
+    setTimeout(() => {
+      initData();
+      scorePanel.scrollIntoView({
+        block: "start",
+        behavior: "smooth"
+      });
+    }, 60);
+  }
+
   function watchOpen(){
     document.addEventListener("click", e => {
-      const target = e.target.closest?.('[data-goto="modKpsulIndex"],[data-module="modKpsulIndex"]');
-      if(target) setTimeout(initData, 80);
+      const target = e.target.closest?.(
+        '[data-goto="modKpsulIndex"],[data-module="modKpsulIndex"]'
+      );
+
+      if(!target) return;
+
+      e.preventDefault();
+      e.stopPropagation();
+      openScoreModule();
+    }, true);
+
+    document.addEventListener("keydown", e => {
+      if(e.key !== "Enter" && e.key !== " ") return;
+
+      const target = e.target.closest?.(
+        '[data-goto="modKpsulIndex"],[data-module="modKpsulIndex"]'
+      );
+
+      if(!target) return;
+
+      e.preventDefault();
+      openScoreModule();
     });
   }
 
   function start(){
     ensurePanel();
     watchOpen();
+
+    window.KpsulScoreV2 = {
+      open: openScoreModule,
+      refresh: initData
+    };
+
     if(document.body.classList.contains("authed")) initData();
     window.addEventListener("kpsul:session-ready", initData);
   }
